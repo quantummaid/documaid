@@ -11,23 +11,13 @@ phases:
     runtime-versions:
       java: corretto8
     commands:
-      - whoami
-      - ls -laR /home/
-      - mkdir -p ~/.m2
-      - ls -laR ~/.m2
-      - ls -laR ~/
-      - gpg --version || echo "gpg not found"
-      - gpg2 --version || echo "gpg2 not found"
       - echo "${SETTINGSXML}" >> ~/.m2/settings.xml
       - gpg --list-secret-keys
       - echo "${PGPSIGNKEY_1}${PGPSIGNKEY_2}" | gpg --import
-      - gpg --list-secret-keys
   build:
     commands:
-      - whoami
-      - ls -laR /home/
-      - echo Building documaid
-      - mvn clean install -DskipTests
+      - echo "Building documaid"
+      - mvn clean install -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests
       - VERSION=$(mvn -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
       - echo Running documaid generate goal
       - mvn de.quantummaid:documaid:$VERSION:validate -DskipPaths=docs/Usage.md
