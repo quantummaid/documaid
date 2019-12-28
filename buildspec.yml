@@ -14,10 +14,10 @@ phases:
       - mkdir -p ~/.m2
       - ls -laR ~/.m2
       - ls -laR ~/
-      - cat ~/.m2/settings.xml
       - gpg --version || echo "gpg not found"
       - gpg2 --version || echo "gpg2 not found"
       - echo "${SETTINGSXML}" >> ~/.m2/settings.xml
+      - cat ~/.m2/settings.xml | head -n 5
   build:
     commands:
       - whoami
