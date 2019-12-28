@@ -1,20 +1,20 @@
 version: 0.2
 
+env:
+  parameter-store:
+    SETTINGSXML: /Quantummaid/CI/sonatype/settingsxml
+
 phases:
   install:
     runtime-versions:
       java: corretto8
     commands:
-      - whoami
-      - ls -la /home
-      - ls -la /home/${whoami}
-      - ls -laR /home/${whoami}
+      - mkdir ~/.m2
+      - gpg --version || echo "gpg not found"
+      - gpg2 --version || echo "gpg2 not found"
+      - echo "${SETTINGSXML}" >> ~/.m2/settings.xml
   build:
     commands:
-      - whoami
-      - ls -la /home
-      - ls -la /home/${whoami}
-      - ls -laR /home/${whoami}
       - echo Building documaid
       - mvn clean install -DskipTests
       - VERSION=$(mvn -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
