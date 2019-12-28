@@ -105,7 +105,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[TOC] File '2_Two.md' has same TOC index as '2_One.md' " +
+            .then(expectAnExceptionWithMessage("[TOC] Same TOC indices[2] used by multiple files [2_One.md, 2_Two.md] " +
                 "(in path ${absPath("tocWithSameIndexTwice")})"))
     }
 
@@ -127,7 +127,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[TOC] File '2_Double.md' has same TOC index as '2_SecondDocs.md' " +
+            .then(expectAnExceptionWithMessage("[TOC] Same TOC indices[2] used by multiple files [02_docs/2_Double.md, 02_docs/2_SecondDocs.md] " +
                 "(in path ${absPath("tocWithSameIndexTwiceInSubDirectory/02_docs")})"))
     }
 

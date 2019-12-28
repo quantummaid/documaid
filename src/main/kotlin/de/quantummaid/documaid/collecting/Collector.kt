@@ -29,8 +29,8 @@ import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
 import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
 interface Collector {
@@ -59,7 +59,7 @@ private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>) : Sim
         super.preVisitDirectory(dir, attrs)
 
         val path = Paths.get(dir.toString())
-                .toAbsolutePath()
+            .toAbsolutePath()
         val directory = Directory(path)
 
         if (currentDirectoryStack.isNotEmpty()) {
@@ -76,7 +76,7 @@ private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>) : Sim
 
         val directory = currentDirectoryStack.last()
         val path = Paths.get(file.toString())
-                .toAbsolutePath()
+            .toAbsolutePath()
         val fileObject = FileCreator.create(path)
         directory.addChild(fileObject)
 

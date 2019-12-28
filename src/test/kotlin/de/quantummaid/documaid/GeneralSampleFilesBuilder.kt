@@ -40,7 +40,7 @@ class GeneralSampleFilesBuilder private constructor(private val sampleFile: Samp
     companion object {
 
         fun severalFilesWithLinksAndSnippets(): Configurator {
-            return { testEnvironment, configurationBuilder, setupSteps, cleanupSteps ->
+            return { testEnvironment, _, setupSteps, cleanupSteps ->
                 val sampleFiles = ArrayList<SampleFile>()
                 sampleFiles.add(generalSampleFile1())
                 sampleFiles.add(generalSampleFile2())

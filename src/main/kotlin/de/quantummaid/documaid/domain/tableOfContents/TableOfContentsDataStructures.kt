@@ -123,15 +123,21 @@ private fun convertToNormalCase(name: String): String {
 }
 
 private fun verifyIndicesCorrect(list: List<TocDataFileObject>, absolutePath: Path) {
-    val array = list.toTypedArray()
-    for (i in 0 until array.size) {
-        val currentIndex = array[i].index
-        val expectedIndex = i + 1
-        if (currentIndex > expectedIndex) {
-            throw DocuMaidException.create("[$TOC_TAG] Missing index $expectedIndex for TOC in directory '${absolutePath.fileName}'", absolutePath)
+    for (tocDataFileObject in list) {
+        val sameIndexTocDataFiles = list.filter { candidate -> candidate.index == tocDataFileObject.index }
+        if (sameIndexTocDataFiles.size > 1) {
+            val conflictingIndexes = sameIndexTocDataFiles.map { it.index }.sorted().distinct()
+            val conflictingIndexFiles = sameIndexTocDataFiles.sortedBy { it.absolutePath }
+                .map { "${it.scanRootRelativeDirectory}" }
+            val message = "[$TOC_TAG] Same TOC indices$conflictingIndexes used by multiple files $conflictingIndexFiles"
+            throw DocuMaidException.create(message, absolutePath)
         }
-        if (currentIndex < expectedIndex) {
-            throw DocuMaidException.create("[$TOC_TAG] File '${array[i - 1].fileName}' has same TOC index as '${array[i].fileName}'", absolutePath)
+    }
+    list.forEachIndexed { index, tocDataFileObject ->
+        val expectedIndex = index + 1
+        if (expectedIndex != tocDataFileObject.index) {
+            val message = "[$TOC_TAG] Missing index $expectedIndex for TOC in directory '${absolutePath.fileName}'"
+            throw DocuMaidException.create(message, absolutePath)
         }
     }
 }
