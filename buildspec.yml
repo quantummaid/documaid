@@ -4,6 +4,11 @@ phases:
   install:
     runtime-versions:
       java: corretto8
+    commands:
+      - whoami
+      - ls -la /home
+      - ls -la /home/${whoami}
+      - ls -laR /home/${whoami}
   build:
     commands:
       - echo Building documaid
