@@ -26,7 +26,6 @@ import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.givenWhenThen.SampleFile
 import de.quantummaid.documaid.givenWhenThen.SampleFilesBuilder
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment
-import de.quantummaid.documaid.givenWhenThen.TestEnvironmentProperty
 import de.quantummaid.documaid.shared.TestDirectoryBuilder
 import de.quantummaid.documaid.shared.TestFileBuilder
 import de.quantummaid.documaid.shared.TestStructureBuilder
@@ -38,30 +37,8 @@ class CodeSnippetSampleFilesBuilder internal constructor(private val sampleFile:
     }
 }
 
-fun aFileWithASingleCodeSnippet(basePath: String): Configurator {
-    val testIsolatedDir = "singleCodeSnippetFile"
-    val baseDir = Paths.get(basePath, testIsolatedDir)
-
-    return object : Configurator {
-        override fun invoke(
-            testEnvironment: TestEnvironment,
-            configurationBuilder: DocuMaidConfigurationBuilder,
-            setupSteps: MutableCollection<() -> Unit>,
-            cleanupSteps: MutableCollection<() -> Unit>
-        ) {
-            val sampleFile = singleCodeSnippetSampleFiles(testIsolatedDir + "/")
-            setupSteps.add {
-                val fileStructure = TestStructureBuilder.aTestStructureIn(baseDir)
-                    .with(
-                        sampleFile.asBuilder(),
-                        generalJavaSampleFile()
-                    )
-                    .build()
-                cleanupSteps.add { fileStructure.cleanUp() }
-            }
-            testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFile)
-        }
-    }
+fun aFileWithASingleCodeSnippet(): CodeSnippetSampleFilesBuilder {
+    return CodeSnippetSampleFilesBuilder(singleCodeSnippetSampleFiles())
 }
 
 fun aFileWithATwoCodeSnippets(): CodeSnippetSampleFilesBuilder {

@@ -40,7 +40,7 @@ internal class DocuMaidCodeSnippetTest {
     @Test
     fun canInsertSimpleCodeSnippet() {
         given(aDokuMaid()
-            .configuredWith(aFileWithASingleCodeSnippet(BASE_PATH))
+            .configuredWith(aFileWithASingleCodeSnippet())
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
@@ -179,7 +179,7 @@ internal class DocuMaidCodeSnippetTest {
     }
 
     companion object {
-        private const val BASE_PATH = "target/tests/usecases/codeSnippet/"
+        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/codeSnippet/"
     }
 
     fun absPath(fileName: String): String {

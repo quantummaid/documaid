@@ -23,7 +23,7 @@ package de.quantummaid.documaid.usecases.codeSnippet
 
 import de.quantummaid.documaid.givenWhenThen.SampleFile
 
-fun singleCodeSnippetSampleFiles(testDir: String): SampleFile {
+fun singleCodeSnippetSampleFiles(): SampleFile {
     val contentInput = "#Test File\n" +
         "<!---[CodeSnippet] (first)-->\n" +
         "someOtherText"
@@ -37,7 +37,7 @@ fun singleCodeSnippetSampleFiles(testDir: String): SampleFile {
         "```\n" +
         "someOtherText"
     val fileName = "fileWithOneCodeSnippet.md"
-    return SampleFile.sampleFileInDirectory(contentInput, expectedContentOutput, testDir + fileName)
+    return SampleFile.sampleFile(contentInput, expectedContentOutput, fileName)
 }
 
 fun twoCodeSnippetsSampleFiles(): SampleFile {
@@ -146,7 +146,7 @@ fun fullClassSnippet(): SampleFile {
     val expectedContentOutput = "#Test File\n" +
         "<!---[CodeSnippet] ( file=./FullClassCodeSnippet.java)-->\n" +
         "```java\n" +
-        "package de.quantummaid.documaid.codeSnippet;\n" +
+        "package de.quantummaid.documaid.usecases.codeSnippet;\n" +
         "\n" +
         "public class FullClassCodeSnippet {\n" +
         "\n" +

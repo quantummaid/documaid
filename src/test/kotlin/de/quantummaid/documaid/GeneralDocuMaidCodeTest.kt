@@ -21,10 +21,13 @@
 
 package de.quantummaid.documaid
 
+import de.quantummaid.documaid.GeneralSampleFilesBuilder.Companion.aCorrectlyGeneratedFileWithLinksAndSnippets
+import de.quantummaid.documaid.GeneralSampleFilesBuilder.Companion.severalFilesWithLinksAndSnippets
 import de.quantummaid.documaid.config.Goal
-import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder
+import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrectlyGenerated
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 
@@ -32,22 +35,22 @@ class GeneralDocuMaidCodeTest {
 
     @Test
     fun canProcessMultipleFilesWithGenerationGoal() {
-        given(DokuMaidTestBuilder.aDokuMaid()
-                .configuredWith(GeneralSampleFilesBuilder.severalFilesWithLinksAndSnippets())
-                .configuredWithGoal(Goal.GENERATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(DokuMaidActionTestBuilder.theDokuIsPimped())
-                .then(DokuMaidTestValidationBuilder.expectAllFilesToBeCorrectlyGenerated())
+        given(aDokuMaid()
+            .configuredWith(severalFilesWithLinksAndSnippets())
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrectlyGenerated())
     }
 
     @Test
     fun canExecuteAllProcessForValidationFile() {
-        given(DokuMaidTestBuilder.aDokuMaid()
-                .configuredWith(GeneralSampleFilesBuilder.aCorrectlyGeneratedFileWithLinksAndSnippets())
-                .configuredWithGoal(Goal.VALIDATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(DokuMaidActionTestBuilder.theDokuIsPimped())
-                .then(DokuMaidTestValidationBuilder.expectNoException())
+        given(aDokuMaid()
+            .configuredWith(aCorrectlyGeneratedFileWithLinksAndSnippets())
+            .configuredWithGoal(Goal.VALIDATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectNoException())
     }
 
     companion object {

@@ -27,7 +27,7 @@ fun generalSampleFile1(): SampleFile {
     val contentInput = "#Test File\n" +
             "<!---[CodeSnippet] (first)-->\n" +
             "someOtherText" +
-            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->"
+            "<!---[Link] ( ./usecases/link/ReferencedCodeFile.java file)-->"
     val expectedContentOutput = "#Test File\n" +
             "<!---[CodeSnippet] (first)-->\n" +
             "```java\n" +
@@ -37,8 +37,8 @@ fun generalSampleFile1(): SampleFile {
             "strings.remove(1);\n" +
             "```\n" +
             "someOtherText" +
-            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->\n" +
-            "[file](./link/ReferencedCodeFile.java)"
+            "<!---[Link] ( ./usecases/link/ReferencedCodeFile.java file)-->\n" +
+            "[file](./usecases/link/ReferencedCodeFile.java)"
     val fileName = "generalSampleFile1.md"
     return SampleFile.sampleFile(contentInput, expectedContentOutput, fileName)
 }
@@ -47,7 +47,7 @@ fun generalSampleFile2(): SampleFile {
     val contentInput = "#Test File\n" +
             "<!---[CodeSnippet] (first)-->\n" +
             "someOtherText" +
-            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->"
+            "<!---[Link] ( ./usecases/link/ReferencedCodeFile.java file)-->"
     val expectedContentOutput = "#Test File\n" +
             "<!---[CodeSnippet] (first)-->\n" +
             "```java\n" +
@@ -57,8 +57,8 @@ fun generalSampleFile2(): SampleFile {
             "strings.remove(1);\n" +
             "```\n" +
             "someOtherText" +
-            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->\n" +
-            "[file](./link/ReferencedCodeFile.java)"
+            "<!---[Link] ( ./usecases/link/ReferencedCodeFile.java file)-->\n" +
+            "[file](./usecases/link/ReferencedCodeFile.java)"
     val fileName = "generalSampleFile2.md"
     return SampleFile.sampleFile(contentInput, expectedContentOutput, fileName)
 }
@@ -73,8 +73,8 @@ fun multipleGoalsValidationFile(): SampleFile {
             "strings.remove(1);\n" +
             "```\n" +
             "someOtherText" +
-            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->\n" +
-            "[file](./link/ReferencedCodeFile.java)"
+            "<!---[Link] ( ./usecases/link/ReferencedCodeFile.java file)-->\n" +
+            "[file](./usecases/link/ReferencedCodeFile.java)"
     val fileName = "multipleGoalsValidationFile.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)
 }
