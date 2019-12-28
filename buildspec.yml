@@ -3,6 +3,8 @@ version: 0.2
 env:
   parameter-store:
     SETTINGSXML: /Quantummaid/CI/sonatype/settingsxml
+    PGPSIGNKEY_1: /Quantummaid/CI/signPrivateKey/1
+    PGPSIGNKEY_2: /Quantummaid/CI/signPrivateKey/2
 
 phases:
   install:
@@ -17,7 +19,9 @@ phases:
       - gpg --version || echo "gpg not found"
       - gpg2 --version || echo "gpg2 not found"
       - echo "${SETTINGSXML}" >> ~/.m2/settings.xml
-      - cat ~/.m2/settings.xml | head -n 5
+      - gpg --list-secret-keys
+      - echo "${PGPSIGNKEY_1}${PGPSIGNKEY_2}" | gpg --import
+      - gpg --list-secret-keys
   build:
     commands:
       - whoami
