@@ -12,6 +12,8 @@ phases:
       - whoami
       - ls -laR /home/
       - mkdir -p ~/.m2
+      - ls -laR ~/.m2
+      - ls -laR ~/
       - gpg --version || echo "gpg not found"
       - gpg2 --version || echo "gpg2 not found"
       - echo "${SETTINGSXML}" >> ~/.m2/settings.xml
