@@ -29,6 +29,7 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.OptionsString
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
+import de.quantummaid.documaid.errors.DocuMaidException
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -43,7 +44,7 @@ class TableOfContentsDirective private constructor(
 
         fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): TableOfContentsDirective {
             val directoryBasePath = file.absolutePath().parent
-            val options = TableOfContentsDirectiveOptions.create(rawMarkdownDirective.optionsString, directoryBasePath)
+            val options = TableOfContentsDirectiveOptions.create(rawMarkdownDirective.optionsString, directoryBasePath, file)
             val tocScanBaseDirectory = options.tocScanBaseDirectory
             val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
             val scanBaseDirectory = lookUpTable.getFileObject(tocScanBaseDirectory) as Directory
@@ -55,7 +56,7 @@ class TableOfContentsDirective private constructor(
 class TableOfContentsDirectiveOptions(val tocScanBaseDirectory: Path) {
 
     companion object {
-        fun create(optionsString: OptionsString, directoryBasePath: Path): TableOfContentsDirectiveOptions {
+        fun create(optionsString: OptionsString, directoryBasePath: Path, file: MarkdownFile): TableOfContentsDirectiveOptions {
             val optionsRegex = """ *\(? *(?<baseDir>[^ )]+) *\)? *""".toRegex()
             val matchResult = optionsRegex.matchEntire(optionsString.value)
             if (matchResult != null) {
@@ -63,11 +64,11 @@ class TableOfContentsDirectiveOptions(val tocScanBaseDirectory: Path) {
                 val tocScanBaseDirectory = directoryBasePath.resolve(baseDirectoryPathString)
                     .normalize()
                 if (!Files.exists(tocScanBaseDirectory)) {
-                    throw IllegalArgumentException("[$TOC_TAG] Cannot create TOC for not existing directory '$baseDirectoryPathString'")
+                    throw DocuMaidException.create("[$TOC_TAG] Cannot create TOC for not existing directory '$baseDirectoryPathString'", file)
                 }
                 return TableOfContentsDirectiveOptions(tocScanBaseDirectory)
             } else {
-                throw IllegalArgumentException("[$TOC_TAG] Could not match TOC options '${optionsString.value}'")
+                throw DocuMaidException.create("[$TOC_TAG] Could not match TOC options '${optionsString.value}'", file)
             }
         }
     }

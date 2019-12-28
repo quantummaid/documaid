@@ -22,9 +22,29 @@
 package de.quantummaid.documaid.domain.navigation
 
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.link.LinkMarkdown
+import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 
 class NavigationMarkdown(val fileWithDirective: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
+
+    companion object {
+        val NAV_MARKDOWN_REGEX = """\n? *(\[&larr;]\([^)]+\)&nbsp;&nbsp;&nbsp;)?\[Overview]\([^)]+\)(&nbsp;&nbsp;&nbsp;\[&rarr;]\([^)]+\))?""".toRegex()
+
+        fun startsWithNavigationMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+            val content = remainingMarkupFileContent.content
+            if (!content.trimStart().startsWith("[")) {
+                return TrailingMarkdownMatchResult.createForNoMatch()
+            }
+
+            val matchResult = NAV_MARKDOWN_REGEX.find(content)
+            return if (matchResult != null) {
+                TrailingMarkdownMatchResult.createForMatch(matchResult.range.last - matchResult.range.start, matchResult.value)
+            } else {
+                TrailingMarkdownMatchResult.createForNoMatch()
+            }
+        }
+    }
 
     fun generateMarkdown(): String {
         return "${previousFileLink()}${overviewLink()}${nextFileLink()}"

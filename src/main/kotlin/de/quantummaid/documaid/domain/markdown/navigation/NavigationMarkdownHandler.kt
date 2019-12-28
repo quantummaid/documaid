@@ -26,36 +26,32 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
+import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.markdown.navigation.NavigationDirective.Companion.NAV_TAG
+import de.quantummaid.documaid.domain.navigation.NavigationMarkdown.Companion.startsWithNavigationMarkdown
 import de.quantummaid.documaid.errors.VerificationError
 
 class NavigationMarkdownHandler : MarkdownTagHandler {
 
     override fun tag(): String = NAV_TAG.toString()
 
-    companion object {
-        val NAV_MARKDOWN_REGEX = """(\[&larr;]\([^)]+\)&nbsp;&nbsp;&nbsp;)?\[Overview]\([^)]+\)(&nbsp;&nbsp;&nbsp;\[&rarr;]\([^)]+\))?""".toRegex()
-    }
-
     override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
-        val navigationDirective = NavigationDirective.create(file, project)
-        val navigationMarkdown = navigationDirective.generateNavigationMarkdownObject()
-        val markdown = navigationMarkdown.generateMarkdown()
-        val textToReplace = directive.completeString + markdown
-        val textToBeReplaced = textToBeReplaced(directive)
-        val rangeToReplaceIn = rangeToReplaceIn(directive, textToReplace, textToBeReplaced)
-        val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, textToReplace)
+        val navigationDirective = NavigationDirective.create(directive, file, project)
+        val markdown = navigationDirective.generateMarkdown()
+        val (textToBeReplaced) = textToBeReplaced(directive)
+        val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
+        val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, markdown)
         return Pair(markdownReplacement, emptyList())
     }
 
-    private fun textToBeReplaced(directive: RawMarkdownDirective): String {
-        val followingMarkdown = directive.remainingMarkupFileContent.content
-        val matchResult = NAV_MARKDOWN_REGEX.find(followingMarkdown)
-        return if (matchResult != null) {
-            "${directive.completeString}${matchResult.value}"
+    private fun textToBeReplaced(directive: RawMarkdownDirective): Pair<String, TrailingMarkdownMatchResult> {
+        val matchResult = startsWithNavigationMarkdown(directive.remainingMarkupFileContent)
+        val text = if (matchResult.matches) {
+            "${directive.completeString}${matchResult.content}"
         } else {
             directive.completeString
         }
+        return Pair(text, matchResult)
     }
 
     private fun rangeToReplaceIn(directive: RawMarkdownDirective, markdown: String, textToBeReplaced: String): IntRange {
@@ -63,23 +59,18 @@ class NavigationMarkdownHandler : MarkdownTagHandler {
     }
 
     override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
-        val (markdownReplacement, errors) = generate(directive, file, project)
-        if (errors.isNotEmpty() || markdownReplacement == null) {
-            return errors
-        }
-        val (_, textToBeReplaced, textToReplace) = markdownReplacement
-        return if (textToReplace != textToBeReplaced) {
-            if (noNavigationPresent(textToBeReplaced)) {
-                listOf(VerificationError("Found [${tag()}] tag with missing navigation in '${file.absolutePath()}'", file.absolutePath()))
+        val navigationDirective = NavigationDirective.create(directive, file, project)
+        val markdown = navigationDirective.generateMarkdown()
+        val (textToBeReplaced, matchResult) = textToBeReplaced(directive)
+        return if (markdown != textToBeReplaced) {
+            val linkFound = matchResult.matches
+            if (linkFound) {
+                listOf(VerificationError.create("Found [${tag()}] tag with wrong navigation", file))
             } else {
-                listOf(VerificationError("Found [${tag()}] tag with wrong navigation in '${file.absolutePath()}'", file.absolutePath()))
+                listOf(VerificationError.create("Found [${tag()}] tag with missing navigation", file))
             }
         } else {
             emptyList()
         }
-    }
-
-    private fun noNavigationPresent(textToBeReplaced: String): Boolean {
-        return !textToBeReplaced.contains(NAV_MARKDOWN_REGEX)
     }
 }

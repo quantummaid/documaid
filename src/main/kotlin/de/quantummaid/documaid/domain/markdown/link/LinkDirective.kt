@@ -21,26 +21,35 @@
 
 package de.quantummaid.documaid.domain.markdown.link
 
+import de.quantummaid.documaid.collecting.fastLookup.FileObjectsFastLookUpTable
+import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.domain.markdown.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.link.LinkDirective.Companion.LINK_TAG
+import de.quantummaid.documaid.errors.DocuMaidException
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class LinkDirective(private val directive: RawMarkdownDirective, val options: LinkDirectiveOptions) {
+class LinkDirective private constructor(private val directive: RawMarkdownDirective, val options: LinkDirectiveOptions, val linkMarkdown: LinkMarkdown) {
 
     companion object {
         val LINK_TAG = DirectiveTag("Link")
 
-        fun create(directive: RawMarkdownDirective, file: MarkdownFile): LinkDirective {
+        fun create(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): LinkDirective {
             val options = LinkDirectiveOptions.create(directive, file)
-            return LinkDirective(directive, options)
+            val rootRelativeTargetPath = options.rootDirRelativePath
+            val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
+            if (!lookUpTable.fileExists(rootRelativeTargetPath)) {
+                throw DocuMaidException.create("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
+            }
+            val linkMarkdown = LinkMarkdown(options.name, options.originalPathString)
+            return LinkDirective(directive, options, linkMarkdown)
         }
     }
 
-    fun completeString(): String {
-        return directive.completeString
+    fun generateMarkdown(): String {
+        return "${directive.completeString}\n${linkMarkdown.markdownString()}"
     }
 }
 
@@ -54,10 +63,10 @@ data class LinkDirectiveOptions(val rootDirRelativePath: Path, val originalPathS
                 val pathString = matchResult.groups["path"]!!.value
                 val path = Paths.get(pathString)
                 val directory = file.absolutePath()
-                        .parent
+                    .parent
                 val absolutePath = directory.resolve(path)
-                        .normalize()
-                        .toAbsolutePath()
+                    .normalize()
+                    .toAbsolutePath()
 
                 var name = matchResult.groups["name"]!!.value
                 if (name.startsWith("\"")) {
@@ -65,7 +74,7 @@ data class LinkDirectiveOptions(val rootDirRelativePath: Path, val originalPathS
                 }
                 return LinkDirectiveOptions(absolutePath, pathString, name)
             } else {
-                throw IllegalArgumentException("Found [$LINK_TAG] directive with not parsable options '${directive.completeString}'")
+                throw DocuMaidException.create("Found [$LINK_TAG] directive with not parsable options '${directive.completeString}'", file)
             }
         }
     }

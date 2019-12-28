@@ -24,25 +24,27 @@ package de.quantummaid.documaid.domain.markdown.navigation
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.domain.markdown.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.navigation.NavigationMarkdown
 import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupData
 
-class NavigationDirective private constructor(val file: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
+class NavigationDirective private constructor(val directive: RawMarkdownDirective, val file: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
 
     companion object {
         val NAV_TAG = DirectiveTag("Nav")
 
-        fun create(file: MarkdownFile, project: Project): NavigationDirective {
+        fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): NavigationDirective {
             val tableOfContentsLookupData = project.getInformation(TableOfContentsLookupData.TOC_LOOKUP_KEY)
             val tableOfContents = tableOfContentsLookupData.getTableOfContents()
             val overviewFile = tableOfContents.getFileWithToc()
             val previousFile = tableOfContents.getFilePredecessor(file)
             val nextFile = tableOfContents.getFileSuccessor(file)
-            return NavigationDirective(file, previousFile, overviewFile, nextFile)
+            return NavigationDirective(rawMarkdownDirective, file, previousFile, overviewFile, nextFile)
         }
     }
 
-    fun generateNavigationMarkdownObject(): NavigationMarkdown {
-        return NavigationMarkdown(file, previousFile, overviewFile, nextFile)
+    fun generateMarkdown(): String {
+        val navigationMarkdown = NavigationMarkdown(file, previousFile, overviewFile, nextFile)
+        return "${directive.completeString}\n${navigationMarkdown.generateMarkdown()}"
     }
 }

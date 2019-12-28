@@ -24,7 +24,7 @@ package de.quantummaid.documaid.errors
 import de.quantummaid.documaid.collecting.structure.FileObject
 import java.nio.file.Path
 
-data class VerificationError(val message: String, val path: Path?) : DokuMaidError {
+class VerificationError private constructor(val message: String, val path: Path?) : DokuMaidError {
 
     override fun message(): String = message
 
@@ -34,12 +34,16 @@ data class VerificationError(val message: String, val path: Path?) : DokuMaidErr
             return VerificationError(message, fileObject?.absolutePath())
         }
 
-        fun create(message: String, fileObject: FileObject?): VerificationError {
-            return createForPath(message, fileObject?.absolutePath())
+        fun create(message: String, fileObject: FileObject): VerificationError {
+            return createForPath(message, fileObject.absolutePath())
         }
 
-        fun createForPath(message: String, path: Path?): VerificationError {
-            return VerificationError(message, path)
+        fun createForPath(message: String, path: Path): VerificationError {
+            return VerificationError("$message (in path ${path.toAbsolutePath()})", path)
+        }
+
+        fun createWithoutFileOrigin(message: String): VerificationError {
+            return VerificationError(message, null)
         }
     }
 }

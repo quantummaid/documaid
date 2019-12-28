@@ -23,6 +23,7 @@ package de.quantummaid.documaid.collecting.snippets
 
 import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
 import de.quantummaid.documaid.domain.snippet.SnippetId
+import de.quantummaid.documaid.errors.DocuMaidException
 import java.nio.file.Path
 
 class CodeSnippetsLookupTable {
@@ -50,7 +51,7 @@ class CodeSnippetsLookupTable {
         if (list!!.size == 1) {
             return list[0]
         } else {
-            throw IllegalArgumentException("Snippet $snippetId was not unique")
+            throw DocuMaidException.createWithoutFileOrigin("Snippet $snippetId was not unique")
         }
     }
 }

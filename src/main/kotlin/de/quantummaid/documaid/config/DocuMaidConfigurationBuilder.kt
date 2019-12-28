@@ -21,6 +21,7 @@
 
 package de.quantummaid.documaid.config
 
+import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.logging.Logger
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -58,7 +59,7 @@ class DocuMaidConfigurationBuilder private constructor() {
 
     fun build(): DocuMaidConfiguration {
         return DocuMaidConfiguration(basePath
-            ?: throw IllegalArgumentException("Base path required"), goal!!, logger!!, mavenConfiguration)
+            ?: throw DocuMaidException.createWithoutFileOrigin("Base path required"), goal!!, logger!!, mavenConfiguration)
     }
 
     companion object {

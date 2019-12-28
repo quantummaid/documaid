@@ -23,6 +23,7 @@ package de.quantummaid.documaid.collecting.structure
 
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.domain.snippet.SnippetId
+import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
 
@@ -57,11 +58,11 @@ interface ProjectFile : FileObject {
 
     fun snippetForId(snippetId: SnippetId): RawSnippet {
         val matchingSnippets = snippets().filter { it.id == snippetId }
-                .toList()
+            .toList()
         when {
             matchingSnippets.size == 1 -> return matchingSnippets[0]
-            matchingSnippets.isEmpty() -> throw IllegalArgumentException("Snippet $snippetId not found")
-            else -> throw IllegalArgumentException("Not unique snippet $snippetId found")
+            matchingSnippets.isEmpty() -> throw DocuMaidException.create("Snippet $snippetId not found", this)
+            else -> throw DocuMaidException.create("Not unique snippet $snippetId found", this)
         }
     }
 }

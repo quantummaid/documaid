@@ -68,7 +68,8 @@ class TableOfContentWithNavigationTest {
                 .configuredWith(aTocInReadmeWithAnIndexFileWithoutNavigation(BASE_PATH))
                 .configuredWithGoal(GENERATE))
                 .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found file indexed by table of contents but without [$NAV_TAG] tag: ${absPath("fileWithoutNav/1_error.md")}"))
+                .then(expectAnExceptionWithMessage("Found file indexed by table of contents but without [$NAV_TAG] tag " +
+                    "(in path ${absPath("fileWithoutNav/1_error.md")})"))
     }
 
     @Test
@@ -77,7 +78,8 @@ class TableOfContentWithNavigationTest {
                 .configuredWith(aTocInReadmeWithFileWithNavigationButNotIndexedByToc(BASE_PATH))
                 .configuredWithGoal(GENERATE))
                 .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag for file not indexed by table of contents: ${absPath("fileOutsideOfToc/1_error.md")}"))
+                .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag for file not indexed by table of contents " +
+                    "(in path ${absPath("fileOutsideOfToc/1_error.md")})"))
     }
 
     @Test
@@ -104,7 +106,8 @@ class TableOfContentWithNavigationTest {
                 .configuredWith(aReadmeWithTocAndAFileWithMissingNav(BASE_PATH))
                 .configuredWithGoal(Goal.VALIDATE))
                 .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with missing navigation in '${absPath("missingNav/docs/02_SomeImportantStuff.md")}'"))
+                .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with missing navigation " +
+                    "(in path ${absPath("missingNav/docs/02_SomeImportantStuff.md")})"))
     }
 
     @Test
@@ -113,7 +116,7 @@ class TableOfContentWithNavigationTest {
                 .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
                 .configuredWithGoal(Goal.VALIDATE))
                 .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with wrong navigation in '${absPath("wrongNav/docs/1_Introduction.md")}'"))
+                .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with wrong navigation (in path ${absPath("wrongNav/docs/1_Introduction.md")})"))
     }
 
     private fun absPath(fileName: String): String {

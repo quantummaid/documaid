@@ -73,7 +73,7 @@ fun multipleGoalsValidationFile(): SampleFile {
             "strings.remove(1);\n" +
             "```\n" +
             "someOtherText" +
-            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->" +
+            "<!---[Link] ( ./link/ReferencedCodeFile.java file)-->\n" +
             "[file](./link/ReferencedCodeFile.java)"
     val fileName = "multipleGoalsValidationFile.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)

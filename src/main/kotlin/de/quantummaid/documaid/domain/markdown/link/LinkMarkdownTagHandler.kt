@@ -27,6 +27,8 @@ import de.quantummaid.documaid.domain.markdown.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.link.LinkDirective.Companion.LINK_TAG
+import de.quantummaid.documaid.domain.markdown.link.LinkMarkdown.Companion.startsWithLinkMarkdown
+import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.errors.VerificationError
 
 class LinkMarkdownTagHandler : MarkdownTagHandler {
@@ -34,42 +36,38 @@ class LinkMarkdownTagHandler : MarkdownTagHandler {
     override fun tag(): String = LINK_TAG.toString()
 
     override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
-        val linkDirective = LinkDirective.create(directive, file)
-        val (directiveAndMarkdownLink, errors) = LinkDirectiveAndMarkdown.create(linkDirective, file, project)
-        if (errors.isNotEmpty() || directiveAndMarkdownLink == null) {
-            return Pair(null, errors)
-        }
-        val markdown = directiveAndMarkdownLink.generateMarkdown()
-
-        val textToBeReplaced = textToBeReplaced(directive)
+        val linkDirective = LinkDirective.create(directive, file, project)
+        val markdown = linkDirective.generateMarkdown()
+        val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeToReplaceIn = rangeToReplaceIn(directive, markdown)
         val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, markdown)
         return Pair(markdownReplacement, emptyList())
     }
 
-    private fun textToBeReplaced(markdownDirective: RawMarkdownDirective): String {
-        val trailingLink = loadTrailingLink(markdownDirective)
-        return if (trailingLink != null) {
-            "${markdownDirective.completeString}\n$trailingLink"
+    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+        val linkDirective = LinkDirective.create(directive, file, project)
+        val markdown = linkDirective.generateMarkdown()
+        val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
+        return if (textToBeReplaced != markdown) {
+            val trailingCodeFound = trailingMarkdownMatchResult.matches
+            if (trailingCodeFound) {
+                listOf(VerificationError.create("Found [${tag()}] tag with wrong link being set: '${directive.completeString}'", file))
+            } else {
+                listOf(VerificationError.create("Found [${tag()}] tag without link being set for '${directive.completeString}'", file))
+            }
         } else {
-            markdownDirective.completeString
+            emptyList()
         }
     }
 
-    private fun loadTrailingLink(markdownDirective: RawMarkdownDirective): String? {
-        val remainingContent = markdownDirective.remainingMarkupFileContent.content
-        if (!remainingContent.trimStart().startsWith("[")) {
-            return null
+    private fun textToBeReplaced(markdownDirective: RawMarkdownDirective): Pair<String, TrailingMarkdownMatchResult> {
+        val markdownMatchResult = startsWithLinkMarkdown(markdownDirective.remainingMarkupFileContent)
+        val text = if (markdownMatchResult.matches) {
+            "${markdownDirective.completeString}${markdownMatchResult.content}"
+        } else {
+            markdownDirective.completeString
         }
-
-        val LINK_PATTERN = """\[ *[^]]+ *] *\([^)]*\)""".toRegex()
-        val find = LINK_PATTERN.find(remainingContent)
-        val range = find?.range ?: return ""
-
-        val bigRange = IntRange(range.first, range.last)
-
-        val link = remainingContent.substring(bigRange).trim()
-        return link
+        return Pair(text, markdownMatchResult)
     }
 
     private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String): IntRange {
@@ -77,28 +75,5 @@ class LinkMarkdownTagHandler : MarkdownTagHandler {
         val endIndexInitialTag = markdownDirective.range.last
         val lengthNewContent = textToReplace.length
         return IntRange(startIndex, Math.max(endIndexInitialTag, startIndex + lengthNewContent))
-    }
-
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
-        val (markdownReplacement, errors) = generate(directive, file, project)
-        if (errors.isNotEmpty() || markdownReplacement == null) {
-            return errors
-        }
-        val (_, textToBeReplaced, textToReplace) = markdownReplacement
-        return if (textToReplace != textToBeReplaced) {
-            if (noLinkPresent(textToBeReplaced)) {
-                listOf(VerificationError("Found [${tag()}] tag without link being set for '${directive.completeString}'", file.absolutePath()))
-            } else {
-                listOf(VerificationError("Found [${tag()}] tag with wrong link being set: '${directive.completeString}'", file.absolutePath()))
-            }
-        } else {
-            emptyList()
-        }
-    }
-
-    private fun noLinkPresent(textToBeReplaced: String): Boolean {
-        val stringWithPotentialLink = textToBeReplaced.substringAfter(">")
-            .trim()
-        return !stringWithPotentialLink.startsWith("[")
     }
 }

@@ -81,15 +81,16 @@ fun fileWithWrongLink(): SampleFile {
 }
 
 fun twoMissingLinksFileSampleFiles(): SampleFile {
-    val contentInput = "<!---[Link] ( ./someWhere/notExistingFile.java linkName)-->" + "<!---[Link] ( differentNotExistingFile.java linkName)-->"
+    val contentInput = "<!---[Link] ( ./someWhere/notExistingFile.java linkName)-->\n" +
+        "<!---[Link] ( differentNotExistingFile.java linkName)-->"
     val fileName = "missingLinksFile.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)
 }
 
 fun correctlyGeneratedFileWithTwoLinks(): SampleFile {
     val contentInput = "Some Text with isolated Link\n" +
-        "<!---[Link] ( ./ReferencedCodeFile.java \"longer Name\")-->[longer Name](./ReferencedCodeFile.java)\n" +
-        "text with the link <!---[Link] ( ./ReferencedCodeFile.java \"name with %A(H!3js@\")-->" +
+        "<!---[Link] ( ./ReferencedCodeFile.java \"longer Name\")-->\n[longer Name](./ReferencedCodeFile.java)\n" +
+        "text with the link <!---[Link] ( ./ReferencedCodeFile.java \"name with %A(H!3js@\")-->\n" +
         "[name with %A(H!3js@](./ReferencedCodeFile.java) inside\n"
     val fileName = "correctlyGeneratedFileWithTwoLinks.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)
@@ -97,7 +98,7 @@ fun correctlyGeneratedFileWithTwoLinks(): SampleFile {
 
 fun oneMissingLinkFileSampleFiles(): SampleFile {
     val contentInput = "Some Text with isolated Link\n" +
-        "<!---[Link] ( ./ReferencedCodeFile.java \"longer Name\")-->[longer Name](./ReferencedCodeFile.java)\n" +
+        "<!---[Link] ( ./ReferencedCodeFile.java \"longer Name\")-->\n[longer Name](./ReferencedCodeFile.java)\n" +
         "text with the link <!---[Link] ( ./ReferencedCodeFile.java name)-->"
     val fileName = "oneMissingLinkFileSampleFiles.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)
@@ -105,14 +106,14 @@ fun oneMissingLinkFileSampleFiles(): SampleFile {
 
 fun wrongLinkFileSampleFiles(): SampleFile {
     val contentInput = "Some Text with isolated Link\n" +
-        "<!---[Link] ( ./ReferencedCodeFile.java \"name\")-->[name](./differentTarget.java)\n" +
+        "<!---[Link] ( ./ReferencedCodeFile.java \"name\")-->\n[name](./differentTarget.java)\n" +
         "restOfTheText"
     val fileName = "wrongLinkFileSampleFiles.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)
 }
 
 fun aLinkToANotExistingFile(): SampleFile {
-    val contentInput = "Some Text with isolated Link\n" + "<!---[Link] ( ./someWhere/notExistingFile.java name)-->[mame](./someWhere/notExistingFile.java)"
+    val contentInput = "Some Text with isolated Link\n" + "<!---[Link] ( ./someWhere/notExistingFile.java name)-->\n[mame](./someWhere/notExistingFile.java)"
     val fileName = "aLinkToANotExistingFile.md"
     return SampleFile.inputOnlySampleFile(contentInput, fileName)
 }

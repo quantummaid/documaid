@@ -51,7 +51,7 @@ class NavigationPreparer : PreparingVisitor {
 
         val tableOfContentsLookupData = project.getInformation(TOC_LOOKUP_KEY)
         if (!tableOfContentsLookupData.tableOfContentsAvailable()) {
-            return listOf(VerificationError.create("Found [$NAV_TAG] tags without a [$TOC_TAG]", null))
+            return listOf(VerificationError.createWithoutFileOrigin("Found [$NAV_TAG] tags without a [$TOC_TAG]"))
         }
 
         val tableOfContents = tableOfContentsLookupData.getTableOfContents()
@@ -59,14 +59,14 @@ class NavigationPreparer : PreparingVisitor {
         val filesWithNavButNotIndexed = filesWithNavigationDirective.minus(filePathsIncludedInToc)
         if (filesWithNavButNotIndexed.isNotEmpty()) {
             return filesWithNavButNotIndexed.map {
-                VerificationError.create("Found [$NAV_TAG] tag for file not indexed by table of contents: ${it.key}", it.value)
+                VerificationError.create("Found [$NAV_TAG] tag for file not indexed by table of contents", it.value)
             }
         }
 
         val filesWithoutNavigationDirective = filePathsIncludedInToc.minus(filesWithNavigationDirective.keys)
         if (filesWithoutNavigationDirective.isNotEmpty()) {
             return filesWithoutNavigationDirective.map {
-                VerificationError.createForPath("Found file indexed by table of contents but without [$NAV_TAG] tag: $it", it)
+                VerificationError.createForPath("Found file indexed by table of contents but without [$NAV_TAG] tag", it)
             }
         }
         return emptyList()

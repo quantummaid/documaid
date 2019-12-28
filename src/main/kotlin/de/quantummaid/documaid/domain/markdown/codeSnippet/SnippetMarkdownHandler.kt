@@ -22,13 +22,13 @@
 package de.quantummaid.documaid.domain.markdown.codeSnippet
 
 import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.domain.markdown.MarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.codeSnippet.CodeSnippetDirective.Companion.CODE_SNIPPET_TAG
-import de.quantummaid.documaid.domain.markdown.codeSnippet.CodeSnippetDirectiveAndMarkdown.Companion.CODE_SEGMENT_PATTERN
+import de.quantummaid.documaid.domain.markdown.codeSnippet.CodeSnippetMarkdown.Companion.startsWithCodeSnippetMarkdown
+import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.errors.VerificationError
 
 class SnippetMarkdownHandler : MarkdownTagHandler {
@@ -38,17 +38,12 @@ class SnippetMarkdownHandler : MarkdownTagHandler {
     }
 
     override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
-        return try {
-            val codeSnippetDirectiveAndMarkdown = CodeSnippetDirectiveAndMarkdown.create(directive, file, project)
-
-            val markdown = codeSnippetDirectiveAndMarkdown.generateMarkdown()
-            val textToBeReplaced = textToBeReplaced(directive)
-            val range = rangeToReplaceIn(directive, textToBeReplaced)
-            val markdownReplacement = MarkdownReplacement(range, textToBeReplaced, markdown)
-            Pair(markdownReplacement, emptyList())
-        } catch (e: Exception) {
-            Pair(null, listOf(VerificationError.createFromException(e, file)))
-        }
+        val codeSnippetDirective = CodeSnippetDirective.create(directive, file, project)
+        val markdown = codeSnippetDirective.generateMarkdown()
+        val (textToBeReplaced) = textToBeReplaced(directive)
+        val range = rangeToReplaceIn(directive, textToBeReplaced)
+        val markdownReplacement = MarkdownReplacement(range, textToBeReplaced, markdown)
+        return Pair(markdownReplacement, emptyList())
     }
 
     private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String): IntRange {
@@ -58,41 +53,26 @@ class SnippetMarkdownHandler : MarkdownTagHandler {
         return IntRange(startIndex, Math.max(endIndexInitialTag, startIndex + lengthNewContent))
     }
 
-    private fun textToBeReplaced(markdownDirective: RawMarkdownDirective): String {
-        val trailingCodeSection = loadTrailingCodeSection(markdownDirective)
-        if (trailingCodeSection != null) {
-            return markdownDirective.completeString + "\n" + trailingCodeSection.content
+    private fun textToBeReplaced(markdownDirective: RawMarkdownDirective): Pair<String, TrailingMarkdownMatchResult> {
+        val markdownMatchResult = startsWithCodeSnippetMarkdown(markdownDirective.remainingMarkupFileContent)
+        val text = if (markdownMatchResult.matches) {
+            markdownDirective.completeString + markdownMatchResult.content
         } else {
-            return markdownDirective.completeString
+            markdownDirective.completeString
         }
-    }
-
-    private fun loadTrailingCodeSection(markdownDirective: RawMarkdownDirective): MarkdownCodeSection? {
-        val content = markdownDirective.remainingMarkupFileContent.content
-        if (!content.startsWith("\n```")) {
-            return null
-        }
-
-        val find = CODE_SEGMENT_PATTERN.find(content)
-        val range = find?.range ?: return null
-
-        val bigRange = IntRange(range.first, range.last)
-
-        val codeContent = content.substring(bigRange).trim()
-        return MarkdownCodeSection(codeContent)
+        return Pair(text, markdownMatchResult)
     }
 
     override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
-        val (markdownReplacement, errors) = generate(directive, file, project)
-        if (errors.isNotEmpty() || markdownReplacement == null) {
-            return errors
-        }
-        val (_, textToBeReplaced, textToReplace) = markdownReplacement
-        if (textToReplace != textToBeReplaced) {
-            return if (!textToBeReplaced.contains("```")) {
-                listOf(VerificationError("Found [${tag()}] tag with missing snippet for '${directive.completeString}'", file.absolutePath()))
+        val codeSnippetDirective = CodeSnippetDirective.create(directive, file, project)
+        val textToReplace = codeSnippetDirective.generateMarkdown()
+        val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
+        return if (textToBeReplaced != textToReplace) {
+            val trailingCodeFound = trailingMarkdownMatchResult.matches
+            if (trailingCodeFound) {
+                listOf(VerificationError.create("Found [${tag()}] tag with incorrect code for '${directive.completeString}'", file))
             } else {
-                listOf(VerificationError("Found [${tag()}] tag with incorrect code for '${directive.completeString}'", file.absolutePath()))
+                listOf(VerificationError.create("Found [${tag()}] tag with missing snippet for '${directive.completeString}'", file))
             }
         } else {
             return emptyList()

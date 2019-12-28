@@ -26,6 +26,7 @@ import de.quantummaid.documaid.collecting.structure.FileObject
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
 
@@ -65,7 +66,7 @@ class TocDataDirectory internal constructor(
             return try {
                 val dirAbsolutePath = directory.absolutePath()
                 val fileName = dirAbsolutePath.fileName.toString()
-                val (index, title) = parseName(fileName)
+                val (index, title) = parseName(fileName, dirAbsolutePath)
                 val sortedChildren = children.sortedBy { it.index }
                 verifyIndicesCorrect(sortedChildren, dirAbsolutePath)
                 val relativePath = scanBaseDir.relativize(dirAbsolutePath)
@@ -90,7 +91,7 @@ class TocDataFile(
             return try {
                 val fileAbsolutePath = file.absolutePath()
                 val fileName = fileAbsolutePath.fileName.toString()
-                val (index, title) = parseName(fileName)
+                val (index, title) = parseName(fileName, fileAbsolutePath)
                 val relativePath = scanBaseDir.relativize(fileAbsolutePath)
                 val tocDataFile = TocDataFile(index, title, relativePath, file)
                 Pair(tocDataFile, emptyList())
@@ -102,7 +103,7 @@ class TocDataFile(
     }
 }
 
-fun parseName(name: String): Pair<Int, String> {
+private fun parseName(name: String, path: Path): Pair<Int, String> {
     val matchResult = TableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matchEntire(name)
     if (matchResult != null) {
         val (indexString, _) = matchResult.groups["index"]!!
@@ -111,11 +112,11 @@ fun parseName(name: String): Pair<Int, String> {
         val normalCaseName = convertToNormalCase(title)
         return Pair(index, normalCaseName)
     } else {
-        throw IllegalArgumentException("[$TOC_TAG] Cannot parse Toc indexed name '$name'")
+        throw DocuMaidException.create("[$TOC_TAG] Cannot parse Toc indexed name '$name'", path)
     }
 }
 
-fun convertToNormalCase(name: String): String {
+private fun convertToNormalCase(name: String): String {
     val nameWithOutFirstCharacter = name.substring(1)
     val normalCaseRest = nameWithOutFirstCharacter.replace("""\p{Lu}""".toRegex()) { matchResult -> " " + matchResult.value.toLowerCase() }
     return name[0].toUpperCase() + normalCaseRest
@@ -127,10 +128,10 @@ private fun verifyIndicesCorrect(list: List<TocDataFileObject>, absolutePath: Pa
         val currentIndex = array[i].index
         val expectedIndex = i + 1
         if (currentIndex > expectedIndex) {
-            throw IllegalArgumentException("[$TOC_TAG] Missing index $expectedIndex for TOC in directory '${absolutePath.fileName}'")
+            throw DocuMaidException.create("[$TOC_TAG] Missing index $expectedIndex for TOC in directory '${absolutePath.fileName}'", absolutePath)
         }
         if (currentIndex < expectedIndex) {
-            throw IllegalArgumentException("[$TOC_TAG] File '${array[i - 1].fileName}' has same TOC index as '${array[i].fileName}'")
+            throw DocuMaidException.create("[$TOC_TAG] File '${array[i - 1].fileName}' has same TOC index as '${array[i].fileName}'", absolutePath)
         }
     }
 }

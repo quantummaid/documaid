@@ -19,32 +19,28 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.domain.markdown.link
+package de.quantummaid.documaid.domain.markdown.codeSnippet
 
+import de.quantummaid.documaid.domain.markdown.MarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
+import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 
-class LinkMarkdown(val name: String, val target: String) {
+class CodeSnippetMarkdown private constructor(val markdownCodeSection: MarkdownCodeSection) {
 
     companion object {
-        val LINK_PATTERN = """\n? *\[ *[^]]+ *] *\([^)]*\)""".toRegex()
+        fun create(markdownCodeSection: MarkdownCodeSection): CodeSnippetMarkdown {
+            return CodeSnippetMarkdown(markdownCodeSection)
+        }
 
-        fun startsWithLinkMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
-            val remainingContent = remainingMarkupFileContent.content
-            return if (!remainingContent.trimStart().startsWith("[")) {
-                TrailingMarkdownMatchResult.createForNoMatch()
+        fun startsWithCodeSnippetMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+            val content = remainingMarkupFileContent.content
+            return if (content.trimStart().startsWith("```")) {
+                val trailingCodeSection = TrailingMarkdownCodeSection.extractTrailingCodeSection(remainingMarkupFileContent)
+                TrailingMarkdownMatchResult.createForMatch(trailingCodeSection.completeLength, trailingCodeSection.untrimmedContent)
             } else {
-                val find = LINK_PATTERN.find(remainingContent)
-                if (find != null) {
-                    TrailingMarkdownMatchResult.createForMatch(find.range.last - find.range.start, find.value)
-                } else {
-                    TrailingMarkdownMatchResult.createForNoMatch()
-                }
+                TrailingMarkdownMatchResult.createForNoMatch()
             }
         }
-    }
-
-    fun markdownString(): String {
-        return "[$name]($target)"
     }
 }

@@ -49,110 +49,119 @@ internal class DocuMaidCodeLinkTest {
     @Test
     fun canInsertSimpleCodeLinks() {
         given(DokuMaidTestBuilder.aDokuMaid()
-                .configuredWith(aFileWithALink())
-                .configuredWithGoal(Goal.GENERATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectTheLinkToBeInserted())
+            .configuredWith(aFileWithALink())
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectTheLinkToBeInserted())
     }
 
     @Test
     fun canInsertTwoLinks() {
         given(aDokuMaid()
-                .configuredWith(aFileWithTwoLinks())
-                .configuredWithGoal(Goal.GENERATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectAllLinksToBeInserted())
+            .configuredWith(aFileWithTwoLinks())
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllLinksToBeInserted())
     }
 
     @Test
     fun canInsertTheSameLinkTwice() {
         given(aDokuMaid()
-                .configuredWith(aFileWithTheSameLinksTwice())
-                .configuredWithGoal(Goal.GENERATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectAllLinksToBeInserted())
+            .configuredWith(aFileWithTheSameLinksTwice())
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllLinksToBeInserted())
     }
 
     @Test
     fun canReplaceAWrongLink() {
         given(aDokuMaid()
-                .configuredWith(aFileWithWrongLink())
-                .configuredWithGoal(Goal.GENERATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectAllLinksToBeInserted())
+            .configuredWith(aFileWithWrongLink())
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllLinksToBeInserted())
     }
 
     @Test
     fun failsForSeveralNotExistingLinkTarget() {
         given(aDokuMaid()
-                .configuredWith(aFileWithTheLinksToMissingFiles())
-                .configuredWithGoal(Goal.GENERATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
-                        "Found [Link] tag to not existing file '" + ABS_BASE_PATH + "someWhere/notExistingFile.java'",
-                        "Found [Link] tag to not existing file '" + ABS_BASE_PATH + "differentNotExistingFile.java'"
-                ))
+            .configuredWith(aFileWithTheLinksToMissingFiles())
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
+                "Found [Link] tag to not existing file '" + ABS_BASE_PATH + "someWhere/notExistingFile.java' (in path ${absPath("missingLinksFile.md")})",
+                "Found [Link] tag to not existing file '" + ABS_BASE_PATH + "differentNotExistingFile.java' (in path ${absPath("missingLinksFile.md")})"
+            ))
     }
 
     @Test
     fun canValidateCorrectLinks() {
         given(aDokuMaid()
-                .configuredWith(aCorrectlyGeneratedFileWithTwoLinks())
-                .configuredWithGoal(Goal.VALIDATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectNoException())
+            .configuredWith(aCorrectlyGeneratedFileWithTwoLinks())
+            .configuredWithGoal(Goal.VALIDATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectNoException())
     }
 
     @Test
     fun failsForMissingLink() {
         given(aDokuMaid()
-                .configuredWith(aFileWithAMissingLink())
-                .configuredWithGoal(Goal.VALIDATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for '<!---[Link] ( ./ReferencedCodeFile.java name)-->'"))
+            .configuredWith(aFileWithAMissingLink())
+            .configuredWithGoal(Goal.VALIDATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for '<!---[Link] ( ./ReferencedCodeFile.java name)-->' " +
+                "(in path ${absPath("oneMissingLinkFileSampleFiles.md")})"))
     }
 
     @Test
     fun failsForWrongLink() {
         given(aDokuMaid()
-                .configuredWith(aFileWithAWrongLink())
-                .configuredWithGoal(Goal.VALIDATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: '<!---[Link] ( ./ReferencedCodeFile.java \"name\")-->'"))
+            .configuredWith(aFileWithAWrongLink())
+            .configuredWithGoal(Goal.VALIDATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: '<!---[Link] ( ./ReferencedCodeFile.java \"name\")-->' " +
+                "(in path ${absPath("wrongLinkFileSampleFiles.md")})"))
     }
 
     @Test
     fun failsIfLinkDoesNotPointToAExistingFileAnymore() {
         given(aDokuMaid()
-                .configuredWith(aFileWithALinkToANotExistingFile())
-                .configuredWithGoal(Goal.VALIDATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file '" + ABS_BASE_PATH + "someWhere/notExistingFile.java'"))
+            .configuredWith(aFileWithALinkToANotExistingFile())
+            .configuredWithGoal(Goal.VALIDATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file '" + ABS_BASE_PATH + "someWhere/notExistingFile.java' " +
+                "(in path ${absPath("aLinkToANotExistingFile.md")})"))
     }
 
     @Test
     fun capturesMultipleErrors() {
         given(aDokuMaid()
-                .configuredWith(aFileWithMultipleLinkErrors())
-                .configuredWithGoal(Goal.VALIDATE)
-                .configuredWithBasePath(BASE_PATH))
-                .`when`(theDokuIsPimped())
-                .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
-                        "Found [Link] tag with wrong link being set: '<!---[Link] ( ./ReferencedCodeFile.java name)-->'",
-                        "Found [Link] tag without link being set for '<!---[Link] ( ./ReferencedCodeFile.java name)-->'"))
+            .configuredWith(aFileWithMultipleLinkErrors())
+            .configuredWithGoal(Goal.VALIDATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
+                "Found [Link] tag with wrong link being set: '<!---[Link] ( ./ReferencedCodeFile.java name)-->' " +
+                    "(in path ${absPath("multipleLinkErrors.md")})",
+                "Found [Link] tag without link being set for '<!---[Link] ( ./ReferencedCodeFile.java name)-->' " +
+                    "(in path ${absPath("multipleLinkErrors.md")})"))
     }
 
     companion object {
         private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/link/"
         private val ABS_BASE_PATH = Paths.get("", BASE_PATH).toAbsolutePath().toString() + "/"
+    }
+
+    private fun absPath(fileName: String): String {
+        return Paths.get("", BASE_PATH).resolve(fileName).toAbsolutePath().toString()
     }
 }

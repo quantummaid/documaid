@@ -126,10 +126,10 @@ internal class DocuMaidCodeSnippetTest {
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +
-                    "${absBasePath()}/duplicateSnippetsDirectory/snippetDuplicate1.java, ${absBasePath()}/duplicateSnippetsDirectory/snippetDuplicate2.xml",
+                    "${absPath("duplicateSnippetsDirectory/snippetDuplicate1.java")}, ${absPath("duplicateSnippetsDirectory/snippetDuplicate2.xml")}",
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'tripleDuplicate': " +
-                    "${absBasePath()}/duplicateSnippetsDirectory/snippetTriplicate1.java, ${absBasePath()}/duplicateSnippetsDirectory/subDir/snippetTriplicate2.java, " +
-                    "${absBasePath()}/duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml"
+                    "${absPath("duplicateSnippetsDirectory/snippetTriplicate1.java")}, ${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate2.java")}, " +
+                    "${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml")}"
             ))
     }
 
@@ -150,7 +150,8 @@ internal class DocuMaidCodeSnippetTest {
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with incorrect code for '<!---[$CODE_SNIPPET_TAG] (first)-->'"))
+            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with incorrect code for '<!---[$CODE_SNIPPET_TAG] (first)-->' " +
+                "(in path ${absPath("wrongCodeSnippet.md")})"))
     }
 
     @Test
@@ -160,7 +161,8 @@ internal class DocuMaidCodeSnippetTest {
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '<!---[$CODE_SNIPPET_TAG] (notExisting)-->'"))
+            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '<!---[$CODE_SNIPPET_TAG] (notExisting)-->' " +
+                "(in path ${absPath("missingCodeSnippet.md")})"))
     }
 
     @Test
@@ -171,8 +173,8 @@ internal class DocuMaidCodeSnippetTest {
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
-                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (first)-->'",
-                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (first)-->'"
+                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (first)-->' (in path ${absPath("multipleCodeSnippetErrors.md")})",
+                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (first)-->' (in path ${absPath("multipleCodeSnippetErrors.md")})"
             ))
     }
 
@@ -180,7 +182,7 @@ internal class DocuMaidCodeSnippetTest {
         private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/codeSnippet/"
     }
 
-    fun absBasePath(): String {
-        return Paths.get(BASE_PATH).toAbsolutePath().toString()
+    fun absPath(fileName: String): String {
+        return Paths.get(BASE_PATH).resolve(fileName).toAbsolutePath().toString()
     }
 }

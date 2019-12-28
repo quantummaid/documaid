@@ -35,15 +35,27 @@ class DependencyMarkdownHandler : MarkdownTagHandler {
     override fun tag(): String = DEPENDENCY_TAG.value
 
     override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
-        return try {
-            val dependencyDirective = DependencyDirective.create(directive, project)
-            val textToReplace = dependencyDirective.generateCompleteMarkdown()
-            val (textToBeReplaced) = textToBeReplaced(directive)
-            val rangeStart = directive.range.first
-            val rangeEnd = rangeStart + Math.max(textToBeReplaced.length, textToReplace.length)
-            Pair(MarkdownReplacement(IntRange(rangeStart, rangeEnd), textToBeReplaced, textToReplace), emptyList())
-        } catch (e: Exception) {
-            Pair(null, listOf(VerificationError.createFromException(e, file)))
+        val dependencyDirective = DependencyDirective.create(directive, file, project)
+        val textToReplace = dependencyDirective.generateCompleteMarkdown()
+        val (textToBeReplaced) = textToBeReplaced(directive)
+        val rangeStart = directive.range.first
+        val rangeEnd = rangeStart + Math.max(textToBeReplaced.length, textToReplace.length)
+        return Pair(MarkdownReplacement(IntRange(rangeStart, rangeEnd), textToBeReplaced, textToReplace), emptyList())
+    }
+
+    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+        val dependencyDirective = DependencyDirective.create(directive, file, project)
+        val textToReplace = dependencyDirective.generateCompleteMarkdown()
+        val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
+        return if (textToBeReplaced != textToReplace) {
+            val trailingCodeFound = trailingMarkdownMatchResult.matches
+            if (trailingCodeFound) {
+                listOf(VerificationError.create("Found [${tag()}] tag with incorrect dependency code for '${directive.completeString}'", file))
+            } else {
+                listOf(VerificationError.create("Found [${tag()}] tag with missing dependency code for '${directive.completeString}'", file))
+            }
+        } else {
+            emptyList()
         }
     }
 
@@ -56,21 +68,5 @@ class DependencyMarkdownHandler : MarkdownTagHandler {
             directive.completeString
         }
         return Pair(text, trailingMarkdownMatchResult)
-    }
-
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
-        val dependencyDirective = DependencyDirective.create(directive, project)
-        val textToReplace = dependencyDirective.generateCompleteMarkdown()
-        val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
-        return if (textToBeReplaced != textToReplace) {
-            val trailingCodeFound = trailingMarkdownMatchResult.matches
-            if (trailingCodeFound) {
-                listOf(VerificationError("Found [${tag()}] tag with incorrect dependency code for '${directive.completeString}'", file.absolutePath()))
-            } else {
-                listOf(VerificationError("Found [${tag()}] tag with missing dependency code for '${directive.completeString}'", file.absolutePath()))
-            }
-        } else {
-            emptyList()
-        }
     }
 }

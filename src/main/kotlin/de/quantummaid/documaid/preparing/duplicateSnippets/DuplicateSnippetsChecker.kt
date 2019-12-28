@@ -32,7 +32,7 @@ class DuplicateSnippetsChecker : PreparingVisitor {
                     .sortedBy { projectFile -> projectFile.absolutePath().toString() }
                     .joinToString(separator = ", ") { projectFile -> projectFile.absolutePath().toString() }
                 val message = "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet '${it.key.value}': $filesListing"
-                VerificationError(message, null)
+                VerificationError.createWithoutFileOrigin(message)
             }
     }
 }

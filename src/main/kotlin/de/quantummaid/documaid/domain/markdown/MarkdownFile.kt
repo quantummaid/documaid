@@ -30,6 +30,7 @@ import de.quantummaid.documaid.domain.markdown.link.LinkMarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.navigation.NavigationMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.domain.snippet.RawSnippet
+import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
 
@@ -50,28 +51,28 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
                 .joinToString(separator = "|", prefix = "(", postfix = ")") { it }
             val regex = "<!--- *\\[(?<tag>$tagsGroup)](?<options>.*?) *-->".toRegex()
 
-            val tagMatches = loadTags(content, regex)
+            val tagMatches = loadTags(content, regex, path)
             return MarkdownFile(path, tagMatches, tagHandlers)
         }
 
-        private fun loadTags(content: String, regex: Regex): List<RawMarkdownDirective> {
+        private fun loadTags(content: String, regex: Regex, path: Path): List<RawMarkdownDirective> {
             val matches: MutableList<RawMarkdownDirective> = mutableListOf()
-            var currentMatch = findNextTagInComment(content, 0, regex)
+            var currentMatch = findNextTagInComment(content, 0, regex, path)
             while (currentMatch != null) {
                 matches.add(currentMatch)
                 val nextStartIndex = currentMatch.endIndex()
-                currentMatch = findNextTagInComment(content, nextStartIndex, regex)
+                currentMatch = findNextTagInComment(content, nextStartIndex, regex, path)
             }
             return matches
         }
 
-        private fun findNextTagInComment(content: String, startIndex: Int, regex: Regex): RawMarkdownDirective? {
+        private fun findNextTagInComment(content: String, startIndex: Int, regex: Regex, path: Path): RawMarkdownDirective? {
             val tagFound: MatchResult? = regex.find(content, startIndex)
             return tagFound?.let { matchResult ->
                 val range = matchResult.range
                 val optionsString: String = matchResult.groups["options"]?.value ?: ""
                 val tag = matchResult.groups["tag"]?.value
-                    ?: throw IllegalArgumentException("Could not identify tag of markdown directive")
+                    ?: throw DocuMaidException.create("Could not identify tag of markdown directive", path)
                 val completeString = matchResult.value
                 val remainingMarkupFileContent = RemainingMarkupFileContent(content.substring(range.last + 1))
                 RawMarkdownDirective(DirectiveTag(tag), OptionsString(optionsString), completeString, range, remainingMarkupFileContent)
@@ -112,18 +113,10 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
         return emptyList()
     }
 
-    override fun validate(project: Project): List<VerificationError> {
-        val tagHandlerPairs = directives.map { it to handlerFor(it) }
-            .filter { it.second != null }
-
-        return tagHandlerPairs.flatMap { it.second!!.validate(it.first, this, project) }
-    }
-
     private fun createMarkdownTags(project: Project): Pair<List<MarkdownReplacement>?, List<VerificationError>> {
-        val tagHandlerPairs = directives.map { it to handlerFor(it) }
-            .filter { it.second != null }
+        val tagHandlerPairs = createTagHandlerPairs()
         val processedSnippetsErrorPairs: List<Pair<MarkdownReplacement?, List<VerificationError>>> = tagHandlerPairs
-            .map { it.second!!.generate(it.first, this, project) }
+            .map { invokeGenerateOnHandler(it, this, project) }
 
         val errors = processedSnippetsErrorPairs
             .map { it.second }
@@ -131,10 +124,40 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
         if (errors.isNotEmpty()) {
             return Pair(null, errors)
         }
-        val processedMarkdownTags = processedSnippetsErrorPairs
+        val markdownTagsWithoutErrors = processedSnippetsErrorPairs
             .filter { it.first != null }
             .map { it.first!! }
-        return Pair(processedMarkdownTags, emptyList())
+        return Pair(markdownTagsWithoutErrors, emptyList())
+    }
+
+    private fun invokeGenerateOnHandler(pair: Pair<RawMarkdownDirective, MarkdownTagHandler>, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+        val (directive, handler) = pair
+        return try {
+            handler.generate(directive, file, project)
+        } catch (e: Exception) {
+            Pair(null, listOf(VerificationError.createFromException(e, file)))
+        }
+    }
+
+    override fun validate(project: Project): List<VerificationError> {
+        val tagHandlerPairs = createTagHandlerPairs()
+        return tagHandlerPairs.flatMap { invokeValidateOnHandler(it, this, project) }
+    }
+
+    private fun invokeValidateOnHandler(pair: Pair<RawMarkdownDirective, MarkdownTagHandler>, file: MarkdownFile, project: Project): List<VerificationError> {
+        val (directive, handler) = pair
+        return try {
+            handler.validate(directive, file, project)
+        } catch (e: Exception) {
+            listOf(VerificationError.createFromException(e, file))
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun createTagHandlerPairs(): List<Pair<RawMarkdownDirective, MarkdownTagHandler>> {
+        val pairs = directives.map { it to handlerFor(it) }
+            .filter { it.second != null }
+        return pairs as List<Pair<RawMarkdownDirective, MarkdownTagHandler>>
     }
 
     override fun snippets(): List<RawSnippet> = emptyList()

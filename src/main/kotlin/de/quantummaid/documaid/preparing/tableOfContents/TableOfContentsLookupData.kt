@@ -23,6 +23,7 @@ package de.quantummaid.documaid.preparing.tableOfContents
 
 import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
+import de.quantummaid.documaid.errors.DocuMaidException
 
 class TableOfContentsLookupData {
 
@@ -41,6 +42,6 @@ class TableOfContentsLookupData {
     }
 
     fun getTableOfContents(): TableOfContents {
-        return tableOfContents ?: throw IllegalStateException("Not table of contents was generated")
+        return tableOfContents ?: throw DocuMaidException.createWithoutFileOrigin("Not table of contents was generated")
     }
 }

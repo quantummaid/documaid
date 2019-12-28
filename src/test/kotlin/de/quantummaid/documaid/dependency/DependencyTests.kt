@@ -36,6 +36,7 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Compa
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectTheDependencyToBeInserted
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
+import java.nio.file.Paths
 
 class DependencyTests {
 
@@ -75,7 +76,8 @@ class DependencyTests {
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Cannot parse options for [${DependencyDirective.DEPENDENCY_TAG.value}]: ${"(groupId=not correct artifactId version )"}"))
+            .then(expectAnExceptionWithMessage("Cannot parse options for [${DependencyDirective.DEPENDENCY_TAG.value}]: ${"(groupId=not correct artifactId version )"} " +
+                "(in path ${absPath("depWithWrongCode/dependency.md")})"))
     }
 
     @Test
@@ -96,7 +98,7 @@ class DependencyTests {
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with incorrect dependency code for " +
-                "'<!---[Dependency](groupId artifactId=test version=1.0.0 )-->'"))
+                "'<!---[Dependency](groupId artifactId=test version=1.0.0 )-->' (in path ${absPath("depWithWrongCode/dependency.md")})"))
     }
 
     @Test
@@ -107,10 +109,14 @@ class DependencyTests {
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with missing dependency code for " +
-                "'<!---[Dependency](groupId artifactId version=1.0.0 scope=compile )-->'"))
+                "'<!---[Dependency](groupId artifactId version=1.0.0 scope=compile )-->' (in path ${absPath("depWithWrongCode/dependency.md")})"))
     }
 
     companion object {
         private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/dependency/"
+    }
+
+    fun absPath(fileName: String): String {
+        return Paths.get(BASE_PATH).resolve(fileName).toAbsolutePath().toString()
     }
 }

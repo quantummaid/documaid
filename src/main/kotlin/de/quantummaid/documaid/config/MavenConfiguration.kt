@@ -24,18 +24,19 @@ package de.quantummaid.documaid.config
 import de.quantummaid.documaid.domain.markdown.dependency.ArtifactId
 import de.quantummaid.documaid.domain.markdown.dependency.GroupId
 import de.quantummaid.documaid.domain.markdown.dependency.Version
+import de.quantummaid.documaid.errors.DocuMaidException
 
 class MavenConfiguration(private val groupId: GroupId?, private val artifactId: ArtifactId?, private val version: Version?) {
 
     fun getGroupId(): GroupId {
-        return groupId ?: throw IllegalStateException("Required groupId to be defined")
+        return groupId ?: throw DocuMaidException.createWithoutFileOrigin("Required groupId to be defined")
     }
 
     fun getArtifactId(): ArtifactId {
-        return artifactId ?: throw IllegalStateException("Required artifactId to be defined")
+        return artifactId ?: throw DocuMaidException.createWithoutFileOrigin("Required artifactId to be defined")
     }
 
     fun getVersion(): Version {
-        return version ?: throw IllegalStateException("Required version to be defined")
+        return version ?: throw DocuMaidException.createWithoutFileOrigin("Required version to be defined")
     }
 }

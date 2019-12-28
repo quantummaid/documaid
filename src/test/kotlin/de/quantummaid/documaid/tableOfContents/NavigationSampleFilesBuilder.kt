@@ -438,7 +438,7 @@ fun fileWithNavigationDirective(baseDirRelativePath: String, navigationString: S
 
         <!---[Nav]-->
     """.trimIndent()
-    val expectedContentOutput = content.replace("<!---[Nav]-->", "<!---[Nav]-->$navigationString")
+    val expectedContentOutput = content.replace("<!---[Nav]-->", "<!---[Nav]-->\n$navigationString")
     return SampleFile.sampleFileInDirectory(content, expectedContentOutput, baseDirRelativePath)
 }
 
@@ -449,7 +449,7 @@ fun fileWithNavigation(baseDirRelativePath: String, navigationString: String): S
         with some Text
         and a navigation at the bottom
 
-        <!---[Nav]-->$navigationString
+        <!---[Nav]-->${"\n" + navigationString}
 
         some other Text
     """.trimIndent()
