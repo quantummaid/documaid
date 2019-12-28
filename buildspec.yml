@@ -11,6 +11,10 @@ phases:
       - ls -laR /home/${whoami}
   build:
     commands:
+      - whoami
+      - ls -la /home
+      - ls -la /home/${whoami}
+      - ls -laR /home/${whoami}
       - echo Building documaid
       - mvn clean install -DskipTests
       - VERSION=$(mvn -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:1.3.1:exec)
