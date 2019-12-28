@@ -6,26 +6,49 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9</version>
-
+    <version>0.9.1</version>
     <packaging>maven-plugin</packaging>
 
-
     <name>DocuMaid</name>
-
     <description>
         DocuMaid is an easy to use plugin to reference code in your documentation and to validate that those links
         always exist.
         And you also can insert your current project's version anywhere.
     </description>
-
+    <url>https://github.com/quantummaid/documaid</url>
+    <organization>
+        <name>Richard Hauswald</name>
+        <url>https://www.quantummaid.de</url>
+    </organization>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>http://www.apache.org/licenses/LICmaven-compiler-pluginENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <developers>
+        <developer>
+            <name>Richard Hauswald</name>
+            <email>richard.hauswald@quantummaid.de</email>
+            <organization>Richard Hauswald</organization>
+            <organizationUrl>https://www.quantummaid.de</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/quantummaid/quantummaid-opensource-parent</url>
+        <connection>scm:git:git://github.com/quantummaid/quantummaid-opensource-parent.git</connection>
+        <developerConnection>scm:git:git@github.com:quantummaid/quantummaid-opensource-parent.git</developerConnection>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>nexus</id>
+            <name>Sonatype Staging</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <java.version>8</java.version>
@@ -37,15 +60,6 @@
         <maven>3.3.9</maven>
     </prerequisites>
 
-    <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>nexus</id>
-            <name>Sonatype Staging</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-            <layout>default</layout>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
