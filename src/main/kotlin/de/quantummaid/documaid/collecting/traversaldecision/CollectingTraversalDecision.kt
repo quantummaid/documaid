@@ -19,25 +19,30 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.config
+package de.quantummaid.documaid.collecting.traversaldecision
 
-import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
-import de.quantummaid.documaid.logging.Logger
-
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 import java.nio.file.Path
 
-class DocuMaidConfiguration(
-    val basePath: Path,
-    val goal: Goal,
-    val logger: Logger,
-    val mavenConfiguration: MavenConfiguration,
-    val skippedPaths: List<Path>
-) {
-    companion object {
-        val DOCUMAID_CONFIGURATION_KEY = CollectedInformationKey<DocuMaidConfiguration>("DOCUMAID_CONFIGURATION_KEY")
+interface CollectingTraversalDecision {
+    fun shouldFileBeVisited(path: Path): Boolean
+    fun shouldDirectoryBeVisited(path: Path): Boolean
+}
 
-        fun aDocuMaidConfiguration(): DocuMaidConfigurationBuilder {
-            return DocuMaidConfigurationBuilder.builder()
+class SkippingCollectingTraversalDecision private constructor(val skippedPaths: List<Path>) : CollectingTraversalDecision {
+
+    companion object {
+        fun createForConfiguration(docuMaidConfiguration: DocuMaidConfiguration): SkippingCollectingTraversalDecision {
+            val skippedPaths = docuMaidConfiguration.skippedPaths
+            return SkippingCollectingTraversalDecision(skippedPaths)
         }
+    }
+
+    override fun shouldFileBeVisited(path: Path): Boolean {
+        return !skippedPaths.contains(path)
+    }
+
+    override fun shouldDirectoryBeVisited(path: Path): Boolean {
+        return !skippedPaths.contains(path)
     }
 }

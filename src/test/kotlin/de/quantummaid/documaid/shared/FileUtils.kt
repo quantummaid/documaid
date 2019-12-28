@@ -46,6 +46,13 @@ fun createDirectory(path: Path) {
     Files.createDirectory(path)
 }
 
+fun createDirectoryAndParents(path: Path) {
+    if (Files.exists(path)) {
+        throw IllegalArgumentException("Cannot create directory $path, because directory already exists.")
+    }
+    Files.createDirectories(path)
+}
+
 fun assertFileWithContent(basePath: String, filePath: String, expectedContent: String) {
     val path = Paths.get(basePath, filePath).toAbsolutePath()
     try {

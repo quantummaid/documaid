@@ -25,6 +25,7 @@ import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.FileCreator
 import de.quantummaid.documaid.collecting.structure.FileObjectVisitor
 import de.quantummaid.documaid.collecting.structure.Project
+import de.quantummaid.documaid.collecting.traversaldecision.CollectingTraversalDecision
 import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -34,13 +35,13 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
 interface Collector {
-    fun collectData(basePath: Path, visitors: List<FileObjectVisitor>): Project
+    fun collectData(basePath: Path, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project
 }
 
 class FullCollector : Collector {
 
-    override fun collectData(basePath: Path, visitors: List<FileObjectVisitor>): Project {
-        val visitor = CollectingFileVisitor(visitors)
+    override fun collectData(basePath: Path, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project {
+        val visitor = CollectingFileVisitor(visitors, collectingTraversalDecision)
         Files.walkFileTree(basePath, visitor)
         val rootDirectory = visitor.getRootDirectory()
         visitors.forEach { it.directoryVisited(rootDirectory) }
@@ -52,14 +53,17 @@ class FullCollector : Collector {
     }
 }
 
-private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>) : SimpleFileVisitor<Any>() {
+private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>, val collectingTraversalDecision: CollectingTraversalDecision) : SimpleFileVisitor<Any>() {
     private val currentDirectoryStack: MutableList<Directory> = mutableListOf()
 
     override fun preVisitDirectory(dir: Any?, attrs: BasicFileAttributes?): FileVisitResult {
         super.preVisitDirectory(dir, attrs)
-
         val path = Paths.get(dir.toString())
             .toAbsolutePath()
+        if (!collectingTraversalDecision.shouldDirectoryBeVisited(path)) {
+            return FileVisitResult.SKIP_SUBTREE
+        }
+
         val directory = Directory(path)
 
         if (currentDirectoryStack.isNotEmpty()) {
@@ -73,10 +77,13 @@ private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>) : Sim
 
     override fun visitFile(file: Any?, attrs: BasicFileAttributes?): FileVisitResult {
         super.visitFile(file, attrs)
-
-        val directory = currentDirectoryStack.last()
         val path = Paths.get(file.toString())
             .toAbsolutePath()
+        if (!collectingTraversalDecision.shouldFileBeVisited(path)) {
+            return FileVisitResult.CONTINUE
+        }
+
+        val directory = currentDirectoryStack.last()
         val fileObject = FileCreator.create(path)
         directory.addChild(fileObject)
 

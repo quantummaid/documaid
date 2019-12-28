@@ -1,4 +1,4 @@
-package de.quantummaid.documaid.codeSnippet;
+package de.quantummaid.documaid.usecases.codeSnippet;
 
 public class FullClassCodeSnippet {
 

@@ -22,6 +22,7 @@
 package de.quantummaid.documaid
 
 import de.quantummaid.documaid.collecting.CollectingStep
+import de.quantummaid.documaid.collecting.traversaldecision.SkippingCollectingTraversalDecision
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
 import de.quantummaid.documaid.preparing.PrepareStep
@@ -30,10 +31,10 @@ import de.quantummaid.documaid.processing.ProcessingStep
 class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidConfiguration) {
 
     fun pimpMyDocu() {
-
         val goal = docuMaidConfiguration.goal
+        val traversalDecision = SkippingCollectingTraversalDecision.createForConfiguration(docuMaidConfiguration)
         val project = CollectingStep.create()
-            .collect(docuMaidConfiguration.basePath)
+            .collect(docuMaidConfiguration.basePath, traversalDecision)
         project.addInformation(DocuMaidConfiguration.DOCUMAID_CONFIGURATION_KEY, docuMaidConfiguration)
 
         val preparationErrors = PrepareStep.create()

@@ -19,7 +19,12 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.link;
+package de.quantummaid.documaid.domain.maven
 
-public class ReferencedCodeFile {
+class ArtifactId private constructor(val value: String) {
+    companion object {
+        fun create(value: String): ArtifactId {
+            return ArtifactId(value)
+        }
+    }
 }

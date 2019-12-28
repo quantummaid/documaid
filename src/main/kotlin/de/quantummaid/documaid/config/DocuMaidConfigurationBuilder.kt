@@ -31,6 +31,7 @@ class DocuMaidConfigurationBuilder private constructor() {
     private var goal: Goal? = null
     private var logger: Logger? = null
     private var mavenConfiguration = MavenConfiguration(null, null, null)
+    private var skippedPaths = emptyList<Path>()
 
     fun withBasePath(basePath: String): DocuMaidConfigurationBuilder {
         this.basePath = Paths.get(basePath)
@@ -57,9 +58,14 @@ class DocuMaidConfigurationBuilder private constructor() {
         return this
     }
 
+    fun withSkippedPaths(skippedPaths: List<Path>): DocuMaidConfigurationBuilder {
+        this.skippedPaths = skippedPaths
+        return this
+    }
+
     fun build(): DocuMaidConfiguration {
         return DocuMaidConfiguration(basePath
-            ?: throw DocuMaidException.createWithoutFileOrigin("Base path required"), goal!!, logger!!, mavenConfiguration)
+            ?: throw DocuMaidException.createWithoutFileOrigin("Base path required"), goal!!, logger!!, mavenConfiguration, skippedPaths)
     }
 
     companion object {

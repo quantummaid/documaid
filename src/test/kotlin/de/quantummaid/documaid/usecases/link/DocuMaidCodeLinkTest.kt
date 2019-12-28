@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.link
+package de.quantummaid.documaid.usecases.link
 
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
@@ -31,16 +31,16 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Compa
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectTheLinkToBeInserted
 import de.quantummaid.documaid.givenWhenThen.given
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aCorrectlyGeneratedFileWithTwoLinks
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithALink
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithALinkToANotExistingFile
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithAMissingLink
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithAWrongLink
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithMultipleLinkErrors
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithTheLinksToMissingFiles
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithTheSameLinksTwice
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithTwoLinks
-import de.quantummaid.documaid.link.LinkSampleFilesBuilder.Companion.aFileWithWrongLink
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aCorrectlyGeneratedFileWithTwoLinks
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithALink
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithALinkToANotExistingFile
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithAMissingLink
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithAWrongLink
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithMultipleLinkErrors
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithTheLinksToMissingFiles
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithTheSameLinksTwice
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithTwoLinks
+import de.quantummaid.documaid.usecases.link.LinkSampleFilesBuilder.Companion.aFileWithWrongLink
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
@@ -157,7 +157,7 @@ internal class DocuMaidCodeLinkTest {
     }
 
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/link/"
+        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/link/"
         private val ABS_BASE_PATH = Paths.get("", BASE_PATH).toAbsolutePath().toString() + "/"
     }
 

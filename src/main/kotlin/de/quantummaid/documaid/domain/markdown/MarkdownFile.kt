@@ -28,6 +28,7 @@ import de.quantummaid.documaid.domain.markdown.codeSnippet.SnippetMarkdownHandle
 import de.quantummaid.documaid.domain.markdown.dependency.DependencyMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.link.LinkMarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.navigation.NavigationMarkdownHandler
+import de.quantummaid.documaid.domain.markdown.plugin.PluginMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.errors.DocuMaidException
@@ -42,7 +43,8 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
             LinkMarkdownTagHandler(),
             TableOfContentsMarkdownTagHandler(),
             NavigationMarkdownHandler(),
-            DependencyMarkdownHandler()
+            DependencyMarkdownHandler(),
+            PluginMarkdownHandler()
         )
 
         fun create(path: Path): MarkdownFile {

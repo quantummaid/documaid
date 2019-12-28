@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.link
+package de.quantummaid.documaid.usecases.link
 
 import de.quantummaid.documaid.givenWhenThen.SampleFile
 import de.quantummaid.documaid.givenWhenThen.SampleFilesBuilder

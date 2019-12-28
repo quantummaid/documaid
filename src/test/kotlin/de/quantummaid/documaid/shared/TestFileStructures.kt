@@ -32,7 +32,7 @@ class TestStructureBuilder(private val basePath: Path) {
             if (Files.exists(basePath)) {
                 throw IllegalArgumentException("Test directory base path already exists")
             }
-            createDirectory(basePath)
+            createDirectoryAndParents(basePath)
             return TestStructureBuilder(basePath)
         }
     }

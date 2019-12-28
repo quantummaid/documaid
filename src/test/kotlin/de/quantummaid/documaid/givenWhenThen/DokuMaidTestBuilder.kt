@@ -25,9 +25,9 @@ import de.quantummaid.documaid.Configurator
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
-import de.quantummaid.documaid.domain.markdown.dependency.ArtifactId
-import de.quantummaid.documaid.domain.markdown.dependency.GroupId
-import de.quantummaid.documaid.domain.markdown.dependency.Version
+import de.quantummaid.documaid.domain.maven.ArtifactId
+import de.quantummaid.documaid.domain.maven.GroupId
+import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment.Companion.emptyTestEnvironment
 import de.quantummaid.documaid.shared.SampleMavenProjectProperties
 import de.quantummaid.documaid.shared.createFileWithContent

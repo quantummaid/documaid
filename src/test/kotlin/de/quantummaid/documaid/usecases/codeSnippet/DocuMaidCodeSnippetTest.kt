@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.codeSnippet
+package de.quantummaid.documaid.usecases.codeSnippet
 
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.domain.markdown.codeSnippet.CodeSnippetDirective.Companion.CODE_SNIPPET_TAG
@@ -40,7 +40,7 @@ internal class DocuMaidCodeSnippetTest {
     @Test
     fun canInsertSimpleCodeSnippet() {
         given(aDokuMaid()
-            .configuredWith(aFileWithASingleCodeSnippet())
+            .configuredWith(aFileWithASingleCodeSnippet(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
@@ -179,7 +179,7 @@ internal class DocuMaidCodeSnippetTest {
     }
 
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/codeSnippet/"
+        private const val BASE_PATH = "target/tests/usecases/codeSnippet/"
     }
 
     fun absPath(fileName: String): String {

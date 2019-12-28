@@ -25,6 +25,7 @@ import de.quantummaid.documaid.collecting.fastLookup.FastFileLookupTableCollecto
 import de.quantummaid.documaid.collecting.snippets.SnippetsCollector
 import de.quantummaid.documaid.collecting.structure.FileObjectVisitorAdapter
 import de.quantummaid.documaid.collecting.structure.Project
+import de.quantummaid.documaid.collecting.traversaldecision.CollectingTraversalDecision
 import java.nio.file.Path
 
 class CollectingStep private constructor(private val collectors: List<FileObjectVisitorAdapter>) {
@@ -32,15 +33,15 @@ class CollectingStep private constructor(private val collectors: List<FileObject
     companion object {
         fun create(): CollectingStep {
             val collectors = listOf(
-                    FastFileLookupTableCollector(),
-                    SnippetsCollector()
+                FastFileLookupTableCollector(),
+                SnippetsCollector()
             )
             return CollectingStep(collectors)
         }
     }
 
-    fun collect(basePath: Path): Project {
+    fun collect(basePath: Path, collectingTraversalDecision: CollectingTraversalDecision): Project {
         val collector = FullCollector()
-        return collector.collectData(basePath, collectors)
+        return collector.collectData(basePath, collectors, collectingTraversalDecision)
     }
 }

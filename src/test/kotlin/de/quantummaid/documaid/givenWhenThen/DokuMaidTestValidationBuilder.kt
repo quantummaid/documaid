@@ -55,6 +55,10 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             return expectTheCorrectFileToBeGenerated()
         }
 
+        fun expectThePluginCodeToBeInserted(): DokuMaidTestValidationBuilder {
+            return expectTheCorrectFileToBeGenerated()
+        }
+
         fun expectTheCorrectFileToBeGenerated(): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment ->
                 assertNoExceptionThrown(testEnvironment)

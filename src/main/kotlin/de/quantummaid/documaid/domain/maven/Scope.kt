@@ -19,24 +19,12 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.config
+package de.quantummaid.documaid.domain.maven
 
-import de.quantummaid.documaid.domain.maven.ArtifactId
-import de.quantummaid.documaid.domain.maven.GroupId
-import de.quantummaid.documaid.domain.maven.Version
-import de.quantummaid.documaid.errors.DocuMaidException
-
-class MavenConfiguration(private val groupId: GroupId?, private val artifactId: ArtifactId?, private val version: Version?) {
-
-    fun getGroupId(): GroupId {
-        return groupId ?: throw DocuMaidException.createWithoutFileOrigin("Required groupId to be defined")
-    }
-
-    fun getArtifactId(): ArtifactId {
-        return artifactId ?: throw DocuMaidException.createWithoutFileOrigin("Required artifactId to be defined")
-    }
-
-    fun getVersion(): Version {
-        return version ?: throw DocuMaidException.createWithoutFileOrigin("Required version to be defined")
+class Scope private constructor(val value: String) {
+    companion object {
+        fun create(value: String): Scope {
+            return Scope(value)
+        }
     }
 }

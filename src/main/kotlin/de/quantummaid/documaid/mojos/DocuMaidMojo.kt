@@ -25,21 +25,25 @@ import de.quantummaid.documaid.DocuMaid.Companion.dokuMaid
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
-import de.quantummaid.documaid.domain.markdown.dependency.ArtifactId
-import de.quantummaid.documaid.domain.markdown.dependency.GroupId
-import de.quantummaid.documaid.domain.markdown.dependency.Version
+import de.quantummaid.documaid.domain.maven.ArtifactId
+import de.quantummaid.documaid.domain.maven.GroupId
+import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
 import de.quantummaid.documaid.logging.MavenLogger
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
+import java.nio.file.Path
+import java.nio.file.Paths
 
 abstract class DocuMaidMojo : AbstractMojo() {
     @Parameter(property = "project", required = true, readonly = true)
     private val project: MavenProject? = null
     @Parameter(property = "skipTests", defaultValue = "false")
     private val skip: Boolean = false
+    @Parameter(property = "skipPaths")
+    private val skipPaths: List<String>? = null
 
     protected abstract val goal: Goal
 
@@ -57,6 +61,7 @@ abstract class DocuMaidMojo : AbstractMojo() {
             .forGoal(goal)
             .withLogger(MavenLogger.mavenLogger(log))
             .withMavenConfiguration(createMavenConfiguration())
+            .withSkippedPaths(getSkippedPaths())
             .build()
         val dokuMaid = dokuMaid(configuration)
         try {
@@ -79,6 +84,16 @@ abstract class DocuMaidMojo : AbstractMojo() {
             return MavenConfiguration(groupId, artifactId, version)
         } else {
             return MavenConfiguration(null, null, null)
+        }
+    }
+
+    private fun getSkippedPaths(): List<Path> {
+        return if (skipPaths == null || skipPaths.isEmpty()) {
+            emptyList()
+        } else {
+            return skipPaths
+                .map { Paths.get(it) }
+                .map { it.toAbsolutePath() }
         }
     }
 }

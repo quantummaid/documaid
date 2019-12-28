@@ -19,13 +19,14 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.codeSnippet
+package de.quantummaid.documaid.usecases.codeSnippet
 
 import de.quantummaid.documaid.Configurator
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.givenWhenThen.SampleFile
 import de.quantummaid.documaid.givenWhenThen.SampleFilesBuilder
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment
+import de.quantummaid.documaid.givenWhenThen.TestEnvironmentProperty
 import de.quantummaid.documaid.shared.TestDirectoryBuilder
 import de.quantummaid.documaid.shared.TestFileBuilder
 import de.quantummaid.documaid.shared.TestStructureBuilder
@@ -37,8 +38,30 @@ class CodeSnippetSampleFilesBuilder internal constructor(private val sampleFile:
     }
 }
 
-fun aFileWithASingleCodeSnippet(): CodeSnippetSampleFilesBuilder {
-    return CodeSnippetSampleFilesBuilder(singleCodeSnippetSampleFiles())
+fun aFileWithASingleCodeSnippet(basePath: String): Configurator {
+    val testIsolatedDir = "singleCodeSnippetFile"
+    val baseDir = Paths.get(basePath, testIsolatedDir)
+
+    return object : Configurator {
+        override fun invoke(
+            testEnvironment: TestEnvironment,
+            configurationBuilder: DocuMaidConfigurationBuilder,
+            setupSteps: MutableCollection<() -> Unit>,
+            cleanupSteps: MutableCollection<() -> Unit>
+        ) {
+            val sampleFile = singleCodeSnippetSampleFiles(testIsolatedDir + "/")
+            setupSteps.add {
+                val fileStructure = TestStructureBuilder.aTestStructureIn(baseDir)
+                    .with(
+                        sampleFile.asBuilder(),
+                        generalJavaSampleFile()
+                    )
+                    .build()
+                cleanupSteps.add { fileStructure.cleanUp() }
+            }
+            testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFile)
+        }
+    }
 }
 
 fun aFileWithATwoCodeSnippets(): CodeSnippetSampleFilesBuilder {
@@ -135,4 +158,45 @@ fun aXmlFileWithSnippetId(fileName: String, snippetId: String): TestFileBuilder 
             <!-- Showcase end $snippetId -->
 
             """.trimIndent())
+}
+
+fun generalJavaSampleFile(): TestFileBuilder {
+    return TestFileBuilder
+        .aFile("sampleCodeSnippets.java")
+        .withContent("""
+public class SampleCodeSnippets {
+
+    public void firstSnippet() {
+        //Showcase start first
+        final List<String> strings = new ArrayList<>();
+        strings.add("A");
+        strings.add("B");
+        strings.remove(1);
+        //Showcase end first
+    }
+
+    public void secondSnippet() {
+        //Showcase start second
+        if (Math.random() % 2 == 0) {
+            System.out.println("Success");
+        } else {
+            System.out.println("Nope");
+        }
+        //Showcase end second
+    }
+
+    public void thirdSnippet() {
+        //Showcase start third
+        final Object o = new Object();//our first object
+
+        // we create a     second    object
+        final Object o2 = new Object();
+        /*
+        and no we check on equality
+         */
+        o.equals(o2);
+        //Showcase end third
+    }
+}
+        """.trimIndent())
 }

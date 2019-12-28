@@ -19,28 +19,35 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.domain.markdown.dependency
+package de.quantummaid.documaid.domain.markdown.plugin
 
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
-import de.quantummaid.documaid.domain.maven.Scope
+import de.quantummaid.documaid.domain.maven.MavenGoal
+import de.quantummaid.documaid.domain.maven.MavenPhase
 import de.quantummaid.documaid.domain.maven.Version
 
-class DependencyMarkdown private constructor(private val groupId: GroupId, private val artifactId: ArtifactId, private val version: Version, private val scope: Scope?) {
+class PluginMarkdown private constructor(
+    private val groupId: GroupId,
+    private val artifactId: ArtifactId,
+    private val version: Version,
+    private val goal: MavenGoal,
+    private val phase: MavenPhase
+) {
 
     companion object {
-        fun create(groupId: GroupId, artifactId: ArtifactId, version: Version, scope: Scope?): DependencyMarkdown {
-            return DependencyMarkdown(groupId, artifactId, version, scope)
+        fun create(groupId: GroupId, artifactId: ArtifactId, version: Version, goal: MavenGoal, phase: MavenPhase): PluginMarkdown {
+            return PluginMarkdown(groupId, artifactId, version, goal, phase)
         }
 
-        fun startsWithDependencyMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithPluginMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
             val content = remainingMarkupFileContent.content
             return if (content.trimStart().startsWith("```")) {
                 val trailingCodeSection = TrailingMarkdownCodeSection.extractTrailingCodeSection(remainingMarkupFileContent)
-                return if (trailingCodeSection.codeContent.contains("<dependency>")) {
+                return if (trailingCodeSection.codeContent.contains("<plugin>")) {
                     TrailingMarkdownMatchResult.createForMatch(trailingCodeSection.completeLength, trailingCodeSection.untrimmedContent)
                 } else {
                     TrailingMarkdownMatchResult.createForNoMatch()
@@ -52,14 +59,21 @@ class DependencyMarkdown private constructor(private val groupId: GroupId, priva
     }
 
     fun markdownString(): String {
-        val optionalScopeString = if (scope != null) "\n                <scope>${scope.value}</scope>" else ""
         return """
             ```xml
-            <dependency>
+            <plugin>
                 <groupId>${groupId.value}</groupId>
                 <artifactId>${artifactId.value}</artifactId>
-                <version>${version.value}</version>$optionalScopeString
-            </dependency>
+                <version>${version.value}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>${goal.value}</goal>
+                        </goals>
+                        <phase>${phase.value}</phase>
+                    </execution>
+                </executions>
+            </plugin>
             ```
         """.trimIndent()
     }

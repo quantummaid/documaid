@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.dependency
+package de.quantummaid.documaid.usecases.maven.dependency
 
 import de.quantummaid.documaid.Configurator
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder

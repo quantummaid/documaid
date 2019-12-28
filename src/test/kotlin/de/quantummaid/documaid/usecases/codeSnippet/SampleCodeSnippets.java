@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.codeSnippet;
+package de.quantummaid.documaid.usecases.codeSnippet;
 
 import java.util.ArrayList;
 import java.util.List;

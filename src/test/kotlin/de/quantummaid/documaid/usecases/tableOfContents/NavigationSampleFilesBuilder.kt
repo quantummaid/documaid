@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.tableOfContents
+package de.quantummaid.documaid.usecases.tableOfContents
 
 import de.quantummaid.documaid.Configurator
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
