@@ -6,7 +6,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.3</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
