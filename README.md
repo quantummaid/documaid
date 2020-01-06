@@ -27,7 +27,7 @@ Takes the `readme.md` in the root directory
 <plugin>
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.4</version>
+    <version>0.9.6</version>
     <executions>
         <execution>
             <goals>
