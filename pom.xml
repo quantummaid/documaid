@@ -275,6 +275,7 @@
                                 <allowSnapshots>false</allowSnapshots>
                                 <outputFile>target/dependency-updates.txt</outputFile>
                                 <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml</rulesUri>
                             </configuration>
                         </execution>
                         <execution>
@@ -287,6 +288,7 @@
                                 <allowSnapshots>false</allowSnapshots>
                                 <outputFile>target/plugin-updates.txt</outputFile>
                                 <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml</rulesUri>
                             </configuration>
                         </execution>
                     </executions>
@@ -379,6 +381,25 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>5.2.4</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <phase>verify</phase>
+                            <configuration>
+                                <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
+                                <suppressionFiles>
+                                    <suppressionFile>src/test/dependencies/ignoredVulnerableVersion.xml</suppressionFile>
+                                </suppressionFiles>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -428,6 +449,10 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>tidy-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
                     </plugin>
                 </plugins>
             </build>
