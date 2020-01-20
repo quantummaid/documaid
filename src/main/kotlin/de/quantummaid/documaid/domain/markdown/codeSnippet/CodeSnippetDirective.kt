@@ -44,7 +44,6 @@ class CodeSnippetDirective(val rawMarkdownDirective: RawMarkdownDirective, val o
 
     companion object {
         val CODE_SNIPPET_TAG = DirectiveTag("CodeSnippet")
-        val CODE_SEGMENT_PATTERN = "(?s)^[\\s]*```.*?(?=```)```".toRegex()
 
         fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): CodeSnippetDirective {
             val options = CodeSnippetDirectiveOptions.create(rawMarkdownDirective, file)
