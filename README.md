@@ -38,3 +38,5 @@ Takes the `README.md` in the root directory
     </executions>
 </plugin>
 ```
+
+More information can be found [here](./docs/Usage.md)
