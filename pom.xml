@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.8</version>
+    <version>0.9.9</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -250,7 +250,7 @@
                 <plugin>
                     <groupId>com.github.gantsign.maven</groupId>
                     <artifactId>ktlint-maven-plugin</artifactId>
-                    <version>1.4.0</version>
+                    <version>1.4.1</version>
                     <executions>
                         <execution>
                             <id>check</id>
