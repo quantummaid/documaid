@@ -5,8 +5,8 @@
 To generate the the docu:
 
 ```
-mvn de.quantummaid:documaid:0.9.7:generate
-mvn de.quantummaid:documaid:0.9.7:generate -DskipPaths=docs/Usage.md
+mvn de.quantummaid:documaid:0.9.10:generate
+mvn de.quantummaid:documaid:0.9.10:generate -DskipPaths=docs/Usage.md
 
 
 ```
@@ -14,7 +14,7 @@ mvn de.quantummaid:documaid:0.9.7:generate -DskipPaths=docs/Usage.md
 To validate, if the current docu is correct and does not require any changes:
 
 ```
-mvn de.quantummaid:documaid:0.9.7:validate
+mvn de.quantummaid:documaid:0.9.10:validate
 ```
 
 
@@ -27,7 +27,7 @@ Takes the `README.md` in the root directory
 <plugin>
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.9</version>
+    <version>0.9.10</version>
     <executions>
         <execution>
             <goals>
