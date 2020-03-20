@@ -1,5 +1,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.quantummaid/documaid/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.quantummaid/documaid)
 
+<img src="documaid_logo.png" align="left"/>
+
 # DocuMaid
 
 To generate the the docu:
