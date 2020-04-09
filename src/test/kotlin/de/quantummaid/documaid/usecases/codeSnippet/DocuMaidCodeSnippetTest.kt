@@ -26,11 +26,9 @@ import de.quantummaid.documaid.domain.markdown.codeSnippet.CodeSnippetDirective.
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectADokuMaidExceptionCollectingTheFollowingErrors
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllCodeSnippetsToBeInserted
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectTheCodeSnippetToBeInserted
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectTheCorrectFileToBeGenerated
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
@@ -40,81 +38,91 @@ internal class DocuMaidCodeSnippetTest {
     @Test
     fun canInsertSimpleCodeSnippet() {
         given(aDokuMaid()
-            .configuredWith(aFileWithASingleCodeSnippet())
+            .configuredWith(aFileWithASingleCodeSnippet(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheCodeSnippetToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTwoSnippets() {
         given(aDokuMaid()
-            .configuredWith(aFileWithATwoCodeSnippets())
+            .configuredWith(aFileWithATwoCodeSnippets(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAllCodeSnippetsToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTheSameSnippetsTwice() {
         given(aDokuMaid()
-            .configuredWith(aFileWithTheSameCodeSnippetTwice())
+            .configuredWith(aFileWithTheSameCodeSnippetTwice(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAllCodeSnippetsToBeInserted())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canInsertTheSameSnippetsTwiceInDifferentFiles() {
+        given(aDokuMaid()
+            .configuredWith(aFileWithTheSameCodeSnippetTwiceInDifferentFiles(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetFromANonJavaFile() {
         given(aDokuMaid()
-            .configuredWith(aFileWithACodeSnippetFromANonJavaFile())
+            .configuredWith(aFileWithACodeSnippetFromANonJavaFile(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheCodeSnippetToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetWithComments() {
         given(aDokuMaid()
-            .configuredWith(aFileWithCommentsInCodeSnippet())
+            .configuredWith(aFileWithCommentsInCodeSnippet(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheCodeSnippetToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetForAFullClass() {
         given(aDokuMaid()
-            .configuredWith(aFileWithAFullClassSnippet())
+            .configuredWith(aFileWithAFullClassSnippet(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheCodeSnippetToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceAWrongCodeSnippet() {
         given(aDokuMaid()
-            .configuredWith(aFileWithIncorrectlyGeneratedCode())
+            .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAllCodeSnippetsToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceTwoSnippets() {
         given(aDokuMaid()
-            .configuredWith(aFileWithTwoOutdatedCodeSnippets())
+            .configuredWith(aFileWithTwoOutdatedCodeSnippets(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheCorrectFileToBeGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -122,21 +130,21 @@ internal class DocuMaidCodeSnippetTest {
         given(aDokuMaid()
             .configuredWith(filesWithDuplicateCodeSnippets(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH + "duplicateSnippetsDirectory"))
+            .configuredWithBasePath(BASE_PATH ))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +
                     "${absPath("duplicateSnippetsDirectory/snippetDuplicate1.java")}, ${absPath("duplicateSnippetsDirectory/snippetDuplicate2.xml")}",
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'tripleDuplicate': " +
                     "${absPath("duplicateSnippetsDirectory/snippetTriplicate1.java")}, ${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate2.java")}, " +
-                    "${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml")}"
+                    absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml")
             ))
     }
 
     @Test
     fun canValidateCorrectSnippets() {
         given(aDokuMaid()
-            .configuredWith(aCorrectlyGeneratedFileWithOneCodeSnippet())
+            .configuredWith(aCorrectlyGeneratedFileWithOneCodeSnippet(BASE_PATH))
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
@@ -146,35 +154,35 @@ internal class DocuMaidCodeSnippetTest {
     @Test
     fun failsForWrongSnippet() {
         given(aDokuMaid()
-            .configuredWith(aFileWithTheWrongCodeSnippet())
+            .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with incorrect code for '<!---[$CODE_SNIPPET_TAG] (first)-->' " +
-                "(in path ${absPath("wrongCodeSnippet.md")})"))
+            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with incorrect code for '<!---[$CODE_SNIPPET_TAG] (snippet)-->' " +
+                "(in path ${absPath("aFileWithWrongCodeSnippetPresent/wrongCodeSnippet.md")})"))
     }
 
     @Test
     fun failsForMissingSnippet() {
         given(aDokuMaid()
-            .configuredWith(aFileWithAMissingCodeSnippet())
+            .configuredWith(aFileWithAMissingCodeSnippet(BASE_PATH))
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '<!---[$CODE_SNIPPET_TAG] (notExisting)-->' " +
-                "(in path ${absPath("missingCodeSnippet.md")})"))
+            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '<!---[$CODE_SNIPPET_TAG] (testSnippet)-->' " +
+                "(in path ${absPath("aFileWithASingleCodeSnippet/md1.md")})"))
     }
 
     @Test
     fun canCaptureMultipleErrors() {
         given(aDokuMaid()
-            .configuredWith(aFileWithMultipleCodeSnippetErrors())
+            .configuredWith(aFileWithMultipleCodeSnippetErrors(BASE_PATH))
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
-                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (first)-->' (in path ${absPath("multipleCodeSnippetErrors.md")})",
-                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (first)-->' (in path ${absPath("multipleCodeSnippetErrors.md")})"
+                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (snippet1)-->' (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})",
+                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (snippet2)-->' (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})"
             ))
     }
 

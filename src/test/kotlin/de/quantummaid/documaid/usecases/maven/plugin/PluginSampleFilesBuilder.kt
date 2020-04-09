@@ -21,45 +21,36 @@
 
 package de.quantummaid.documaid.usecases.maven.plugin
 
-import de.quantummaid.documaid.Configurator
-import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.givenWhenThen.SampleFile
-import de.quantummaid.documaid.givenWhenThen.TestEnvironment
 import de.quantummaid.documaid.givenWhenThen.TestEnvironmentProperty
 import de.quantummaid.documaid.shared.SampleMavenProjectProperties
-import de.quantummaid.documaid.shared.TestStructureBuilder
+import de.quantummaid.documaid.shared.SetupUpdate
+import de.quantummaid.documaid.shared.PhysicalFileSystemStructureBuilder
 import java.nio.file.Path
 import java.nio.file.Paths
 
 class PluginSampleFilesBuilder {
 
     companion object {
-        fun aFileWithASingleFullyDefinedPlugin(basePath: String): Configurator {
+        fun aFileWithASingleFullyDefinedPlugin(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "singleFileWithFullyDefinedPlugin")
             val sampleFile = aXmlFileWithPluginTag("dependency.md", groupId = "local", artifactId = "test", version = "1.0.0", goal = "generate", phase = "Verify")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
         // TODO: might be redundant
-        private fun testDirectoryWithFile(sampleFile: SampleFile, testBaseDir: Path): Configurator {
-            return object : Configurator {
-                override fun invoke(
-                    testEnvironment: TestEnvironment,
-                    configurationBuilder: DocuMaidConfigurationBuilder,
-                    setupSteps: MutableCollection<() -> Unit>,
-                    cleanupSteps: MutableCollection<() -> Unit>
-                ) {
-                    testEnvironment.setProperty(TestEnvironmentProperty.BASE_PATH, testBaseDir.toString())
-                    configurationBuilder.withBasePath(testBaseDir)
+        private fun testDirectoryWithFile(sampleFile: SampleFile, testBaseDir: Path): SetupUpdate {
+            return { (testEnvironment, configurationBuilder, _, _, cleanupSteps) ->
+                testEnvironment.setProperty(TestEnvironmentProperty.BASE_PATH, testBaseDir.toString())
+                configurationBuilder.withBasePath(testBaseDir)
 
-                    val testFileStructure = TestStructureBuilder.aTestStructureIn(testBaseDir)
-                        .with(
-                            sampleFile.asBuilder()
-                        )
-                        .build()
-                    cleanupSteps.add { testFileStructure.cleanUp() }
-                    testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFile)
-                }
+                val testFileStructure = PhysicalFileSystemStructureBuilder.createAPhysicalFileSystemStructureIn(testBaseDir)
+                    .with(
+                        sampleFile.asBuilder()
+                    )
+                    .build()
+                cleanupSteps.add { testFileStructure.cleanUp() }
+                testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFile)
             }
         }
     }

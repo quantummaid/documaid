@@ -21,7 +21,9 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
+import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
+import de.quantummaid.documaid.shared.SutFileStructure
 import de.quantummaid.documaid.shared.assertFileWithContent
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -34,6 +36,19 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
     }
 
     companion object {
+
+        fun expectAllFilesToBeCorrect(): DokuMaidTestValidationBuilder {
+            return DokuMaidTestValidationBuilder { testEnvironment ->
+                assertNoExceptionThrown(testEnvironment)
+                val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+                val platform: Platform = testEnvironment.getPropertyAsType(TestEnvironmentProperty.PLATFORM)
+                val expectedFileStructure = when (platform) {
+                    Platform.GITHUB -> sutFileStructure.generateExpectedFileStructureForGithub()
+                    Platform.HUGO -> sutFileStructure.generateExpectedFileStructureForHugo()
+                }
+                TestFileStructureCorrectnessChecker.checkForCorrectness(expectedFileStructure)
+            }
+        }
 
         fun expectTheCodeSnippetToBeInserted(): DokuMaidTestValidationBuilder {
             return expectTheCorrectFileToBeGenerated()

@@ -55,12 +55,22 @@ fun createDirectoryAndParents(path: Path) {
 
 fun assertFileWithContent(basePath: String, filePath: String, expectedContent: String) {
     val path = Paths.get(basePath, filePath).toAbsolutePath()
+    assertFileWithContent(path, expectedContent)
+}
+
+fun assertFileWithContent(filePath: Path, expectedContent: String) {
     try {
-        val bytes = Files.readAllBytes(path)
+        val bytes = Files.readAllBytes(filePath)
         val content = String(bytes)
         assertEquals(expectedContent, content)
     } catch (e: IOException) {
         throw RuntimeException(e)
+    }
+}
+
+fun assertDirectoryExists(directoryPath: Path) {
+    if (!Files.isDirectory(directoryPath)) {
+        throw IllegalStateException("Directory $directoryPath did not exist")
     }
 }
 
@@ -75,6 +85,10 @@ fun deleteFileIfExisting(path: Path) {
 
 fun deleteDirectory(path: Path) {
     Files.deleteIfExists(path)
+}
+
+fun deleteDirectoryAndChildren(path: Path) {
+    path.toFile().deleteRecursively()
 }
 
 fun deletePath(path: Path) {

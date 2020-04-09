@@ -27,6 +27,8 @@ enum class TestEnvironmentProperty {
     SAMPLE_FILES,
     BASE_PATH,
     DOKU_MAID_INSTANCE,
+    SUT_FILE_STRUCTURE,
+    PLATFORM,
     SETUP_STEPS,
     CLEAN_UP_STEPS,
     EXCEPTION,

@@ -21,15 +21,12 @@
 
 package de.quantummaid.documaid
 
-import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.givenWhenThen.SampleFile
 import de.quantummaid.documaid.givenWhenThen.SampleFilesBuilder
-import de.quantummaid.documaid.givenWhenThen.TestEnvironment
 import de.quantummaid.documaid.givenWhenThen.TestEnvironmentProperty
+import de.quantummaid.documaid.shared.SetupUpdate
 import de.quantummaid.documaid.shared.createFileWithContent
 import de.quantummaid.documaid.shared.deleteFileIfExisting
-
-typealias Configurator = (testEnvironment: TestEnvironment, configurationBuilder: DocuMaidConfigurationBuilder, setupSteps: MutableCollection<() -> Unit>, cleanupSteps: MutableCollection<() -> Unit>) -> Unit
 
 class GeneralSampleFilesBuilder private constructor(private val sampleFile: SampleFile) : SampleFilesBuilder {
 
@@ -39,23 +36,24 @@ class GeneralSampleFilesBuilder private constructor(private val sampleFile: Samp
 
     companion object {
 
-        fun severalFilesWithLinksAndSnippets(): Configurator {
-            return { testEnvironment, _, setupSteps, cleanupSteps ->
+        fun severalFilesWithLinksAndSnippets(): SetupUpdate {
+
+            return { setup ->
                 val sampleFiles = ArrayList<SampleFile>()
                 sampleFiles.add(generalSampleFile1())
                 sampleFiles.add(generalSampleFile2())
-                testEnvironment.setProperty(TestEnvironmentProperty.MULTIPLE_SAMPLE_FILES, sampleFiles)
+                setup.testEnvironment.setProperty(TestEnvironmentProperty.MULTIPLE_SAMPLE_FILES, sampleFiles)
 
-                setupSteps.add {
-                    val basePath = testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
+                setup.setupSteps.add {
+                    val basePath = setup.testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
                     for (sampleFile in sampleFiles) {
                         val contentInput = sampleFile.contentInput
                         val fileName = sampleFile.fileName
                         createFileWithContent(basePath, fileName, contentInput)
                     }
                 }
-                cleanupSteps.add {
-                    val basePath = testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
+                setup.cleanupSteps.add {
+                    val basePath = setup.testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
                     for (sampleFile in sampleFiles) {
                         val fileName = sampleFile.fileName
                         deleteFileIfExisting(basePath, fileName)

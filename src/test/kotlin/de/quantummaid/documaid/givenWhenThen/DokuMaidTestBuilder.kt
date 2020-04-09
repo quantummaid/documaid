@@ -21,15 +21,19 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
-import de.quantummaid.documaid.Configurator
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
+import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment.Companion.emptyTestEnvironment
 import de.quantummaid.documaid.shared.SampleMavenProjectProperties
+import de.quantummaid.documaid.shared.Setup
+import de.quantummaid.documaid.shared.SetupUpdate
+import de.quantummaid.documaid.shared.SutFileStructure
+import de.quantummaid.documaid.shared.SutFileStructure.Companion.aFileStructureForDocuMaidToProcess
 import de.quantummaid.documaid.shared.createFileWithContent
 import de.quantummaid.documaid.shared.deleteFileIfExisting
 import java.nio.file.Path
@@ -39,6 +43,7 @@ class DokuMaidTestBuilder private constructor() {
     private val dokuMaidConfigurationBuilder = DocuMaidConfiguration.aDocuMaidConfiguration()
     private val setupSteps: MutableCollection<() -> Unit> = ArrayList()
     private val cleanupSteps: MutableCollection<() -> Unit> = ArrayList()
+    private val sutFileStructure: SutFileStructure = aFileStructureForDocuMaidToProcess()
 
     fun configuredWithGoal(goal: Goal): DokuMaidTestBuilder {
         dokuMaidConfigurationBuilder.forGoal(goal)
@@ -71,8 +76,9 @@ class DokuMaidTestBuilder private constructor() {
         return this
     }
 
-    fun configuredWith(configurator: Configurator): DokuMaidTestBuilder {
-        configurator.invoke(testEnvironment, dokuMaidConfigurationBuilder, setupSteps, cleanupSteps)
+    fun configuredWith(setupUpdate: SetupUpdate): DokuMaidTestBuilder {
+        val setup = Setup(testEnvironment, dokuMaidConfigurationBuilder, sutFileStructure, setupSteps, cleanupSteps)
+        setupUpdate(setup)
         return this
     }
 
@@ -91,8 +97,10 @@ class DokuMaidTestBuilder private constructor() {
             .build()
         val dokuMaid = de.quantummaid.documaid.DocuMaid.dokuMaid(dokuMaidConfiguration)
         testEnvironment.setProperty(TestEnvironmentProperty.DOKU_MAID_INSTANCE, dokuMaid)
+        testEnvironment.setProperty(TestEnvironmentProperty.SUT_FILE_STRUCTURE, sutFileStructure)
         testEnvironment.setProperty(TestEnvironmentProperty.SETUP_STEPS, setupSteps)
         testEnvironment.setProperty(TestEnvironmentProperty.CLEAN_UP_STEPS, cleanupSteps)
+        testEnvironment.setProperty(TestEnvironmentProperty.PLATFORM, Platform.GITHUB)
         return testEnvironment
     }
 

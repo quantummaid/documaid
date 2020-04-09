@@ -21,6 +21,8 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
+import de.quantummaid.documaid.shared.SutFileStructure
+
 class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBuilder, private val dokuMaidActionTestBuilder: DokuMaidActionTestBuilder) {
 
     fun then(dokuMaidTestValidationBuilder: DokuMaidTestValidationBuilder) {
@@ -30,6 +32,9 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
             for (setupStep in setupSteps) {
                 setupStep.invoke()
             }
+
+            val sutFileStructure: SutFileStructure  = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+            sutFileStructure.generateFileStructureForDocuMaidToProcess()
 
             val dokuMaid = testEnvironment.getPropertyAsType<de.quantummaid.documaid.DocuMaid>(TestEnvironmentProperty.DOKU_MAID_INSTANCE)
             val testAction = dokuMaidActionTestBuilder.build()
@@ -57,5 +62,7 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
         for (cleanupStep in cleanupSteps) {
             cleanupStep.invoke()
         }
+        val sutFileStructure: SutFileStructure  = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+        sutFileStructure.cleanUp()
     }
 }

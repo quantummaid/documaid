@@ -24,108 +24,155 @@ package de.quantummaid.documaid.shared
 import java.nio.file.Files
 import java.nio.file.Path
 
-class TestStructureBuilder(private val basePath: Path) {
-    private val children = ArrayList<TestFileObjectBuilder>()
+class PhysicalFileSystemStructureBuilder internal constructor(private val basePath: Path, private val constructionMode: ConstructionMode) {
+    private val children = ArrayList<PhysicalFileObjectBuilder>()
 
     companion object {
-        fun aTestStructureIn(basePath: Path): TestStructureBuilder {
+        //TODO: remove
+        fun createAPhysicalFileSystemStructureIn(basePath: Path): PhysicalFileSystemStructureBuilder {
             if (Files.exists(basePath)) {
                 throw IllegalArgumentException("Test directory base path already exists")
             }
             createDirectoryAndParents(basePath)
-            return TestStructureBuilder(basePath)
+            return PhysicalFileSystemStructureBuilder(basePath, ConstructionMode.CREATE_ON_DISK)
+        }
+
+        fun createAPhysicalFileSystemStructureIn(temporaryTestDirectory: TemporaryTestDirectory): PhysicalFileSystemStructureBuilder {
+            val basePath = temporaryTestDirectory.path
+            if (Files.exists(basePath)) {
+                throw IllegalArgumentException("Test directory base path already exists")
+            }
+            createDirectoryAndParents(basePath)
+            return PhysicalFileSystemStructureBuilder(basePath, ConstructionMode.CREATE_ON_DISK)
+        }
+
+        fun constructAPhysicalFileSystemStructureIn(temporaryTestDirectory: TemporaryTestDirectory): PhysicalFileSystemStructureBuilder {
+            val basePath = temporaryTestDirectory.path
+            if (!Files.exists(basePath)) {
+                createDirectoryAndParents(basePath)
+            }
+            return PhysicalFileSystemStructureBuilder(basePath, ConstructionMode.CONSTRUCT_WITHOUT_CREATING_OBJECTS)
         }
     }
 
-    fun with(vararg testFileObjectBuilders: TestFileObjectBuilder): TestStructureBuilder {
-        testFileObjectBuilders.forEach {
+    fun with(vararg physicalFileObjectBuilders: PhysicalFileObjectBuilder): PhysicalFileSystemStructureBuilder {
+        physicalFileObjectBuilders.forEach {
             children.add(it)
         }
         return this
     }
 
-    fun build(): TestFileStructure {
+    fun build(): PhysicalFileSystemStructure {
         val childrenObjects = children
-            .map { it.build(basePath) }
-        return TestFileStructure(basePath, childrenObjects)
+            .map {
+                when (constructionMode) {
+                    ConstructionMode.CREATE_ON_DISK -> it.create(basePath)
+                    ConstructionMode.CONSTRUCT_WITHOUT_CREATING_OBJECTS -> it.construct(basePath)
+                }
+            }
+        val baseDirectory = PhysicalDirectory(basePath, childrenObjects.toMutableList())
+        return PhysicalFileSystemStructure(baseDirectory)
     }
 }
 
-class TestFileStructure(val basePath: Path, private val children: List<TestFileObject>) {
+internal enum class ConstructionMode {
+    CREATE_ON_DISK,
+    CONSTRUCT_WITHOUT_CREATING_OBJECTS
+}
+
+class PhysicalFileSystemStructure internal constructor(val baseDirectory: PhysicalDirectory) {
 
     fun cleanUp() {
-        children.forEach { it.cleanUp() }
-        deleteDirectory(basePath)
+        baseDirectory.cleanUp()
     }
 }
 
-interface TestFileObjectBuilder {
-    fun build(parentPath: Path): TestFileObject
+interface PhysicalFileObjectBuilder {
+    fun create(parentPath: Path): PhysicalFileObject
+    fun construct(parentPath: Path): PhysicalFileObject
 }
 
-abstract class TestFileObject(val path: Path) {
+abstract class PhysicalFileObject(val path: Path) {
     val name = path.fileName.toString()
     abstract fun cleanUp()
 }
 
-class TestDirectoryBuilder(private val name: String) : TestFileObjectBuilder {
+class PhysicalDirectoryBuilder private constructor(private val name: String) : PhysicalFileObjectBuilder {
 
-    private val children = ArrayList<TestFileObjectBuilder>()
+    private val children = ArrayList<PhysicalFileObjectBuilder>()
 
     companion object {
-        fun aDirectory(name: String): TestDirectoryBuilder {
-            return TestDirectoryBuilder(name)
+        fun aDirectory(name: String): PhysicalDirectoryBuilder {
+            return PhysicalDirectoryBuilder(name)
         }
     }
 
-    fun with(vararg testFileObjectBuilders: TestFileObjectBuilder): TestDirectoryBuilder {
-        testFileObjectBuilders.forEach {
+    fun with(vararg physicalFileObjectBuilders: PhysicalFileObjectBuilder): PhysicalDirectoryBuilder {
+        physicalFileObjectBuilders.forEach {
             children.add(it)
         }
         return this
     }
 
-    override fun build(parentPath: Path): TestDirectory {
+    override fun create(parentPath: Path): PhysicalDirectory {
         val path = parentPath.resolve(name)
         createDirectory(path)
         val childrenObjects = children
-            .map { it.build(path) }
-        return TestDirectory(path, childrenObjects)
+            .map { it.create(path) }
+        return PhysicalDirectory(path, childrenObjects.toMutableList())
+    }
+
+    override fun construct(parentPath: Path): PhysicalDirectory {
+        val path = parentPath.resolve(name)
+        val childrenObjects = children
+            .map { it.construct(path) }
+        return PhysicalDirectory(path, childrenObjects.toMutableList())
     }
 }
 
-class TestDirectory(path: Path, val children: List<TestFileObject>) : TestFileObject(path) {
+class PhysicalDirectory internal constructor(path: Path, val children: MutableList<PhysicalFileObject>) : PhysicalFileObject(path) {
+
+    fun add(children: List<PhysicalFileObject>){
+        this.children.addAll(children)
+    }
+
     override fun cleanUp() {
         children.forEach { it.cleanUp() }
         deleteDirectory(path)
     }
 }
 
-class TestFileBuilder(private val name: String) : TestFileObjectBuilder {
+class PhysicalFileBuilder private constructor(private val name: String) : PhysicalFileObjectBuilder {
 
     private var content: String = ""
 
     companion object {
-        fun aFile(name: String): TestFileBuilder {
-            return TestFileBuilder(name)
+        fun aFile(name: String): PhysicalFileBuilder {
+            return PhysicalFileBuilder(name)
         }
     }
 
-    fun withContent(content: String): TestFileBuilder {
+    fun withContent(content: String): PhysicalFileBuilder {
         this.content = content
         return this
     }
 
-    override fun build(parentPath: Path): TestFileObject {
+    override fun create(parentPath: Path): PhysicalFileObject {
         val path = parentPath.resolve(name)
         createFileWithContent(path, content)
-        return TestFile(path)
+        return PhysicalFile(path, content)
+    }
+
+    override fun construct(parentPath: Path): PhysicalFileObject {
+        val path = parentPath.resolve(name)
+        return PhysicalFile(path, content)
     }
 }
 
-class TestFile(path: Path) : TestFileObject(path) {
+class PhysicalFile internal constructor(path: Path, val content: String) : PhysicalFileObject(path) {
 
     override fun cleanUp() {
         deleteFileIfExisting(path)
     }
 }
+

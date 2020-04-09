@@ -21,74 +21,65 @@
 
 package de.quantummaid.documaid.usecases.maven.dependency
 
-import de.quantummaid.documaid.Configurator
-import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.givenWhenThen.SampleFile
-import de.quantummaid.documaid.givenWhenThen.TestEnvironment
 import de.quantummaid.documaid.givenWhenThen.TestEnvironmentProperty
 import de.quantummaid.documaid.shared.SampleMavenProjectProperties
-import de.quantummaid.documaid.shared.TestStructureBuilder
+import de.quantummaid.documaid.shared.SetupUpdate
+import de.quantummaid.documaid.shared.PhysicalFileSystemStructureBuilder
 import java.nio.file.Path
 import java.nio.file.Paths
 
 class DependencySampleFilesBuilder {
 
     companion object {
-        fun aFileWithASingleFullyDefinedDependency(basePath: String): Configurator {
+        fun aFileWithASingleFullyDefinedDependency(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "singleFullyDefinedDep")
             val sampleFile = aXmlFileWithDependencyTag("dependency.md", groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
-        fun aFileWithADependencyWithoutAnythingDefined(basePath: String): Configurator {
+        fun aFileWithADependencyWithoutAnythingDefined(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "depWithoutAnythingDefined")
             val sampleFile = aXmlFileWithDependencyTag("dependency.md")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
-        fun aFileWithAWrongGeneratedDependency(basePath: String): Configurator {
+        fun aFileWithAWrongGeneratedDependency(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "depWithWrongCode")
             val sampleFile = aXmlFileWithDependencyTagWithDifferentCode("dependency.md", artifactId = "test", version = "1.0.0")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
-        fun aFileWithUnparsableDependencyOptionsString(basePath: String): Configurator {
+        fun aFileWithUnparsableDependencyOptionsString(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "depWithWrongCode")
             val sampleFile = aXmlFileWithDependencyTagWithDifferentCode("dependency.md", groupId = "not correct")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
-        fun aFileWithACorrectDependency(basePath: String): Configurator {
+        fun aFileWithACorrectDependency(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "depWithWrongCode")
             val sampleFile = aXmlFileWithAlreadyGeneratedCorrectCode("dependency.md", artifactId = "different")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
-        fun aFileWithDependencyWithMissingCode(basePath: String): Configurator {
+        fun aFileWithDependencyWithMissingCode(basePath: String): SetupUpdate {
             val testBaseDir = Paths.get(basePath, "depWithWrongCode")
             val sampleFile = aXmlFileWithDependencyTag("dependency.md", version = "1.0.0", scope = "compile")
             return testDirectoryWithFile(sampleFile, testBaseDir)
         }
 
-        private fun testDirectoryWithFile(sampleFile: SampleFile, testBaseDir: Path): Configurator {
-            return object : Configurator {
-                override fun invoke(
-                    testEnvironment: TestEnvironment,
-                    configurationBuilder: DocuMaidConfigurationBuilder,
-                    setupSteps: MutableCollection<() -> Unit>,
-                    cleanupSteps: MutableCollection<() -> Unit>
-                ) {
-                    testEnvironment.setProperty(TestEnvironmentProperty.BASE_PATH, testBaseDir.toString())
-                    configurationBuilder.withBasePath(testBaseDir)
+        private fun testDirectoryWithFile(sampleFile: SampleFile, testBaseDir: Path): SetupUpdate {
+            return { (testEnvironment, configurationBuilder, _, _, cleanupSteps) ->
+                testEnvironment.setProperty(TestEnvironmentProperty.BASE_PATH, testBaseDir.toString())
+                configurationBuilder.withBasePath(testBaseDir)
 
-                    val testFileStructure = TestStructureBuilder.aTestStructureIn(testBaseDir)
-                        .with(
-                            sampleFile.asBuilder()
-                        )
-                        .build()
-                    cleanupSteps.add { testFileStructure.cleanUp() }
-                    testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFile)
-                }
+                val testFileStructure = PhysicalFileSystemStructureBuilder.createAPhysicalFileSystemStructureIn(testBaseDir)
+                    .with(
+                        sampleFile.asBuilder()
+                    )
+                    .build()
+                cleanupSteps.add { testFileStructure.cleanUp() }
+                testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFile)
             }
         }
     }
