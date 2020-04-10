@@ -113,7 +113,7 @@ class DependencySpecs {
     }
 
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/dependency/"
+        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/maven/dependency/"
     }
 
     fun absPath(fileName: String): String {

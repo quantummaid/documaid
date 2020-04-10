@@ -180,7 +180,7 @@ class TableOfContentSpecs {
     }
 
     companion object {
-        private val BASE_PATH = Paths.get("src/test/kotlin/de/quantummaid/documaid/tableOfContents/")
+        private val BASE_PATH = Paths.get("src/test/kotlin/de/quantummaid/documaid/usecases/tableOfContents/")
     }
 
     private fun absPath(fileName: String): String {

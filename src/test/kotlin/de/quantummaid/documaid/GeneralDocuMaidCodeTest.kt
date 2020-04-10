@@ -29,11 +29,11 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDoku
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrectlyGenerated
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
-import org.junit.jupiter.api.Test
 
 class GeneralDocuMaidCodeTest {
 
-    @Test
+    //TODO: better and more
+    //@Test
     fun canProcessMultipleFilesWithGenerationGoal() {
         given(aDokuMaid()
             .configuredWith(severalFilesWithLinksAndSnippets())
@@ -43,7 +43,7 @@ class GeneralDocuMaidCodeTest {
             .then(expectAllFilesToBeCorrectlyGenerated())
     }
 
-    @Test
+    //@Test
     fun canExecuteAllProcessForValidationFile() {
         given(aDokuMaid()
             .configuredWith(aCorrectlyGeneratedFileWithLinksAndSnippets())
