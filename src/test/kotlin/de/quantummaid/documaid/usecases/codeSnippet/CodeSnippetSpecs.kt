@@ -33,7 +33,7 @@ import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-internal class DocuMaidCodeSnippetTest {
+internal class CodeSnippetSpecs {
 
     @Test
     fun canInsertSimpleCodeSnippet() {

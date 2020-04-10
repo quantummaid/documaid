@@ -169,3 +169,12 @@ open class SimpleProcessedFile(private val originalFile: PhysicalFileBuilder,
 }
 
 open class NotProcessedSourceFile(notChangingFileBuilder: PhysicalFileBuilder): SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder)
+
+open class EmptySutFile(notChangingFileBuilder: PhysicalFileBuilder): SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder){
+    companion object {
+        fun aFile(fileName:String):EmptySutFile{
+            val fileBuilder = PhysicalFileBuilder.aFile(fileName)
+            return EmptySutFile(fileBuilder)
+        }
+    }
+}

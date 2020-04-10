@@ -19,9 +19,20 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.usecases.link;
+package de.quantummaid.documaid.usecases.maven.plugin
 
-//TODO: remove later
+import de.quantummaid.documaid.shared.SetupUpdate
+import de.quantummaid.documaid.shared.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAPluginDirective
 
-public class ReferencedCodeFile {
+fun aFileWithASingleFullyDefinedPlugin(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAPluginDirective")
+
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithAPluginDirective("md1.md",
+                    "com.local", "test", "1.0.0", "testgoal", "verify")
+            )
+    }
 }

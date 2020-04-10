@@ -39,7 +39,7 @@ class LinkMarkdownTagHandler : MarkdownTagHandler {
         val linkDirective = LinkDirective.create(directive, file, project)
         val markdown = linkDirective.generateMarkdown()
         val (textToBeReplaced) = textToBeReplaced(directive)
-        val rangeToReplaceIn = rangeToReplaceIn(directive, markdown)
+        val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
         val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, markdown)
         return Pair(markdownReplacement, emptyList())
     }
@@ -70,10 +70,11 @@ class LinkMarkdownTagHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String): IntRange {
+    private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String, textToBeReplaced: String): IntRange {
         val startIndex = markdownDirective.range.first
         val endIndexInitialTag = markdownDirective.range.last
         val lengthNewContent = textToReplace.length
-        return IntRange(startIndex, Math.max(endIndexInitialTag, startIndex + lengthNewContent))
+        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex+lengthNewContent, startIndex+textToBeReplaced.length))
+        return IntRange(startIndex, endIndex)
     }
 }

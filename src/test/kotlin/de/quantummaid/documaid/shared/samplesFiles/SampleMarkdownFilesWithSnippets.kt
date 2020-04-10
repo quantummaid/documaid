@@ -1,4 +1,7 @@
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.samplesFiles
+
+import de.quantummaid.documaid.shared.ProcessedFile
+import de.quantummaid.documaid.shared.ProcessedFileBuilder
 
 fun aMarkdownFileWithSnippetDirective(fileName: String, snippetName: String, snippet: String, snippetLanguage: String = "java"): ProcessedFile {
     val contentInput = "#Test File\n" +

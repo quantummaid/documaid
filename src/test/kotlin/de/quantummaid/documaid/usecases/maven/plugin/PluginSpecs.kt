@@ -24,21 +24,21 @@ package de.quantummaid.documaid.usecases.maven.plugin
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectThePluginCodeToBeInserted
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.given
-import de.quantummaid.documaid.usecases.maven.plugin.PluginSampleFilesBuilder.Companion.aFileWithASingleFullyDefinedPlugin
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class PluginTests {
+class PluginSpecs {
 
     @Test
     fun canGenerateFullyDefinedPlugin() {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleFullyDefinedPlugin(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectThePluginCodeToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     companion object {

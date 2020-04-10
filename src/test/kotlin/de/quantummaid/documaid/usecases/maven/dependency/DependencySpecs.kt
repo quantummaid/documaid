@@ -22,94 +22,94 @@
 package de.quantummaid.documaid.usecases.maven.dependency
 
 import de.quantummaid.documaid.config.Goal
-import de.quantummaid.documaid.usecases.maven.dependency.DependencySampleFilesBuilder.Companion.aFileWithACorrectDependency
-import de.quantummaid.documaid.usecases.maven.dependency.DependencySampleFilesBuilder.Companion.aFileWithADependencyWithoutAnythingDefined
-import de.quantummaid.documaid.usecases.maven.dependency.DependencySampleFilesBuilder.Companion.aFileWithASingleFullyDefinedDependency
-import de.quantummaid.documaid.usecases.maven.dependency.DependencySampleFilesBuilder.Companion.aFileWithAWrongGeneratedDependency
-import de.quantummaid.documaid.usecases.maven.dependency.DependencySampleFilesBuilder.Companion.aFileWithDependencyWithMissingCode
-import de.quantummaid.documaid.usecases.maven.dependency.DependencySampleFilesBuilder.Companion.aFileWithUnparsableDependencyOptionsString
 import de.quantummaid.documaid.domain.markdown.dependency.DependencyDirective
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectTheDependencyToBeInserted
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class DependencyTests {
+class DependencySpecs {
 
     @Test
     fun canGenerateFullyDefinedDependency() {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleFullyDefinedDependency(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectTheDependencyToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateDependencyWithPropertiesObtainedFromMavenProject() {
         given(aDokuMaid()
             .configuredWith(aFileWithADependencyWithoutAnythingDefined(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectTheDependencyToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceWrongDependency() {
         given(aDokuMaid()
             .configuredWith(aFileWithAWrongGeneratedDependency(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectTheDependencyToBeInserted())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun failsForUnparsableOptionsString() {
         given(aDokuMaid()
             .configuredWith(aFileWithUnparsableDependencyOptionsString(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Cannot parse options for [${DependencyDirective.DEPENDENCY_TAG.value}]: ${"(groupId=not correct artifactId version )"} " +
-                "(in path ${absPath("depWithWrongCode/dependency.md")})"))
+                "(in path ${absPath("aFileWithUnparsableDependencyOptionsString/dependency.md")})"))
     }
 
     @Test
     fun succeedsForCorrectGeneratedDependency() {
         given(aDokuMaid()
-            .configuredWith(aFileWithACorrectDependency(BASE_PATH))
+            .configuredWith(aFileWithACorrectlyGeneratedDependency(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectNoException())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun failsForIncorrectlyGeneratedCode() {
         given(aDokuMaid()
             .configuredWith(aFileWithAWrongGeneratedDependency(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with incorrect dependency code for " +
-                "'<!---[Dependency](groupId artifactId=test version=1.0.0 )-->' (in path ${absPath("depWithWrongCode/dependency.md")})"))
+                "'<!---[Dependency](groupId=local artifactId version=1.0.0 )-->' (in path ${absPath("aFileWithAWrongGeneratedDependency/dependency.md")})"))
     }
 
     @Test
     fun failsForMissingDependency() {
         given(aDokuMaid()
             .configuredWith(aFileWithDependencyWithMissingCode(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with missing dependency code for " +
-                "'<!---[Dependency](groupId artifactId version=1.0.0 scope=compile )-->' (in path ${absPath("depWithWrongCode/dependency.md")})"))
+                "'<!---[Dependency](groupId artifactId=test version=1 scope=compile )-->' (in path ${absPath("aFileWithDependencyWithMissingCode/dependency.md")})"))
     }
 
     companion object {

@@ -25,28 +25,13 @@ import de.quantummaid.documaid.config.Goal.GENERATE
 import de.quantummaid.documaid.config.Goal.VALIDATE
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectTheTocToBeGenerated
 import de.quantummaid.documaid.givenWhenThen.given
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocInReadmeWithCorrectToc
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocInReadmeWithIncorrectToc
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocInReadmeWithMissingToc
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeFromSameDirectory
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithGeneratedOverviewFile
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithMalFormedOptions
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithMissingIndex
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithMissingIndexInSubDirectory
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithMultipleNestedDirectories
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithNotExistingScanDirectory
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithNotIndexedMarkdownFiles
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithTheSameIndexTwice
-import de.quantummaid.documaid.usecases.tableOfContents.TocSampleFilesBuilder.Companion.aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class TableOfContentTest {
+class TableOfContentSpecs {
 
     @Test
     fun canGenerateTocForDocsDirectory() {
@@ -55,7 +40,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheTocToBeGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -65,7 +50,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheTocToBeGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -75,7 +60,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheTocToBeGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -85,7 +70,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheTocToBeGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -95,7 +80,7 @@ class TableOfContentTest {
             .configuredWithGoal(GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectTheTocToBeGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -171,7 +156,7 @@ class TableOfContentTest {
             .configuredWithGoal(VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectNoException())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test

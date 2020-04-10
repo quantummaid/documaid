@@ -1,9 +1,16 @@
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.samplesFiles
 
-class SampleXmlFileWithOneSnippet(javaFileBuilder: PhysicalFileBuilder, val snippet: String) : NotProcessedSourceFile(javaFileBuilder) {
+import de.quantummaid.documaid.shared.NotProcessedSourceFile
+import de.quantummaid.documaid.shared.PhysicalFileBuilder
+
+class SampleXmlFileWithOneSnippet private constructor(val fileName: String,
+                                                      val snippet: String,
+                                                      javaFileBuilder: PhysicalFileBuilder)
+    : NotProcessedSourceFile(javaFileBuilder) {
+
     companion object {
         fun aXmlFileWithOneSnippet(fileName: String, snippetId: String): SampleXmlFileWithOneSnippet {
-            val snippet =   "<configuration>\n" +
+            val snippet = "<configuration>\n" +
                 "    <propA>A</propA>\n" +
                 "    <propB>\n" +
                 "        <internal>internal</internal>\n" +
@@ -14,7 +21,7 @@ class SampleXmlFileWithOneSnippet(javaFileBuilder: PhysicalFileBuilder, val snip
                 "\n<!-- Showcase end $snippetId -->\n\n"
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
-            return SampleXmlFileWithOneSnippet(fileBuilder, snippet)
+            return SampleXmlFileWithOneSnippet(fileName, snippet, fileBuilder)
         }
     }
 }

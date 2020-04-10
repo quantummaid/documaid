@@ -1,9 +1,13 @@
-package de.quantummaid.documaid.usecases.codeSnippet
+package de.quantummaid.documaid.shared.samplesFiles
 
 import de.quantummaid.documaid.shared.NotProcessedSourceFile
 import de.quantummaid.documaid.shared.PhysicalFileBuilder
 
-class SampleJavaFileWithOneSnippet(javaFileBuilder: PhysicalFileBuilder, val snippet: String) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithOneSnippet private constructor(val fileName: String,
+                                                       val snippet: String,
+                                                       javaFileBuilder: PhysicalFileBuilder)
+    : NotProcessedSourceFile(javaFileBuilder) {
+
     companion object {
         fun aJavaFileWithOneSnippet(fileName: String, snippetId: String): SampleJavaFileWithOneSnippet {
             val snippet = "public class SampleCodeSnippets {}"
@@ -12,12 +16,16 @@ class SampleJavaFileWithOneSnippet(javaFileBuilder: PhysicalFileBuilder, val sni
                 "\n//Showcase end $snippetId\n\n"
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
-            return SampleJavaFileWithOneSnippet(fileBuilder, snippet)
+            return SampleJavaFileWithOneSnippet(fileName, snippet, fileBuilder)
         }
     }
 }
 
-class SampleJavaFileWithADifferentSnippet(javaFileBuilder: PhysicalFileBuilder, val snippet: String) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithADifferentSnippet private constructor(val fileName: String,
+                                                              val snippet: String,
+                                                              javaFileBuilder: PhysicalFileBuilder)
+    : NotProcessedSourceFile(javaFileBuilder) {
+
     companion object {
         fun aJavaFileWithADifferentSnippet(fileName: String, snippetId: String): SampleJavaFileWithADifferentSnippet {
             val snippet = "final List<String> strings = new ArrayList<>();\n" +
@@ -34,13 +42,17 @@ class SampleJavaFileWithADifferentSnippet(javaFileBuilder: PhysicalFileBuilder, 
                 "\n//Showcase end $snippetId\n\n" //TODO: hier die Leerzeilen weg
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
-            return SampleJavaFileWithADifferentSnippet(fileBuilder, snippet)
+            return SampleJavaFileWithADifferentSnippet(fileName, snippet, fileBuilder)
         }
     }
 }
 
 
-class SampleJavaFileWithACommentsInSnippet(javaFileBuilder: PhysicalFileBuilder, val snippet: String) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithACommentsInSnippet private constructor(val fileName: String,
+                                                               val snippet: String,
+                                                               javaFileBuilder: PhysicalFileBuilder)
+    : NotProcessedSourceFile(javaFileBuilder) {
+
     companion object {
         fun aJavaFileWithACommentsInSnippet(fileName: String, snippetId: String): SampleJavaFileWithACommentsInSnippet {
             val snippet = "final Object o = new Object();//our first object\n" +
@@ -56,7 +68,7 @@ class SampleJavaFileWithACommentsInSnippet(javaFileBuilder: PhysicalFileBuilder,
                 "\n//Showcase end $snippetId\n\n" //TODO: hier die Leerzeilen weg
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
-            return SampleJavaFileWithACommentsInSnippet(fileBuilder, snippet)
+            return SampleJavaFileWithACommentsInSnippet(fileName, snippet, fileBuilder)
         }
     }
 }
