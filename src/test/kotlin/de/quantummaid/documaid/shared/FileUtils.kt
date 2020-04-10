@@ -53,6 +53,12 @@ fun createDirectoryAndParents(path: Path) {
     Files.createDirectories(path)
 }
 
+fun createDirectoryAndParentsIfNotExisting(path: Path) {
+    if (!Files.exists(path)) {
+        Files.createDirectories(path)
+    }
+}
+
 fun assertFileWithContent(basePath: String, filePath: String, expectedContent: String) {
     val path = Paths.get(basePath, filePath).toAbsolutePath()
     assertFileWithContent(path, expectedContent)

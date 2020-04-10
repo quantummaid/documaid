@@ -118,11 +118,31 @@ class TableOfContentWithNavigationSpecs {
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with wrong navigation (in path ${absPath("wrongNav/docs/003_ADifferentChapter.md")})"))
     }
 
+    @Test
+    fun canGenerateNavigationAtTheEndOfFileWithoutNewLine() {
+        given(aDokuMaid()
+            .configuredWith(aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
+            .configuredWithGoal(GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canReplaceNavigationAtTheEndOfFileWithoutNewLine() {
+        given(aDokuMaid()
+            .configuredWith(aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
+            .configuredWithGoal(GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
     private fun absPath(fileName: String): String {
         return BASE_PATH.toAbsolutePath().resolve(fileName).toString()
     }
 
     companion object {
-        private val BASE_PATH = Paths.get("src/test/kotlin/de/quantummaid/documaid/usecases/tableOfContents/")
+        private val BASE_PATH = Paths.get("target/tempTestDirs/tableOfContents/")
     }
 }

@@ -31,10 +31,10 @@ import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class DependencySpecs {
+interface DependencySpecs {
 
     @Test
-    fun canGenerateFullyDefinedDependency() {
+    fun canGenerateFullyDefinedDependencyInMarkdownFIle() {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleFullyDefinedDependency(BASE_PATH))
             .configuredWithBasePath(BASE_PATH)
@@ -112,8 +112,28 @@ class DependencySpecs {
                 "'<!---[Dependency](groupId artifactId=test version=1 scope=compile )-->' (in path ${absPath("aFileWithDependencyWithMissingCode/dependency.md")})"))
     }
 
+    @Test
+    fun canInsertDependencyAtTheEndOfFileWithoutNewline() {
+        given(aDokuMaid()
+            .configuredWith(aFileWithASingleDependencyAtTheEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canReplaceDependencyAtTheEndOfFileWithoutNewline() {
+        given(aDokuMaid()
+            .configuredWith(aFileWithAWrongDependencyAtTheEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredWithBasePath(BASE_PATH)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/maven/dependency/"
+        private const val BASE_PATH = "target/tempTestDirs/dependency/"
     }
 
     fun absPath(fileName: String): String {

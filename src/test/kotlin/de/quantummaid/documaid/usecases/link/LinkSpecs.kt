@@ -28,7 +28,6 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDoku
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectADokuMaidExceptionCollectingTheFollowingErrors
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
@@ -96,7 +95,7 @@ internal class LinkSpecs {
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectNoException())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -150,8 +149,29 @@ internal class LinkSpecs {
                     "(in path $testBasePath/multipleLinkErrors.md)"))
     }
 
+    @Test
+    fun canInsertCodeLinkAtTheEndOfFileWithoutNewline() {
+        given(DokuMaidTestBuilder.aDokuMaid()
+            .configuredWith(aFileWithASingleLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canReplaceCodeLinkAtTheEndOfFileWithoutNewline() {
+        given(DokuMaidTestBuilder.aDokuMaid()
+            .configuredWith(aFileWithWrongLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/link/"
+        private const val BASE_PATH = "target/tempTestDirs/link/"
     }
 
     private fun absPath(fileName: String): String {

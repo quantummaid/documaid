@@ -179,8 +179,28 @@ class TableOfContentSpecs {
             .then(expectAnExceptionWithMessage("Found [TOC] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithIncorrectToc/README.md")})"))
     }
 
+    @Test
+    fun canGenerateTocAtTheEndOfFileWithoutNewLine() {
+        given(aDokuMaid()
+            .configuredWith(aTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
+            .configuredWithGoal(GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canReplaceTocAtTheEndOfFileWithoutNewLine() {
+        given(aDokuMaid()
+            .configuredWith(aWrongTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
+            .configuredWithGoal(GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
     companion object {
-        private val BASE_PATH = Paths.get("src/test/kotlin/de/quantummaid/documaid/usecases/tableOfContents/")
+        private val BASE_PATH = Paths.get("target/tempTestDirs/tableOfContents/")
     }
 
     private fun absPath(fileName: String): String {

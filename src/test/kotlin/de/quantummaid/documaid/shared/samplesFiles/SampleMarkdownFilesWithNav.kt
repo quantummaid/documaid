@@ -64,3 +64,47 @@ fun aMarkdownFileWithAWrongNav(fileName: String, navigationString: String): Proc
         .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
         .build()
 }
+
+fun aMarkdownFileWithNavAtEndOfLineWithoutNewLine(fileName: String, navigationString: String): ProcessedFile {
+    val contentInput = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->"
+    val expectedContentOutput = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->\n"+
+        navigationString
+
+    return ProcessedFileBuilder.anExpectedFile()
+        .withOriginalNameAndContent(fileName, contentInput)
+        .withProcessedNameAndContent(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .build()
+}
+fun aMarkdownFileWithAWrongNavAtEndOfFile(fileName: String, navigationString: String): ProcessedFile {
+    val contentInput = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->\n"+
+        "[&larr;](1_Wrong1.md)$S[Overview](../README.md)$S[&rarr;](3_Wrong2.md)"
+    val expectedContentOutput = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->\n"+
+        navigationString+""
+
+    return ProcessedFileBuilder.anExpectedFile()
+        .withOriginalNameAndContent(fileName, contentInput)
+        .withProcessedNameAndContent(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .build()
+}

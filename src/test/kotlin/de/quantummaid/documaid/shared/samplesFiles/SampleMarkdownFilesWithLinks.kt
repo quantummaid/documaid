@@ -18,14 +18,13 @@ fun aMarkdownFileWithALinkDirective(fileName: String, linkPath: String, linkName
         .build()
 }
 
-fun aMarkdownFileWithADifferentLinkDirective(fileName: String, linkPath: String, linkName: String): ProcessedFile {
+fun aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine(fileName: String, linkPath: String, linkName: String): ProcessedFile {
     val contentInput = "#Test File\n" +
-        "<!--- [Link]($linkPath  $linkName ) -->" +
-        "someOtherText"
+        "<!--- [Link]($linkPath  $linkName ) -->"
+
     val expectedContentOutput = "#Test File\n" +
         "<!--- [Link]($linkPath  $linkName ) -->\n" +
-        "[$linkName]($linkPath)" +
-        "someOtherText" //TODO: weg hier
+        "[$linkName]($linkPath)"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
@@ -59,6 +58,21 @@ fun aMarkdownFileWithWrongLinkInserted(fileName: String, linkPath: String, linkN
         "<!---[Link] ( $linkPath $linkName)-->\n" +
         "[$linkName]($linkPath)\n" +
         "someOtherText"
+    return ProcessedFileBuilder.anExpectedFile()
+        .withOriginalNameAndContent(fileName, contentInput)
+        .withProcessedNameAndContent(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutput)
+        .build()
+}
+
+
+fun aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline(fileName: String, linkPath: String, linkName: String): ProcessedFile {
+    val contentInput = "#Test File\n" +
+        "<!---[Link] ( $linkPath $linkName)-->\n" +
+        "[somethingDifferent](./someDifferentFile)"
+    val expectedContentOutput = "#Test File\n" +
+        "<!---[Link] ( $linkPath $linkName)-->\n" +
+        "[$linkName]($linkPath)"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)

@@ -23,7 +23,7 @@ fun aMarkdownFileWithAPluginDirective(fileName: String, groupId: String? = null,
         .build()
 }
 
-private fun pluginDirective(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
+internal fun pluginDirective(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
     val optionsString = createOptionsString(groupId, artifactId, version, goal, phase)
     return "<!---[Plugin]$optionsString-->\n"
 }
@@ -38,7 +38,7 @@ private fun createOptionsString(groupId: String?, artifactId: String?, version: 
 }
 
 
-private fun createMarkdownPlugin(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
+internal fun createMarkdownPlugin(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
     val groupIdString = "    <groupId>${groupId ?: SampleMavenProjectProperties.SAMPLE_GROUP_ID}</groupId>\n"
     val artifactIdString = "    <artifactId>${artifactId ?: SampleMavenProjectProperties.SAMPLE_ARTIFACT_ID}</artifactId>\n"
     val versionString = "    <version>${version ?: SampleMavenProjectProperties.SAMPLE_VERSION_ID}</version>\n"

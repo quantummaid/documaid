@@ -23,9 +23,10 @@ package de.quantummaid.documaid.usecases.maven.dependency
 
 import de.quantummaid.documaid.shared.SetupUpdate
 import de.quantummaid.documaid.shared.TemporaryTestDirectory
-import de.quantummaid.documaid.shared.samplesFiles.aXmlFileWithADifferentGeneratedDependency
-import de.quantummaid.documaid.shared.samplesFiles.aXmlFileWithAnAlreadyGeneratedDependency
-import de.quantummaid.documaid.shared.samplesFiles.aXmlFileWithOneDependency
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithADifferentGeneratedDependency
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAnAlreadyGeneratedDependency
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithOneDependency
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline
 
 fun aFileWithASingleFullyDefinedDependency(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
@@ -33,7 +34,7 @@ fun aFileWithASingleFullyDefinedDependency(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aXmlFileWithOneDependency("dependency.md",
+                aMarkdownFileWithOneDependency("dependency.md",
                     groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile")
             )
     }
@@ -45,7 +46,7 @@ fun aFileWithADependencyWithoutAnythingDefined(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aXmlFileWithOneDependency("dependency.md")
+                aMarkdownFileWithOneDependency("dependency.md")
             )
     }
 }
@@ -56,7 +57,7 @@ fun aFileWithAWrongGeneratedDependency(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aXmlFileWithADifferentGeneratedDependency("dependency.md", groupId = "local", version = "1.0.0")
+                aMarkdownFileWithADifferentGeneratedDependency("dependency.md", groupId = "local", version = "1.0.0")
             )
     }
 }
@@ -68,7 +69,7 @@ fun aFileWithUnparsableDependencyOptionsString(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aXmlFileWithADifferentGeneratedDependency("dependency.md", groupId = incorrectGroupId)
+                aMarkdownFileWithADifferentGeneratedDependency("dependency.md", groupId = incorrectGroupId)
             )
     }
 }
@@ -79,7 +80,7 @@ fun aFileWithACorrectlyGeneratedDependency(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aXmlFileWithAnAlreadyGeneratedDependency("dependency.md",
+                aMarkdownFileWithAnAlreadyGeneratedDependency("dependency.md",
                     groupId = "com.local", artifactId = "test-project", version = "2.4-SNAPSHOT", scope = "provided")
             )
     }
@@ -91,7 +92,27 @@ fun aFileWithDependencyWithMissingCode(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aXmlFileWithOneDependency("dependency.md", artifactId = "test", version = "1", scope = "compile")
-            )
+                aMarkdownFileWithOneDependency("dependency.md", artifactId = "test", version = "1", scope = "compile"))
+    }
+}
+
+fun aFileWithASingleDependencyAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
+
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline("dependency.md",
+                    groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile"))
+    }
+}
+fun aFileWithAWrongDependencyAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
+
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline("dependency.md",
+                    groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile"))
     }
 }

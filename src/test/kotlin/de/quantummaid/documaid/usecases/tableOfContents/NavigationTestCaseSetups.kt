@@ -26,8 +26,10 @@ import de.quantummaid.documaid.shared.SetupUpdate
 import de.quantummaid.documaid.shared.SutDirectory
 import de.quantummaid.documaid.shared.TemporaryTestDirectory.Companion.aTemporyTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongNav
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongNavAtEndOfFile
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedNav
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithNav
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithNavAtEndOfLineWithoutNewLine
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithToc
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTocAlreadyGenerated
 import java.nio.file.Path
@@ -250,3 +252,52 @@ fun aReadmeWithTocAndAFileWithWrongNav(basePath: Path): SetupUpdate {
     }
 }
 
+fun aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine")
+
+    return { (_, _, sutFileStructure, _, _) ->
+
+        val expectedToc = """
+                     1. [Introduction](docs/1_Introduction.md)
+                     2. [Some important stuff](docs/02_SomeImportantStuff.md)
+                     3. [A different chapter](docs/003_ADifferentChapter.md)
+                """.trimIndent()
+
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithToc("README.md", "./docs", expectedToc),
+                SutDirectory.aDirectory("docs")
+                    .with(
+                        aMarkdownFileWithNav("1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
+                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine("02_SomeImportantStuff.md",
+                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+    }
+}
+
+fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine")
+
+    return { (_, _, sutFileStructure, _, _) ->
+
+        val expectedToc = """
+                     1. [Introduction](docs/1_Introduction.md)
+                     2. [Some important stuff](docs/02_SomeImportantStuff.md)
+                     3. [A different chapter](docs/003_ADifferentChapter.md)
+                """.trimIndent()
+
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithToc("README.md", "./docs", expectedToc),
+                SutDirectory.aDirectory("docs")
+                    .with(
+                        aMarkdownFileWithNav("1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
+                        aMarkdownFileWithAWrongNavAtEndOfFile("02_SomeImportantStuff.md",
+                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+    }
+}

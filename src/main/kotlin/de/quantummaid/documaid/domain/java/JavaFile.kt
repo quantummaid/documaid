@@ -35,7 +35,7 @@ class JavaFile private constructor(private val path: Path, val snippets: List<Ra
         object JavaSnippetFormat {
             private const val startTagRegex = "// *Showcase *start *(?<id>\\w+) *\\n"
             private const val endTagRegex = " *// *Showcase *end *\\k<id> *"
-            val regex = Regex("(?s)$startTagRegex(?<snippet>.*(?=$endTagRegex))$endTagRegex\\n")
+            val regex = Regex("(?s)$startTagRegex(?<snippet>.*(?=$endTagRegex))$endTagRegex\\n?")
         }
 
         fun create(path: Path): JavaFile {

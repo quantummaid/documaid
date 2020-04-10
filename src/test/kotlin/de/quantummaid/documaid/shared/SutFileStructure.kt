@@ -35,9 +35,13 @@ class SutFileStructure internal constructor() {
     }
 
     private fun generate(basePath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalFileSystemStructure {
+        val parentPath = basePath.parent
+        createDirectoryAndParentsIfNotExisting(parentPath)
 
-        val rootDirectory = SutDirectory.aDirectory(basePath.toFile().name)
-            .with(children).generate(basePath.parent, generatedTargetFileStructureType)
+        val fileName = basePath.toFile().name
+        val rootDirectory = SutDirectory.aDirectory(fileName)
+            .with(children)
+            .generate(parentPath, generatedTargetFileStructureType)
         return PhysicalFileSystemStructure(rootDirectory)
     }
 
@@ -81,7 +85,7 @@ class SutDirectory private constructor(private val name: String) : SutFileObject
 
     override fun generate(parentPath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalDirectory {
         val physicalDirectoryBuilder = PhysicalDirectoryBuilder.aDirectory(name)
-        val physicalDirectory = when(generatedTargetFileStructureType){
+        val physicalDirectory = when (generatedTargetFileStructureType) {
             GeneratedTargetFileStructureType.INPUT_FOR_DOCUMAID -> physicalDirectoryBuilder.create(parentPath)
             GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_GITHUB -> physicalDirectoryBuilder.construct(parentPath)
             GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_HUGO -> physicalDirectoryBuilder.construct(parentPath)
@@ -168,11 +172,11 @@ open class SimpleProcessedFile(private val originalFile: PhysicalFileBuilder,
     }
 }
 
-open class NotProcessedSourceFile(notChangingFileBuilder: PhysicalFileBuilder): SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder)
+open class NotProcessedSourceFile(notChangingFileBuilder: PhysicalFileBuilder) : SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder)
 
-open class EmptySutFile(notChangingFileBuilder: PhysicalFileBuilder): SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder){
+open class EmptySutFile(notChangingFileBuilder: PhysicalFileBuilder) : SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder) {
     companion object {
-        fun aFile(fileName:String):EmptySutFile{
+        fun aFile(fileName: String): EmptySutFile {
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
             return EmptySutFile(fileBuilder)
         }

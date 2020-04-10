@@ -27,10 +27,12 @@ import de.quantummaid.documaid.shared.TemporaryTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirective
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinks
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoLinkDirectives
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInserted
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAndAMissingLink
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline
 
 fun aFileWithASingleLink(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleLink")
@@ -40,8 +42,7 @@ fun aFileWithASingleLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithALinkDirective("md1.md", javaFile.fileName, "sampleLinkName")
-            )
+                aMarkdownFileWithALinkDirective("md1.md", javaFile.fileName, "sampleLinkName"))
     }
 }
 
@@ -61,10 +62,7 @@ fun aFileWithTwoLinks(basePath: String): SetupUpdate {
                             "subSubDir/${xmlFile.fileName}", "complex !/@_ filename"),
                         aDirectory("subSubDir")
                             .with(
-                                xmlFile
-                            )
-                    )
-            )
+                                xmlFile)))
     }
 }
 
@@ -77,8 +75,7 @@ fun aFileWithTheSameLinksTwice(basePath: String): SetupUpdate {
                 aJavaFileWithOneSnippet("source.java", "testSnippet"),
                 aMarkdownFileWithTwoLinkDirectives("md1.md",
                     "source.java", "name1",
-                    "source.java", "name2")
-            )
+                    "source.java", "name2"))
     }
 }
 
@@ -90,8 +87,7 @@ fun aFileWithWrongLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithWrongLinkInserted("md1.md", javaFile.fileName, "linkName")
-            )
+                aMarkdownFileWithWrongLinkInserted("md1.md", javaFile.fileName, "linkName"))
     }
 }
 
@@ -103,8 +99,7 @@ fun aFileWithLinksToNotExistingFiles(basePath: String): SetupUpdate {
             .with(
                 aMarkdownFileWithTwoLinkDirectives("missingLinksFile.md",
                     "someWhere/notExistingFile.java", "linkName1",
-                    "differentNotExistingFile.java", "linkName2")
-            )
+                    "differentNotExistingFile.java", "linkName2"))
     }
 }
 
@@ -120,8 +115,7 @@ fun aCorrectlyGeneratedFileWithTwoLinks(basePath: String): SetupUpdate {
                 xmlFile,
                 aMarkdownFileWithTwoAlreadyGeneratedLinks("md1.md",
                     javaFile.fileName, "sampleLinkName",
-                    xmlFile.fileName, "complex filename")
-            )
+                    xmlFile.fileName, "complex filename"))
     }
 }
 
@@ -133,8 +127,7 @@ fun aFileWithAMissingLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithALinkDirective("oneMissingLinkFileSampleFiles.md", javaFile.fileName, "linkName")
-            )
+                aMarkdownFileWithALinkDirective("oneMissingLinkFileSampleFiles.md", javaFile.fileName, "linkName"))
     }
 }
 
@@ -144,8 +137,7 @@ fun aFileWithLinkANotExistingFile(basePath: String): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "someWhere/notExistingFile.java", "linkName")
-            )
+                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "someWhere/notExistingFile.java", "linkName"))
     }
 }
 
@@ -159,7 +151,32 @@ fun aFileWithMultipleLinkErrors(basePath: String): SetupUpdate {
                 javaFile,
                 aMarkdownFileWithWrongLinkInsertedAndAMissingLink("multipleLinkErrors.md",
                     javaFile.fileName, "linkName1",
-                    javaFile.fileName, "linkName2")
+                    javaFile.fileName, "linkName2"))
+    }
+}
+
+fun aFileWithASingleLinkAtTheEndOfFileWithoutNewline(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleLinkAtEndOfFile")
+
+    val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine("md1.md", javaFile.fileName, "sampleLinkName")
+            )
+    }
+}
+
+fun aFileWithWrongLinkAtTheEndOfFileWithoutNewline(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAWrongLinkAtEndOfFile")
+
+    val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline("md1.md", javaFile.fileName, "sampleLinkName")
             )
     }
 }

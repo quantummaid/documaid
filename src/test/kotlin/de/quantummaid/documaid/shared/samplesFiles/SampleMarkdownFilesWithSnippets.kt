@@ -3,11 +3,16 @@ package de.quantummaid.documaid.shared.samplesFiles
 import de.quantummaid.documaid.shared.ProcessedFile
 import de.quantummaid.documaid.shared.ProcessedFileBuilder
 
-fun aMarkdownFileWithSnippetDirective(fileName: String, snippetName: String, snippet: String, snippetLanguage: String = "java"): ProcessedFile {
-    val contentInput = "#Test File\n" +
+fun aMarkdownFileWithSnippetDirective(fileName: String,
+                                      snippetName: String,
+                                      snippet: String,
+                                      snippetLanguage: String = "java")
+    : ProcessedFile {
+
+    val contentInput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
         "someOtherText"
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
         "```$snippetLanguage\n" +
         snippet + "\n" +
@@ -20,15 +25,38 @@ fun aMarkdownFileWithSnippetDirective(fileName: String, snippetName: String, sni
         .build()
 }
 
-fun aMarkdownFileWithTwoSnippets(fileName: String, firstSnippetName: String, firstSnippet: String, secondSnippetName: String, secondSnippet: String): ProcessedFile {
-    val contentInput = "#Test File\n" +
+fun aMarkdownFileWithSnippetDirectiveAtTheEnd(fileName: String,
+                                              snippetName: String,
+                                              snippet: String,
+                                              snippetLanguage: String = "java"): ProcessedFile {
+    val contentInput = "Test File\n" +
+        "<!---[CodeSnippet] (" + snippetName + ")-->"
+
+    val expectedContentOutput = "Test File\n" +
+        "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
+        "```$snippetLanguage\n" +
+        snippet + "\n" +
+        "```"
+    return ProcessedFileBuilder.anExpectedFile()
+        .withOriginalNameAndContent(fileName, contentInput)
+        .withProcessedNameAndContent(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutput)
+        .build()
+}
+
+fun aMarkdownFileWithTwoSnippets(fileName: String,
+                                 firstSnippetName: String,
+                                 firstSnippet: String,
+                                 secondSnippetName: String,
+                                 secondSnippet: String): ProcessedFile {
+    val contentInput = "Test File\n" +
         "<!---[CodeSnippet] (" + firstSnippetName + ")-->\n" +
         "someOtherText\n" +
         "<!---[CodeSnippet] (" + secondSnippetName + ")-->\n" +
         "\n" +
         "adsadsad\n"
 
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (" + firstSnippetName + ")-->\n" +
         "```java\n" +
         firstSnippet + "\n" +
@@ -47,11 +75,11 @@ fun aMarkdownFileWithTwoSnippets(fileName: String, firstSnippetName: String, fir
         .build()
 }
 
-fun aMarkdownFileWithFillClassSnippetDirective(fileName: String, relativeClassPath: String, snippet: String, snippetLanguage: String = "java"): ProcessedFile {
-    val contentInput = "#Test File\n" +
+fun aMarkdownFileWithFullClassSnippetDirective(fileName: String, relativeClassPath: String, snippet: String, snippetLanguage: String = "java"): ProcessedFile {
+    val contentInput = "Test File\n" +
         "<!---[CodeSnippet] (file=" + relativeClassPath + ")-->\n" +
         "someOtherText"
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (file=" + relativeClassPath + ")-->\n" +
         "```$snippetLanguage\n" +
         snippet + "\n" +
@@ -65,7 +93,7 @@ fun aMarkdownFileWithFillClassSnippetDirective(fileName: String, relativeClassPa
 }
 
 fun aMarkdownFileWithWrongSnippet(fileName: String, snippetName: String, snippet: String, snippetLanguage: String = "java"): ProcessedFile {
-    val contentInput = "#Test File\n" +
+    val contentInput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
         "```$snippetLanguage\n" +
         "something completely different" +
@@ -73,7 +101,7 @@ fun aMarkdownFileWithWrongSnippet(fileName: String, snippetName: String, snippet
         "something completely different" +
         "```\n" +
         "someOtherText"
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
         "```$snippetLanguage\n" +
         snippet + "\n" +
@@ -87,7 +115,7 @@ fun aMarkdownFileWithWrongSnippet(fileName: String, snippetName: String, snippet
 }
 
 fun aMarkdownFileWithTwoWrongSnippets(fileName: String, snippetName1: String, snippet1: String, snippetName2: String, snippet2: String): ProcessedFile {
-    val contentInput = "#Test File\n" +
+    val contentInput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName1 + ")-->\n" +
         "```java\n" +
         "something completely different" +
@@ -103,7 +131,7 @@ fun aMarkdownFileWithTwoWrongSnippets(fileName: String, snippetName1: String, sn
         "someOtherText\n" +
         "someOtherText\n" +
         "```\n"
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName1 + ")-->\n" +
         "```java\n" +
         snippet1 + "\n" +
@@ -121,7 +149,7 @@ fun aMarkdownFileWithTwoWrongSnippets(fileName: String, snippetName1: String, sn
 }
 
 fun aMarkdownFileWithAlreadyGeneratedSnippet(fileName: String, snippetName: String, snippet: String, snippetLanguage: String = "java"): ProcessedFile {
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
         "```$snippetLanguage\n" +
         snippet + "\n" +
@@ -134,8 +162,28 @@ fun aMarkdownFileWithAlreadyGeneratedSnippet(fileName: String, snippetName: Stri
         .build()
 }
 
+fun aMarkdownFileWithWrongGeneratedSnippetAtEndOfFile(fileName: String, snippetName: String, snippet: String): ProcessedFile {
+    val contentInput = "Test File\n" +
+        "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
+        "```java\n" +
+        "something completely different" +
+        "something completely different" +
+        "something completely different" +
+        "```"
+    val expectedContentOutput = "Test File\n" +
+        "<!---[CodeSnippet] (" + snippetName + ")-->\n" +
+        "```java\n" +
+        snippet + "\n" +
+        "```"
+    return ProcessedFileBuilder.anExpectedFile()
+        .withOriginalNameAndContent(fileName, contentInput)
+        .withProcessedNameAndContent(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutput)
+        .build()
+}
+
 fun aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet(fileName: String, snippetName1: String, snippet1: String, snippetName2: String, snippet2: String): ProcessedFile {
-    val contentInput = "#Test File\n" +
+    val contentInput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName1 + ")-->\n" +
         "```java\n" +
         "something completely different" +
@@ -146,7 +194,7 @@ fun aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet(fileNa
         "<!---[CodeSnippet] (" + snippetName2 + ")-->\n" +
         "adasdsadsad"
 
-    val expectedContentOutput = "#Test File\n" +
+    val expectedContentOutput = "Test File\n" +
         "<!---[CodeSnippet] (" + snippetName1 + ")-->\n" +
         "```java\n" +
         snippet1 + "\n" +

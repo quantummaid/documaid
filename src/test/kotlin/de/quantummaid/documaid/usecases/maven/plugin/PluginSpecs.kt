@@ -42,7 +42,7 @@ class PluginSpecs {
     }
 
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/maven/plugin/"
+        private const val BASE_PATH = "target/tempTestDirs/plugin/"
     }
 
     fun absPath(fileName: String): String {

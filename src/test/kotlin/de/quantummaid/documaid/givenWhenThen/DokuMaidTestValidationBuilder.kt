@@ -50,60 +50,10 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             }
         }
 
-        fun expectTheCodeSnippetToBeInserted(): DokuMaidTestValidationBuilder {
-            return expectTheCorrectFileToBeGenerated()
-        }
-
-        fun expectAllCodeSnippetsToBeInserted(): DokuMaidTestValidationBuilder {
-            return expectTheCorrectFileToBeGenerated()
-        }
-
-        fun expectTheLinkToBeInserted(): DokuMaidTestValidationBuilder {
-            return expectTheCorrectFileToBeGenerated()
-        }
-
-        fun expectAllLinksToBeInserted(): DokuMaidTestValidationBuilder {
-            return expectTheCorrectFileToBeGenerated()
-        }
-
-        fun expectTheDependencyToBeInserted(): DokuMaidTestValidationBuilder {
-            return expectTheCorrectFileToBeGenerated()
-        }
-
-        fun expectThePluginCodeToBeInserted(): DokuMaidTestValidationBuilder {
-            return expectTheCorrectFileToBeGenerated()
-        }
-
-        fun expectTheCorrectFileToBeGenerated(): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { testEnvironment ->
-                assertNoExceptionThrown(testEnvironment)
-                assertFileContainsCorrectContent(testEnvironment)
-            }
-        }
-
-        fun expectNoException(): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { assertNoExceptionThrown(it) }
-        }
-
         fun expectAnExceptionWithMessage(expectedMessage: String): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment -> assertExceptionWithMessage(expectedMessage, testEnvironment) }
         }
 
-        fun expectAnExceptionOfType(expectedExceptionClass: Class<*>): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { testEnvironment -> assertExceptionOfType(expectedExceptionClass, testEnvironment) }
-        }
-
-        fun expectAnExceptionWithCause(expectedExceptionClass: Class<*>): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { testEnvironment ->
-                if (testEnvironment.has(TestEnvironmentProperty.EXCEPTION)) {
-                    val exception = testEnvironment.getPropertyAsType<Exception>(TestEnvironmentProperty.EXCEPTION)
-                    val cause = exception.cause!!
-                    assertEquals(expectedExceptionClass, cause.javaClass)
-                } else {
-                    fail<Any>("Expected an exception to be thrown, but none was found")
-                }
-            }
-        }
 
         fun expectADokuMaidExceptionCollectingTheFollowingErrors(vararg expectedMessages: String): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment ->
@@ -125,28 +75,6 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             }
         }
 
-        fun expectAllFilesToBeCorrectlyGenerated(): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { testEnvironment ->
-                assertNoExceptionThrown(testEnvironment)
-                @Suppress("UNCHECKED_CAST") val sampleFiles = testEnvironment.getProperty(TestEnvironmentProperty.MULTIPLE_SAMPLE_FILES) as List<SampleFile>
-                for (sampleFile in sampleFiles) {
-                    assertFileContainsCorrectContent(testEnvironment, sampleFile)
-                }
-            }
-        }
-
-        private fun assertFileContainsCorrectContent(testEnvironment: TestEnvironment) {
-            val sampleFiles = testEnvironment.getPropertyAsType<SampleFile>(TestEnvironmentProperty.SAMPLE_FILE)
-            assertFileContainsCorrectContent(testEnvironment, sampleFiles)
-        }
-
-        private fun assertFileContainsCorrectContent(testEnvironment: TestEnvironment, sampleFile: SampleFile) {
-            val basePath = testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
-            val expectedContent = sampleFile.expectedContentOutput
-            val baseDirRelativePath = sampleFile.baseDirRelativePath
-            assertFileWithContent(basePath, baseDirRelativePath, expectedContent!!)
-        }
-
         private fun assertNoExceptionThrown(testEnvironment: TestEnvironment) {
             if (testEnvironment.has(TestEnvironmentProperty.EXCEPTION)) {
                 val exception = testEnvironment.getPropertyAsType<Exception>(TestEnvironmentProperty.EXCEPTION)
@@ -154,14 +82,6 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             }
         }
 
-        private fun assertExceptionOfType(expectedExceptionClass: Class<*>, testEnvironment: TestEnvironment) {
-            if (testEnvironment.has(TestEnvironmentProperty.EXCEPTION)) {
-                val exception = testEnvironment.getPropertyAsType<Exception>(TestEnvironmentProperty.EXCEPTION)
-                assertEquals(expectedExceptionClass, exception.javaClass)
-            } else {
-                fail<Any>("Expected an exception to be thrown, but none was found")
-            }
-        }
 
         private fun assertExceptionWithMessage(expectedMessage: String, testEnvironment: TestEnvironment) {
             if (testEnvironment.has(TestEnvironmentProperty.EXCEPTION)) {
@@ -170,24 +90,6 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
                 assertEquals(expectedMessage, message)
             } else {
                 fail<Any>("Expected an exception to be thrown, but none was found")
-            }
-        }
-
-        fun expectTheTocToBeGenerated(): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { testEnvironment ->
-                assertNoExceptionThrown(testEnvironment)
-                val sampleFile = testEnvironment.getPropertyAsType<SampleFile>(TestEnvironmentProperty.SAMPLE_FILE)
-                assertFileContainsCorrectContent(testEnvironment, sampleFile)
-            }
-        }
-
-        fun expectTheTocAndAllNavigationDirectivesToBeInserted(): DokuMaidTestValidationBuilder {
-            return DokuMaidTestValidationBuilder { testEnvironment ->
-                assertNoExceptionThrown(testEnvironment)
-                val sampleFiles = testEnvironment.getPropertyAsType<SampleFiles>(TestEnvironmentProperty.SAMPLE_FILES)
-                for (sampleFile in sampleFiles.files) {
-                    assertFileContainsCorrectContent(testEnvironment, sampleFile)
-                }
             }
         }
     }

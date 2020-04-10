@@ -39,7 +39,7 @@ class SampleJavaFileWithADifferentSnippet private constructor(val fileName: Stri
                 "}\n"
             val content = "//Showcase start $snippetId\n" +
                 snippet +
-                "\n//Showcase end $snippetId\n\n" //TODO: hier die Leerzeilen weg
+                "\n//Showcase end $snippetId"
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
             return SampleJavaFileWithADifferentSnippet(fileName, snippet, fileBuilder)
@@ -69,6 +69,35 @@ class SampleJavaFileWithACommentsInSnippet private constructor(val fileName: Str
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
             return SampleJavaFileWithACommentsInSnippet(fileName, snippet, fileBuilder)
+        }
+    }
+}
+
+class SampleJavaFileWithFullClassSnippet private constructor(val fileName: String,
+                                                       val snippet: String,
+                                                       javaFileBuilder: PhysicalFileBuilder)
+    : NotProcessedSourceFile(javaFileBuilder) {
+
+    companion object {
+        fun aJavaFileWithOneFullSnippet(fileName: String): SampleJavaFileWithFullClassSnippet {
+            val snippet = """
+                package de.quantummaid.documaid.usecases.codeSnippet;
+
+                public class FullClassCodeSnippet {
+
+                public static void main(String[] args) {
+                    Object o = new Object();
+                    log(o);
+                }
+
+                private static void log(Object o) {
+
+                }
+             }
+            """.trimIndent()
+            val fileBuilder = PhysicalFileBuilder.aFile(fileName)
+                .withContent(snippet)
+            return SampleJavaFileWithFullClassSnippet(fileName, snippet, fileBuilder)
         }
     }
 }

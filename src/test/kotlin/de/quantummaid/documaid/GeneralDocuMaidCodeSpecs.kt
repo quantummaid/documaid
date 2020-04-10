@@ -21,39 +21,37 @@
 
 package de.quantummaid.documaid
 
-import de.quantummaid.documaid.GeneralSampleFilesBuilder.Companion.aCorrectlyGeneratedFileWithLinksAndSnippets
-import de.quantummaid.documaid.GeneralSampleFilesBuilder.Companion.severalFilesWithLinksAndSnippets
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrectlyGenerated
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.given
+import org.junit.jupiter.api.Test
 
-class GeneralDocuMaidCodeTest {
+class GeneralDocuMaidCodeSpecs {
 
-    //TODO: better and more
-    //@Test
+    //TODO: Fehlerfall wäre noch cool
+    @Test
     fun canProcessMultipleFilesWithGenerationGoal() {
         given(aDokuMaid()
-            .configuredWith(severalFilesWithLinksAndSnippets())
+            .configuredWith(severalFilesWithLinksAndSnippets(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectAllFilesToBeCorrectlyGenerated())
+            .then(expectAllFilesToBeCorrect())
     }
 
-    //@Test
+    @Test
     fun canExecuteAllProcessForValidationFile() {
         given(aDokuMaid()
-            .configuredWith(aCorrectlyGeneratedFileWithLinksAndSnippets())
+            .configuredWith(aCorrectlyGeneratedFileWithLinksAndSnippets(BASE_PATH))
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectNoException())
+            .then(expectAllFilesToBeCorrect())
     }
 
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid"
+        private const val BASE_PATH = "target/tempTestDirs/generalTests"
     }
 }

@@ -28,7 +28,6 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDoku
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectADokuMaidExceptionCollectingTheFollowingErrors
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
@@ -59,6 +58,16 @@ internal class CodeSnippetSpecs {
     fun canInsertTheSameSnippetsTwice() {
         given(aDokuMaid()
             .configuredWith(aFileWithTheSameCodeSnippetTwice(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canInsertTheSameSnippetsInMultipleFiles() {
+        given(aDokuMaid()
+            .configuredWith(filesWithTheSameCodeSnippet(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
@@ -130,7 +139,7 @@ internal class CodeSnippetSpecs {
         given(aDokuMaid()
             .configuredWith(filesWithDuplicateCodeSnippets(BASE_PATH))
             .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH ))
+            .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +
@@ -148,7 +157,7 @@ internal class CodeSnippetSpecs {
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithBasePath(BASE_PATH))
             .`when`(theDokuIsPimped())
-            .then(expectNoException())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -186,8 +195,28 @@ internal class CodeSnippetSpecs {
             ))
     }
 
+    @Test
+    fun canReplaceSimpleCodeSnippetAtTheEndOfFileWithoutNewline() {
+        given(aDokuMaid()
+            .configuredWith(aFileWithASingleCodeSnippetAtTheEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canReplaceCodeSnippetAtTheEndOfFileWithoutNewline() {
+        given(aDokuMaid()
+            .configuredWith(aFileWithAlreadyExistingCodeSnippetAtTheEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE)
+            .configuredWithBasePath(BASE_PATH))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
     companion object {
-        private const val BASE_PATH = "src/test/kotlin/de/quantummaid/documaid/usecases/codeSnippet/"
+        private const val BASE_PATH = "target/tempTestDirs/codeSnippet/"
     }
 
     fun absPath(fileName: String): String {
