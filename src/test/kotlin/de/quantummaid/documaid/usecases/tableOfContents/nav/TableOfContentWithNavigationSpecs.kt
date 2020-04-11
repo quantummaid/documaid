@@ -23,8 +23,8 @@ package de.quantummaid.documaid.usecases.tableOfContents.nav
 
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.Goal.GENERATE
-import de.quantummaid.documaid.domain.markdown.navigation.NavigationDirective.Companion.NAV_TAG
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
+import de.quantummaid.documaid.domain.markdown.tagBased.navigation.NavigationDirective.Companion.NAV_TAG
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect

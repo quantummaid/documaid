@@ -22,7 +22,7 @@
 package de.quantummaid.documaid.usecases.maven.dependency
 
 import de.quantummaid.documaid.config.Goal
-import de.quantummaid.documaid.domain.markdown.dependency.DependencyDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.dependency.DependencyDirective
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect

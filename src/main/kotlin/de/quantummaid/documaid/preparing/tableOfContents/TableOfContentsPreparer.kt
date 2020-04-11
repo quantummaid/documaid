@@ -25,10 +25,10 @@ import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
-import de.quantummaid.documaid.domain.markdown.tableOfContents.GithubTableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContentsCreator
 import de.quantummaid.documaid.domain.tableOfContents.TocTraversalDecision

@@ -1,11 +1,9 @@
 package de.quantummaid.documaid.usecases.tableOfContents.nav
 
 import de.quantummaid.documaid.config.Goal
-import de.quantummaid.documaid.domain.markdown.navigation.NavigationDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.navigation.NavigationDirective
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given

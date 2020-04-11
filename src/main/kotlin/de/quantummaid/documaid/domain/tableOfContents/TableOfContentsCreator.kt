@@ -25,8 +25,8 @@ import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.FileObject
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective
-import de.quantummaid.documaid.domain.markdown.tableOfContents.GithubTableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
 

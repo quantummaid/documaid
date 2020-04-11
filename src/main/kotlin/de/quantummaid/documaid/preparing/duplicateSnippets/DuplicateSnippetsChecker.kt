@@ -2,7 +2,7 @@ package de.quantummaid.documaid.preparing.duplicateSnippets
 
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
-import de.quantummaid.documaid.domain.markdown.codeSnippet.CodeSnippetDirective.Companion.CODE_SNIPPET_TAG
+import de.quantummaid.documaid.domain.markdown.tagBased.codeSnippet.CodeSnippetDirective.Companion.CODE_SNIPPET_TAG
 import de.quantummaid.documaid.domain.snippet.SnippetId
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.preparing.PreparingVisitor

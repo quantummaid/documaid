@@ -24,15 +24,16 @@ package de.quantummaid.documaid.givenWhenThen
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
+import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment.Companion.emptyTestEnvironment
-import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties
 import de.quantummaid.documaid.shared.filesystem.Setup
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutFileStructure
 import de.quantummaid.documaid.shared.filesystem.SutFileStructure.Companion.aFileStructureForDocuMaidToProcess
+import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import java.nio.file.Path
 
@@ -74,6 +75,11 @@ class DokuMaidTestBuilder private constructor() {
         val version = Version.create(SampleMavenProjectProperties.SAMPLE_VERSION_ID)
         val mavenConfiguration = MavenConfiguration(groupId, artifactId, version)
         docuMaidConfigurationBuilder.withMavenConfiguration(mavenConfiguration)
+        return this
+    }
+
+    fun configuredWith(platform: Platform): DokuMaidTestBuilder {
+        docuMaidConfigurationBuilder.forPlatform(platform)
         return this
     }
 
