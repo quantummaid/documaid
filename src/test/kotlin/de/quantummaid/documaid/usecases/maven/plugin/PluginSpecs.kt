@@ -35,7 +35,6 @@ class PluginSpecs {
     fun canGenerateFullyDefinedPlugin() {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleFullyDefinedPlugin(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())

@@ -1,0 +1,78 @@
+package de.quantummaid.documaid.generating
+
+import de.quantummaid.documaid.collecting.structure.FileType
+import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.config.Platform
+import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.processing.ProcessingResult
+import java.nio.file.Files
+import java.nio.file.Path
+
+class GenerationStep private constructor(private val fileGenerator: FileGenerator) {
+    companion object {
+        fun create(docuMaidConfiguration: DocuMaidConfiguration): GenerationStep {
+            val fileGenerator = when (docuMaidConfiguration.platform) {
+                Platform.GITHUB -> GithubFileGenerator()
+                Platform.HUGO -> HugoFileGenerator.create(docuMaidConfiguration)
+            }
+            return GenerationStep(fileGenerator)
+        }
+    }
+
+    fun generate(processingResults: List<ProcessingResult>): List<VerificationError> {
+        return fileGenerator.generate(processingResults)
+    }
+}
+
+internal interface FileGenerator {
+
+    fun generate(processingResults: List<ProcessingResult>): List<VerificationError>
+}
+
+internal class GithubFileGenerator : FileGenerator {
+    override fun generate(processingResults: List<ProcessingResult>): List<VerificationError> {
+        return try {
+            processingResults.filter { it.file.fileType() == FileType.MARKDOWN }
+                .filter { it.contentChanged }
+                .forEach { it.file.absolutePath().toFile().writeText(it.newContent) }
+            emptyList()
+        } catch (e: Exception) {
+            listOf(VerificationError.createFromException(e, null))
+        }
+    }
+}
+
+internal class HugoFileGenerator(val basePath: Path, val hugoBasePath: Path) : FileGenerator {
+
+    companion object {
+        fun create(docuMaidConfiguration: DocuMaidConfiguration): HugoFileGenerator {
+            val basePath = docuMaidConfiguration.basePath
+            val hugoBasePath = basePath.resolve(docuMaidConfiguration.hugoOutputPath)
+            return HugoFileGenerator(basePath, hugoBasePath)
+        }
+    }
+
+    override fun generate(processingResults: List<ProcessingResult>): List<VerificationError> {
+
+        return try {
+            processingResults.filter { it.file.fileType() == FileType.MARKDOWN }
+                .filter { it.contentChanged }
+                .forEach {
+                    val absoluteFilePath = it.file.absolutePath()
+                    val relativizedPath = basePath.relativize(absoluteFilePath)
+                    val targetPath = hugoBasePath.resolve(relativizedPath)
+                    createDirectoryAndParentsIfNotExisting(targetPath.parent)
+                    targetPath.toFile().writeText(it.newContent)
+                }
+            emptyList()
+        } catch (e: Exception) {
+            listOf(VerificationError.createFromException(e, null))
+        }
+    }
+
+    private fun createDirectoryAndParentsIfNotExisting(path: Path) {
+        if (!Files.exists(path)) {
+            Files.createDirectories(path)
+        }
+    }
+}

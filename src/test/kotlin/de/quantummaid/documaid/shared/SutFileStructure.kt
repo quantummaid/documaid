@@ -1,6 +1,8 @@
 package de.quantummaid.documaid.shared
 
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class SutFileStructure internal constructor() {
     private val children = mutableListOf<SutFileObject>()
@@ -30,8 +32,9 @@ class SutFileStructure internal constructor() {
         return generate(basePath!!, GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_GITHUB)
     }
 
-    fun generateExpectedFileStructureForHugo(): PhysicalFileSystemStructure {
-        return generate(basePath!!, GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_HUGO)
+    fun generateExpectedFileStructureForHugo(config: DocuMaidConfiguration): PhysicalFileSystemStructure {
+        val hugoOutputPath = basePath!!.resolve(config.hugoOutputPath)
+        return generate(hugoOutputPath, GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_HUGO)
     }
 
     private fun generate(basePath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalFileSystemStructure {

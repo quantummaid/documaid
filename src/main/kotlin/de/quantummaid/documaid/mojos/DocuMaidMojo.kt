@@ -21,7 +21,7 @@
 
 package de.quantummaid.documaid.mojos
 
-import de.quantummaid.documaid.DocuMaid.Companion.dokuMaid
+import de.quantummaid.documaid.DocuMaid.Companion.docuMaid
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
@@ -63,7 +63,7 @@ abstract class DocuMaidMojo : AbstractMojo() {
             .withMavenConfiguration(createMavenConfiguration())
             .withSkippedPaths(getSkippedPaths())
             .build()
-        val dokuMaid = dokuMaid(configuration)
+        val dokuMaid = docuMaid(configuration)
         try {
             log.info("DocuMaid started")
             dokuMaid.pimpMyDocu()

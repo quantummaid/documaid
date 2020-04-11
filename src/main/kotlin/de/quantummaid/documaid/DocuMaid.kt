@@ -26,7 +26,9 @@ import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.traversaldecision.SkippingCollectingTraversalDecision
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
+import de.quantummaid.documaid.generating.GenerationStep
 import de.quantummaid.documaid.preparing.PrepareStep
+import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingStep
 
 class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidConfiguration) {
@@ -34,7 +36,8 @@ class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidCo
     fun pimpMyDocu() {
         val project = collect()
         prepare(project)
-        process(project)
+        val processingResults = process(project)
+        generate(processingResults)
     }
 
     private fun collect(): Project {
@@ -45,15 +48,6 @@ class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidCo
         return project
     }
 
-    private fun process(project: Project) {
-        val goal = docuMaidConfiguration.goal
-        val processingErrors = ProcessingStep.create()
-            .process(project, goal)
-        if (processingErrors.isNotEmpty()) {
-            throw ErrorsEncounteredInDokuMaidException.fromVerificationErrors(processingErrors)
-        }
-    }
-
     private fun prepare(project: Project) {
         val preparationErrors = PrepareStep.create()
             .prepare(project)
@@ -62,8 +56,29 @@ class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidCo
         }
     }
 
+    private fun process(project: Project): List<ProcessingResult> {
+        val goal = docuMaidConfiguration.goal
+        val processingResults = ProcessingStep.create()
+            .process(project, goal)
+        val processingResultsWithErrors = processingResults.filter { it.errors.isNotEmpty() }
+        if (processingResultsWithErrors.isNotEmpty()) {
+            val errors = processingResultsWithErrors.flatMap { it.errors }
+            throw ErrorsEncounteredInDokuMaidException.fromVerificationErrors(errors)
+        }else {
+            return processingResults
+        }
+    }
+
+    private fun generate(processingResults: List<ProcessingResult>) {
+        val errors = GenerationStep.create(docuMaidConfiguration)
+            .generate(processingResults)
+        if (errors.isNotEmpty()) {
+            throw ErrorsEncounteredInDokuMaidException.fromVerificationErrors(errors)
+        }
+    }
+
     companion object {
-        fun dokuMaid(configuration: DocuMaidConfiguration): DocuMaid {
+        fun docuMaid(configuration: DocuMaidConfiguration): DocuMaid {
             return DocuMaid(configuration)
         }
     }

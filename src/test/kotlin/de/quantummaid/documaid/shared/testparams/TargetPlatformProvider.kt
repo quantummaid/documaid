@@ -1,5 +1,6 @@
 package de.quantummaid.documaid.shared.testparams
 
+import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.config.Platform
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
@@ -13,29 +14,42 @@ abstract class AbstractTargetPlatformProvider : ParameterResolver {
                                    extensionContext: ExtensionContext): Boolean {
         val parameter = parameterContext.parameter
         val type = parameter.annotatedType.type
-        return type.equals(Platform::class)
+        return type.equals(PlatformConfiguration::class.java)
     }
 
 
     @Throws(ParameterResolutionException::class)
     override fun resolveParameter(parameterContext: ParameterContext,
                                   extensionContext: ExtensionContext): Any {
-        return platform()
+        return platformConfiguration()
     }
 
-    protected abstract fun platform(): Platform
+    protected abstract fun platformConfiguration(): PlatformConfiguration
 }
 
 class GithubPlatformProvider : AbstractTargetPlatformProvider(){
 
-    override fun platform(): Platform {
-        return Platform.GITHUB
+    override fun platformConfiguration(): PlatformConfiguration {
+        return object: PlatformConfiguration {
+            override fun apply(configurationBuilder: DocuMaidConfigurationBuilder) {
+                configurationBuilder.forPlatform(Platform.GITHUB)
+            }
+        }
     }
 }
 
 class HugoPlatformProvider : AbstractTargetPlatformProvider(){
 
-    override fun platform(): Platform {
-        return Platform.HUGO
+    override fun platformConfiguration(): PlatformConfiguration {
+        return object: PlatformConfiguration {
+            override fun apply(configurationBuilder: DocuMaidConfigurationBuilder) {
+                configurationBuilder.forPlatform(Platform.HUGO)
+            }
+        }
     }
+}
+
+interface PlatformConfiguration{
+
+    fun apply(configurationBuilder: DocuMaidConfigurationBuilder)
 }

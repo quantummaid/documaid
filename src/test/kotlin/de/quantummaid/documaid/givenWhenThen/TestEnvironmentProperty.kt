@@ -22,13 +22,9 @@
 package de.quantummaid.documaid.givenWhenThen
 
 enum class TestEnvironmentProperty {
-    SAMPLE_FILE,
-    MULTIPLE_SAMPLE_FILES,
-    SAMPLE_FILES,
-    BASE_PATH,
-    DOKU_MAID_INSTANCE,
+    DOCU_MAID_CONFIG_BUILDER,
+    DOCU_MAID_CONFIG,
     SUT_FILE_STRUCTURE,
-    PLATFORM,
     SETUP_STEPS,
     CLEAN_UP_STEPS,
     EXCEPTION,

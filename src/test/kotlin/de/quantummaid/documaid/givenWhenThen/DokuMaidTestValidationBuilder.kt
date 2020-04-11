@@ -21,10 +21,10 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
 import de.quantummaid.documaid.shared.SutFileStructure
-import de.quantummaid.documaid.shared.assertFileWithContent
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
@@ -40,20 +40,13 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
         fun expectAllFilesToBeCorrect(): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment ->
                 assertNoExceptionThrown(testEnvironment)
-                val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
-                val platform: Platform = testEnvironment.getPropertyAsType(TestEnvironmentProperty.PLATFORM)
-                val expectedFileStructure = when (platform) {
-                    Platform.GITHUB -> sutFileStructure.generateExpectedFileStructureForGithub()
-                    Platform.HUGO -> sutFileStructure.generateExpectedFileStructureForHugo()
-                }
-                TestFileStructureCorrectnessChecker.checkForCorrectness(expectedFileStructure)
+                assertAllFilesCorrectlyGenerated(testEnvironment)
             }
         }
 
         fun expectAnExceptionWithMessage(expectedMessage: String): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment -> assertExceptionWithMessage(expectedMessage, testEnvironment) }
         }
-
 
         fun expectADokuMaidExceptionCollectingTheFollowingErrors(vararg expectedMessages: String): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment ->
@@ -75,11 +68,22 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             }
         }
 
+
         private fun assertNoExceptionThrown(testEnvironment: TestEnvironment) {
             if (testEnvironment.has(TestEnvironmentProperty.EXCEPTION)) {
                 val exception = testEnvironment.getPropertyAsType<Exception>(TestEnvironmentProperty.EXCEPTION)
                 fail<Any>(exception)
             }
+        }
+
+        private fun assertAllFilesCorrectlyGenerated(testEnvironment: TestEnvironment) {
+            val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+            val config:DocuMaidConfiguration = testEnvironment.getPropertyAsType(TestEnvironmentProperty.DOCU_MAID_CONFIG)
+            val expectedFileStructure = when (config.platform) {
+                Platform.GITHUB -> sutFileStructure.generateExpectedFileStructureForGithub()
+                Platform.HUGO -> sutFileStructure.generateExpectedFileStructureForHugo(config)
+            }
+            TestFileStructureCorrectnessChecker.checkForCorrectness(expectedFileStructure)
         }
 
 

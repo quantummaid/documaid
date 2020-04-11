@@ -38,8 +38,7 @@ internal class LinkSpecs {
     fun canInsertSimpleCodeLinks() {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithASingleLink(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -48,8 +47,7 @@ internal class LinkSpecs {
     fun canInsertTwoLinks() {
         given(aDokuMaid()
             .configuredWith(aFileWithTwoLinks(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -58,8 +56,7 @@ internal class LinkSpecs {
     fun canInsertTheSameLinkTwice() {
         given(aDokuMaid()
             .configuredWith(aFileWithTheSameLinksTwice(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -68,8 +65,7 @@ internal class LinkSpecs {
     fun canReplaceAWrongLink() {
         given(aDokuMaid()
             .configuredWith(aFileWithWrongLink(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -79,8 +75,7 @@ internal class LinkSpecs {
         val testBasePath = absPath("aFileWithLinksToNotExistingFiles")
         given(aDokuMaid()
             .configuredWith(aFileWithLinksToNotExistingFiles(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
                 "Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' (in path $testBasePath/missingLinksFile.md)",
@@ -92,8 +87,7 @@ internal class LinkSpecs {
     fun canValidateCorrectLinks() {
         given(aDokuMaid()
             .configuredWith(aCorrectlyGeneratedFileWithTwoLinks(BASE_PATH))
-            .configuredWithGoal(Goal.VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -103,8 +97,7 @@ internal class LinkSpecs {
         val testBasePath = absPath("aFileWithAMissingLink")
         given(aDokuMaid()
             .configuredWith(aFileWithAMissingLink(BASE_PATH))
-            .configuredWithGoal(Goal.VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for '<!---[Link] ( source.java linkName)-->' " +
                 "(in path $testBasePath/oneMissingLinkFileSampleFiles.md)"))
@@ -115,8 +108,7 @@ internal class LinkSpecs {
         val testBasePath = absPath("aFileWithWrongLink")
         given(aDokuMaid()
             .configuredWith(aFileWithWrongLink(BASE_PATH))
-            .configuredWithGoal(Goal.VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName)-->' " +
                 "(in path $testBasePath/md1.md)"))
@@ -127,8 +119,7 @@ internal class LinkSpecs {
         val testBasePath = absPath("aFileWithLinkANotExistingFile")
         given(aDokuMaid()
             .configuredWith(aFileWithLinkANotExistingFile(BASE_PATH))
-            .configuredWithGoal(Goal.VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' " +
                 "(in path $testBasePath/aLinkToANotExistingFile.md)"))
@@ -139,8 +130,7 @@ internal class LinkSpecs {
         val testBasePath = absPath("aFileWithMultipleLinkErrors")
         given(aDokuMaid()
             .configuredWith(aFileWithMultipleLinkErrors(BASE_PATH))
-            .configuredWithGoal(Goal.VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
                 "Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName1)-->' " +
@@ -153,8 +143,7 @@ internal class LinkSpecs {
     fun canInsertCodeLinkAtTheEndOfFileWithoutNewline() {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithASingleLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -163,8 +152,7 @@ internal class LinkSpecs {
     fun canReplaceCodeLinkAtTheEndOfFileWithoutNewline() {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithWrongLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

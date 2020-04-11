@@ -37,8 +37,7 @@ class TableOfContentSpecs {
     fun canGenerateTocForDocsDirectory() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -47,8 +46,7 @@ class TableOfContentSpecs {
     fun canGenerateTocForSameDirectory() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeFromSameDirectory(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -57,8 +55,7 @@ class TableOfContentSpecs {
     fun canGenerateTocForMultipleNestedDirectories() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithMultipleNestedDirectories(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -67,8 +64,7 @@ class TableOfContentSpecs {
     fun tocIgnoresNotIndexedFiles() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithNotIndexedMarkdownFiles(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -77,8 +73,7 @@ class TableOfContentSpecs {
     fun tocIgnoresGeneratedOverviewFilesWithIndex0() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithGeneratedOverviewFile(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -87,8 +82,7 @@ class TableOfContentSpecs {
     fun tocGenerationFailsForRedundantIndex() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithTheSameIndexTwice(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("[TOC] Same TOC indices[2] used by multiple files [2_One.md, 2_Two.md] " +
                 "(in path ${absPath("tocWithSameIndexTwice")})"))
@@ -98,8 +92,7 @@ class TableOfContentSpecs {
     fun tocGenerationFailsForMissingIndex() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithMissingIndex(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("[TOC] Missing index 2 for TOC in directory 'tocWithMissingIndex' " +
                 "(in path ${absPath("tocWithMissingIndex")})"))
@@ -109,8 +102,7 @@ class TableOfContentSpecs {
     fun tocGenerationFailsForRedundantIndexInSubDirectory() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("[TOC] Same TOC indices[2] used by multiple files [02_docs/2_Double.md, 02_docs/2_SecondDocs.md] " +
                 "(in path ${absPath("tocWithSameIndexTwiceInSubDirectory/02_docs")})"))
@@ -120,8 +112,7 @@ class TableOfContentSpecs {
     fun tocGenerationFailsForMissingIndexInSubDirectory() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithMissingIndexInSubDirectory(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("[TOC] Missing index 2 for TOC in directory '02_docs' " +
                 "(in path ${absPath("tocWithMissingIndexInSubDirectory/02_docs")})"))
@@ -131,8 +122,7 @@ class TableOfContentSpecs {
     fun tocGenerationFailsForNotExistingScanDirectory() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithNotExistingScanDirectory(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("[TOC] Cannot create TOC for not existing directory 'notExisting/' " +
                 "(in path ${absPath("aTocTagInReadmeWithNotExistingScanDirectory/README.md")})"))
@@ -142,8 +132,7 @@ class TableOfContentSpecs {
     fun tocGenerationFailsForMalformedOptions() {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithMalFormedOptions(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("[TOC] Could not match TOC options '(not a correct options String)' " +
                 "(in path ${absPath("aTocTagInReadmeWithMalFormedOptions/README.md")})"))
@@ -153,8 +142,7 @@ class TableOfContentSpecs {
     fun tocVerificationSucceedsForValidToc() {
         given(aDokuMaid()
             .configuredWith(aTocInReadmeWithCorrectToc(BASE_PATH))
-            .configuredWithGoal(VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -163,8 +151,7 @@ class TableOfContentSpecs {
     fun tocVerificationFailsForMissingToc() {
         given(aDokuMaid()
             .configuredWith(aTocInReadmeWithMissingToc(BASE_PATH))
-            .configuredWithGoal(VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [TOC] tag with missing TOC (in path ${absPath("aTocInReadmeWithMissingToc/README.md")})"))
     }
@@ -173,8 +160,7 @@ class TableOfContentSpecs {
     fun tocVerificationFailsForIncorrectToc() {
         given(aDokuMaid()
             .configuredWith(aTocInReadmeWithIncorrectToc(BASE_PATH))
-            .configuredWithGoal(VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [TOC] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithIncorrectToc/README.md")})"))
     }
@@ -183,8 +169,7 @@ class TableOfContentSpecs {
     fun canGenerateTocAtTheEndOfFileWithoutNewLine() {
         given(aDokuMaid()
             .configuredWith(aTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -193,8 +178,7 @@ class TableOfContentSpecs {
     fun canReplaceTocAtTheEndOfFileWithoutNewLine() {
         given(aDokuMaid()
             .configuredWith(aWrongTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredWithGoal(GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

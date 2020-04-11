@@ -28,16 +28,17 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDoku
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
+import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
 interface DependencySpecs {
 
     @Test
-    fun canGenerateFullyDefinedDependencyInMarkdownFIle() {
+    fun canGenerateFullyDefinedDependencyInMarkdownFile(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleFullyDefinedDependency(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
+            .withPlatformConfiguration(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
@@ -47,7 +48,6 @@ interface DependencySpecs {
     fun canGenerateDependencyWithPropertiesObtainedFromMavenProject() {
         given(aDokuMaid()
             .configuredWith(aFileWithADependencyWithoutAnythingDefined(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
@@ -58,7 +58,6 @@ interface DependencySpecs {
     fun canReplaceWrongDependency() {
         given(aDokuMaid()
             .configuredWith(aFileWithAWrongGeneratedDependency(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
@@ -69,7 +68,6 @@ interface DependencySpecs {
     fun failsForUnparsableOptionsString() {
         given(aDokuMaid()
             .configuredWith(aFileWithUnparsableDependencyOptionsString(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
@@ -81,7 +79,6 @@ interface DependencySpecs {
     fun succeedsForCorrectGeneratedDependency() {
         given(aDokuMaid()
             .configuredWith(aFileWithACorrectlyGeneratedDependency(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
@@ -92,7 +89,6 @@ interface DependencySpecs {
     fun failsForIncorrectlyGeneratedCode() {
         given(aDokuMaid()
             .configuredWith(aFileWithAWrongGeneratedDependency(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
@@ -104,7 +100,6 @@ interface DependencySpecs {
     fun failsForMissingDependency() {
         given(aDokuMaid()
             .configuredWith(aFileWithDependencyWithMissingCode(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
@@ -116,7 +111,6 @@ interface DependencySpecs {
     fun canInsertDependencyAtTheEndOfFileWithoutNewline() {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleDependencyAtTheEndOfFileWithoutNewLine(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
@@ -126,7 +120,6 @@ interface DependencySpecs {
     fun canReplaceDependencyAtTheEndOfFileWithoutNewline() {
         given(aDokuMaid()
             .configuredWith(aFileWithAWrongDependencyAtTheEndOfFileWithoutNewLine(BASE_PATH))
-            .configuredWithBasePath(BASE_PATH)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())

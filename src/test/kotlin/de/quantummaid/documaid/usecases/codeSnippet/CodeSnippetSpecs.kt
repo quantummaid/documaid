@@ -38,8 +38,7 @@ internal class CodeSnippetSpecs {
     fun canInsertSimpleCodeSnippet() {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleCodeSnippet(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -48,8 +47,7 @@ internal class CodeSnippetSpecs {
     fun canInsertTwoSnippets() {
         given(aDokuMaid()
             .configuredWith(aFileWithATwoCodeSnippets(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -58,8 +56,7 @@ internal class CodeSnippetSpecs {
     fun canInsertTheSameSnippetsTwice() {
         given(aDokuMaid()
             .configuredWith(aFileWithTheSameCodeSnippetTwice(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -68,8 +65,7 @@ internal class CodeSnippetSpecs {
     fun canInsertTheSameSnippetsInMultipleFiles() {
         given(aDokuMaid()
             .configuredWith(filesWithTheSameCodeSnippet(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -78,8 +74,7 @@ internal class CodeSnippetSpecs {
     fun canInsertTheSameSnippetsTwiceInDifferentFiles() {
         given(aDokuMaid()
             .configuredWith(aFileWithTheSameCodeSnippetTwiceInDifferentFiles(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -88,8 +83,7 @@ internal class CodeSnippetSpecs {
     fun canInsertACodeSnippetFromANonJavaFile() {
         given(aDokuMaid()
             .configuredWith(aFileWithACodeSnippetFromANonJavaFile(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -98,8 +92,7 @@ internal class CodeSnippetSpecs {
     fun canInsertACodeSnippetWithComments() {
         given(aDokuMaid()
             .configuredWith(aFileWithCommentsInCodeSnippet(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -108,8 +101,7 @@ internal class CodeSnippetSpecs {
     fun canInsertACodeSnippetForAFullClass() {
         given(aDokuMaid()
             .configuredWith(aFileWithAFullClassSnippet(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -118,8 +110,7 @@ internal class CodeSnippetSpecs {
     fun canReplaceAWrongCodeSnippet() {
         given(aDokuMaid()
             .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -128,8 +119,7 @@ internal class CodeSnippetSpecs {
     fun canReplaceTwoSnippets() {
         given(aDokuMaid()
             .configuredWith(aFileWithTwoOutdatedCodeSnippets(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -138,8 +128,7 @@ internal class CodeSnippetSpecs {
     fun failsForDuplicateSnippet() {
         given(aDokuMaid()
             .configuredWith(filesWithDuplicateCodeSnippets(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+            .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +

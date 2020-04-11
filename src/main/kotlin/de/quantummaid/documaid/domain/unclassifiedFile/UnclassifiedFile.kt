@@ -27,6 +27,8 @@ import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.domain.snippet.RawSnippetExtractor
 import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.processing.ProcessingResult
+import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
 import java.nio.file.Path
 
 class UnclassifiedFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile {
@@ -50,8 +52,8 @@ class UnclassifiedFile private constructor(private val path: Path, val snippets:
 
     override fun absolutePath(): Path = path
 
-    override fun generate(project: Project): List<VerificationError> {
-        return emptyList()
+    override fun process(project: Project): ProcessingResult {
+        return contentNotChangedProcessingResult(this)
     }
 
     override fun validate(project: Project): List<VerificationError> {

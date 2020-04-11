@@ -32,6 +32,8 @@ class DocuMaidConfigurationBuilder private constructor() {
     private var logger: Logger? = null
     private var mavenConfiguration = MavenConfiguration(null, null, null)
     private var skippedPaths = emptyList<Path>()
+    private var platform:Platform = Platform.GITHUB
+    private var hugoOutputPath = "hugo"
 
     fun withBasePath(basePath: String): DocuMaidConfigurationBuilder {
         this.basePath = Paths.get(basePath)
@@ -63,9 +65,20 @@ class DocuMaidConfigurationBuilder private constructor() {
         return this
     }
 
+    fun forPlatform(platform: Platform): DocuMaidConfigurationBuilder {
+        this.platform = platform
+        return this
+    }
+
+    fun withHugoOutputPath(hugoOutputPath: String): DocuMaidConfigurationBuilder {
+        this.hugoOutputPath = hugoOutputPath
+        return this
+    }
+
+
     fun build(): DocuMaidConfiguration {
-        return DocuMaidConfiguration(basePath
-            ?: throw DocuMaidException.createWithoutFileOrigin("Base path required"), goal!!, logger!!, mavenConfiguration, skippedPaths)
+        val absolutePath = basePath!!.toAbsolutePath()
+        return DocuMaidConfiguration(absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths, platform, hugoOutputPath)
     }
 
     companion object {

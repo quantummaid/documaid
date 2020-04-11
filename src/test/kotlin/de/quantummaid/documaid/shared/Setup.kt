@@ -5,6 +5,7 @@ import de.quantummaid.documaid.givenWhenThen.TestEnvironment
 
 typealias SetupUpdate = (setup:Setup) -> Unit
 
+//TODO: simplify
 data class Setup (
     var testEnvironment: TestEnvironment,
     var configurationBuilder: DocuMaidConfigurationBuilder,

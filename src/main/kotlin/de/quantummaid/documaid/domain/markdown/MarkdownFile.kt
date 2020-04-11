@@ -33,6 +33,7 @@ import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMa
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Path
 
 class MarkdownFile private constructor(private val path: Path, val directives: List<RawMarkdownDirective>, val tagHandlers: List<MarkdownTagHandler>) : ProjectFile {
@@ -92,10 +93,10 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
         return tagHandlers.first { directive.tag.value == it.tag() }
     }
 
-    override fun generate(project: Project): List<VerificationError> {
+    override fun process(project: Project): ProcessingResult {
         val (processedMarkdownTags, creationErrors) = createMarkdownTags(project)
         if (creationErrors.isNotEmpty()) {
-            return creationErrors
+            return ProcessingResult.erroneousProcessingResult(this, creationErrors)
         }
 
         val file = path.toFile()
@@ -111,8 +112,7 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
                 content = content.substring(0, startIndex) + changed + content.substring(endIndex)
                 indexOffsets += textToReplace.length - textToBeReplaced.length
             }
-        file.writeText(content)
-        return emptyList()
+        return ProcessingResult.successfulProcessingResult(this, content)
     }
 
     private fun createMarkdownTags(project: Project): Pair<List<MarkdownReplacement>?, List<VerificationError>> {
