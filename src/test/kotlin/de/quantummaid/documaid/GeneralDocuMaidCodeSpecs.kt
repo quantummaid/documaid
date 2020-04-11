@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test
 class GeneralDocuMaidCodeSpecs {
 
     //TODO: Fehlerfall wäre noch cool
+    //TODO: hugo varianten
     @Test
     fun canProcessMultipleFilesWithGenerationGoal() {
         given(aDokuMaid()

@@ -1,4 +1,4 @@
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.filesystem
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import java.nio.file.Path

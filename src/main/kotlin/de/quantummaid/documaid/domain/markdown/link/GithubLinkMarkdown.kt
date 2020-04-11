@@ -24,10 +24,14 @@ package de.quantummaid.documaid.domain.markdown.link
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 
-class LinkMarkdown(val name: String, val target: String) {
+class GithubLinkMarkdown(val name: String, val target: String, val linkDirective: LinkDirective) {
 
     companion object {
         val LINK_PATTERN = """\n? *\[ *[^]]+ *] *\([^)]*\)""".toRegex()
+
+        fun create(linkDirective: LinkDirective): GithubLinkMarkdown {
+            return GithubLinkMarkdown(linkDirective.options.name, linkDirective.options.originalPathString, linkDirective)
+        }
 
         fun startsWithLinkMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
             val remainingContent = remainingMarkupFileContent.content
@@ -42,9 +46,12 @@ class LinkMarkdown(val name: String, val target: String) {
                 }
             }
         }
+
+        fun createLinkMarkdown(name: String, target: String) = "[$name]($target)"
     }
 
-    fun markdownString(): String {
-        return "[$name]($target)"
+    fun generateMarkdown(): String {
+        val markdownLink = createLinkMarkdown(name, target)
+        return "${linkDirective.directive.completeString}\n$markdownLink"
     }
 }

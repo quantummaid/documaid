@@ -35,6 +35,6 @@ class Project private constructor(val rootDirectory: Directory, private val coll
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap.get(key) as T
+        return collectedInformationMap[key] as T
     }
 }

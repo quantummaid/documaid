@@ -21,14 +21,15 @@
 
 package de.quantummaid.documaid.usecases.link
 
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.SutDirectory.Companion.aDirectory
-import de.quantummaid.documaid.shared.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirective
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinks
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoLinkDirectives
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInserted
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAndAMissingLink
@@ -114,6 +115,22 @@ fun aCorrectlyGeneratedFileWithTwoLinks(basePath: String): SetupUpdate {
                 javaFile,
                 xmlFile,
                 aMarkdownFileWithTwoAlreadyGeneratedLinks("md1.md",
+                    javaFile.fileName, "sampleLinkName",
+                    xmlFile.fileName, "complex filename"))
+    }
+}
+
+fun aCorrectlyGeneratedFileWithTwoLinksForHugo(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aCorrectlyGeneratedFileWithTwoLinks")
+
+    val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
+    val xmlFile = aXmlFileWithOneSnippet("config.xml", "differentSnippet")
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                xmlFile,
+                aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo("md1.md",
                     javaFile.fileName, "sampleLinkName",
                     xmlFile.fileName, "complex filename"))
     }

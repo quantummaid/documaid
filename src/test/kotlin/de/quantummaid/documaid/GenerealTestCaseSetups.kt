@@ -21,9 +21,9 @@
 
 package de.quantummaid.documaid
 
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.SutDirectory
-import de.quantummaid.documaid.shared.TemporaryTestDirectory.Companion.aTemporyTestDirectory
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.SutDirectory
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAllDirectives
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAllDirectivesAlreadyGenerated

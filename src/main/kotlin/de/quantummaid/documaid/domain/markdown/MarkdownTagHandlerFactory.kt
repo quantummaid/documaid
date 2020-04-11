@@ -4,7 +4,8 @@ import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.domain.markdown.codeSnippet.SnippetMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.dependency.DependencyMarkdownHandler
-import de.quantummaid.documaid.domain.markdown.link.LinkMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.link.GithubLinkMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.link.HugoLinkMarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.navigation.GithubNavigationMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.navigation.HugoNavigationMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.plugin.PluginMarkdownHandler
@@ -18,7 +19,7 @@ class MarkdownTagHandlerFactory private constructor() {
             return when (docuMaidConfiguration.platform) {
                 Platform.GITHUB -> listOf(
                     SnippetMarkdownHandler(),
-                    LinkMarkdownTagHandler(),
+                    GithubLinkMarkdownTagHandler(),
                     GithubTableOfContentsMarkdownTagHandler(),
                     GithubNavigationMarkdownHandler(),
                     DependencyMarkdownHandler(),
@@ -26,7 +27,7 @@ class MarkdownTagHandlerFactory private constructor() {
                 )
                 Platform.HUGO -> listOf(
                     SnippetMarkdownHandler(),
-                    LinkMarkdownTagHandler(),
+                    HugoLinkMarkdownTagHandler(),
                     HugoTableOfContentsMarkdownTagHandler(),
                     HugoNavigationMarkdownHandler(),
                     DependencyMarkdownHandler(),

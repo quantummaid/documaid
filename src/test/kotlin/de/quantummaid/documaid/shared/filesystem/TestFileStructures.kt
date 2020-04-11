@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.filesystem
 
 import java.nio.file.Files
 import java.nio.file.Path

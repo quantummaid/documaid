@@ -1,8 +1,7 @@
 package de.quantummaid.documaid.shared.samplesFiles
 
-import de.quantummaid.documaid.shared.ProcessedFile
-import de.quantummaid.documaid.shared.ProcessedFileBuilder
-import de.quantummaid.documaid.shared.SampleMavenProjectProperties
+import de.quantummaid.documaid.shared.filesystem.ProcessedFile
+import de.quantummaid.documaid.shared.filesystem.ProcessedFileBuilder
 
 fun aMarkdownFileWithOneDependency(fileName: String, groupId: String? = null, artifactId: String? = null, version: String? = null,
                                    scope: String? = null): ProcessedFile {

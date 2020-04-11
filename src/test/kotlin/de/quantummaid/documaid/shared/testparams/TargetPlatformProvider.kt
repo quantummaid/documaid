@@ -2,6 +2,7 @@ package de.quantummaid.documaid.shared.testparams
 
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.config.Platform
+import de.quantummaid.documaid.shared.samplesFiles.SampleGithubRepositoryProperties
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolutionException
@@ -27,10 +28,10 @@ abstract class AbstractTargetPlatformProvider : ParameterResolver {
     protected abstract fun platformConfiguration(): PlatformConfiguration
 }
 
-class GithubPlatformProvider : AbstractTargetPlatformProvider(){
+class GithubPlatformProvider : AbstractTargetPlatformProvider() {
 
     override fun platformConfiguration(): PlatformConfiguration {
-        return object: PlatformConfiguration {
+        return object : PlatformConfiguration {
             override fun apply(configurationBuilder: DocuMaidConfigurationBuilder) {
                 configurationBuilder.forPlatform(Platform.GITHUB)
             }
@@ -38,18 +39,20 @@ class GithubPlatformProvider : AbstractTargetPlatformProvider(){
     }
 }
 
-class HugoPlatformProvider : AbstractTargetPlatformProvider(){
+class HugoPlatformProvider : AbstractTargetPlatformProvider() {
 
     override fun platformConfiguration(): PlatformConfiguration {
-        return object: PlatformConfiguration {
+        return object : PlatformConfiguration {
             override fun apply(configurationBuilder: DocuMaidConfigurationBuilder) {
                 configurationBuilder.forPlatform(Platform.HUGO)
+                    .withHugoOutputPath("hugo")
+                    .withRepositoryUrl(SampleGithubRepositoryProperties.URL)
             }
         }
     }
 }
 
-interface PlatformConfiguration{
+interface PlatformConfiguration {
 
     fun apply(configurationBuilder: DocuMaidConfigurationBuilder)
 }

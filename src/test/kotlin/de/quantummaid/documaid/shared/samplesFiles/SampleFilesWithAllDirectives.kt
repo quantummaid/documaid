@@ -1,7 +1,7 @@
 package de.quantummaid.documaid.shared.samplesFiles
 
-import de.quantummaid.documaid.shared.ProcessedFile
-import de.quantummaid.documaid.shared.ProcessedFileBuilder
+import de.quantummaid.documaid.shared.filesystem.ProcessedFile
+import de.quantummaid.documaid.shared.filesystem.ProcessedFileBuilder
 
 fun aMarkdownFileWithAllDirectives(fileName: String,
                                    tocPath: String, toc: String,

@@ -1,9 +1,9 @@
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.filesystem
 
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment
 
-typealias SetupUpdate = (setup:Setup) -> Unit
+typealias SetupUpdate = (setup: Setup) -> Unit
 
 //TODO: simplify
 data class Setup (

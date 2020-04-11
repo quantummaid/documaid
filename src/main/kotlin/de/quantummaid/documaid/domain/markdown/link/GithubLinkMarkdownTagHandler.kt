@@ -27,17 +27,16 @@ import de.quantummaid.documaid.domain.markdown.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.link.LinkDirective.Companion.LINK_TAG
-import de.quantummaid.documaid.domain.markdown.link.LinkMarkdown.Companion.startsWithLinkMarkdown
+import de.quantummaid.documaid.domain.markdown.link.GithubLinkMarkdown.Companion.startsWithLinkMarkdown
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.errors.VerificationError
 
-class LinkMarkdownTagHandler : MarkdownTagHandler {
+class GithubLinkMarkdownTagHandler : MarkdownTagHandler {
 
     override fun tag(): String = LINK_TAG.toString()
 
     override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
-        val linkDirective = LinkDirective.create(directive, file, project)
-        val markdown = linkDirective.generateMarkdown()
+        val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
         val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, markdown)
@@ -45,8 +44,7 @@ class LinkMarkdownTagHandler : MarkdownTagHandler {
     }
 
     override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
-        val linkDirective = LinkDirective.create(directive, file, project)
-        val markdown = linkDirective.generateMarkdown()
+        val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
         return if (textToBeReplaced != markdown) {
             val trailingCodeFound = trailingMarkdownMatchResult.matches
@@ -58,6 +56,13 @@ class LinkMarkdownTagHandler : MarkdownTagHandler {
         } else {
             emptyList()
         }
+    }
+
+    private fun newMarkdown(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): String {
+        val linkDirective = LinkDirective.create(directive, file, project)
+        val githubLinkMarkdown = GithubLinkMarkdown.create(linkDirective)
+        val markdown = githubLinkMarkdown.generateMarkdown()
+        return markdown
     }
 
     private fun textToBeReplaced(markdownDirective: RawMarkdownDirective): Pair<String, TrailingMarkdownMatchResult> {

@@ -24,7 +24,7 @@ package de.quantummaid.documaid.givenWhenThen
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
-import de.quantummaid.documaid.shared.SutFileStructure
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail

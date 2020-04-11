@@ -22,9 +22,8 @@
 package de.quantummaid.documaid.givenWhenThen
 
 import de.quantummaid.documaid.DocuMaid
-import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
-import de.quantummaid.documaid.shared.SutFileStructure
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure
 
 class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBuilder, private val dokuMaidActionTestBuilder: DokuMaidActionTestBuilder) {
 
@@ -36,7 +35,7 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
                 setupStep.invoke()
             }
 
-            val sutFileStructure: SutFileStructure  = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+            val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
             val fileStructureForDocuMaidToProcess = sutFileStructure.generateFileStructureForDocuMaidToProcess()
             val configBuilder: DocuMaidConfigurationBuilder = testEnvironment.getPropertyAsType(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER)
             configBuilder.withBasePath(fileStructureForDocuMaidToProcess.baseDirectory.path)
@@ -69,7 +68,7 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
         for (cleanupStep in cleanupSteps) {
             cleanupStep.invoke()
         }
-        val sutFileStructure: SutFileStructure  = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+        val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
         sutFileStructure.cleanUp()
     }
 }

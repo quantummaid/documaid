@@ -21,7 +21,6 @@
 
 package de.quantummaid.documaid.config
 
-import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.logging.Logger
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -32,8 +31,9 @@ class DocuMaidConfigurationBuilder private constructor() {
     private var logger: Logger? = null
     private var mavenConfiguration = MavenConfiguration(null, null, null)
     private var skippedPaths = emptyList<Path>()
-    private var platform:Platform = Platform.GITHUB
+    private var platform: Platform = Platform.GITHUB
     private var hugoOutputPath = "hugo"
+    private var repository: Repository? = null
 
     fun withBasePath(basePath: String): DocuMaidConfigurationBuilder {
         this.basePath = Paths.get(basePath)
@@ -75,10 +75,15 @@ class DocuMaidConfigurationBuilder private constructor() {
         return this
     }
 
+    fun withRepositoryUrl(repositoryBaseUrl: String): DocuMaidConfigurationBuilder {
+        this.repository = GithubRepository.create(repositoryBaseUrl)
+        return this
+    }
 
     fun build(): DocuMaidConfiguration {
         val absolutePath = basePath!!.toAbsolutePath()
-        return DocuMaidConfiguration(absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths, platform, hugoOutputPath)
+        return DocuMaidConfiguration(absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths,
+            platform, hugoOutputPath, repository)
     }
 
     companion object {

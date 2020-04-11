@@ -31,7 +31,7 @@ import de.quantummaid.documaid.errors.DocuMaidException
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class LinkDirective private constructor(private val directive: RawMarkdownDirective, val options: LinkDirectiveOptions, val linkMarkdown: LinkMarkdown) {
+class LinkDirective private constructor(val directive: RawMarkdownDirective, val options: LinkDirectiveOptions) {
 
     companion object {
         val LINK_TAG = DirectiveTag("Link")
@@ -43,13 +43,8 @@ class LinkDirective private constructor(private val directive: RawMarkdownDirect
             if (!lookUpTable.fileExists(rootRelativeTargetPath)) {
                 throw DocuMaidException.create("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
             }
-            val linkMarkdown = LinkMarkdown(options.name, options.originalPathString)
-            return LinkDirective(directive, options, linkMarkdown)
+            return LinkDirective(directive, options)
         }
-    }
-
-    fun generateMarkdown(): String {
-        return "${directive.completeString}\n${linkMarkdown.markdownString()}"
     }
 }
 

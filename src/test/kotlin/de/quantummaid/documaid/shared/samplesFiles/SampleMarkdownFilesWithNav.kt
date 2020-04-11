@@ -1,7 +1,7 @@
 package de.quantummaid.documaid.shared.samplesFiles
 
-import de.quantummaid.documaid.shared.ProcessedFile
-import de.quantummaid.documaid.shared.ProcessedFileBuilder
+import de.quantummaid.documaid.shared.filesystem.ProcessedFile
+import de.quantummaid.documaid.shared.filesystem.ProcessedFileBuilder
 import de.quantummaid.documaid.usecases.tableOfContents.nav.S
 
 fun aMarkdownFileWithNav(fileName: String, navigationString: String): ProcessedFile {

@@ -23,7 +23,7 @@ package de.quantummaid.documaid.domain.markdown.navigation
 
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
-import de.quantummaid.documaid.domain.markdown.link.LinkMarkdown
+import de.quantummaid.documaid.domain.markdown.link.GithubLinkMarkdown
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 
 class GithubNavigationMarkdown(val fileWithDirective: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
@@ -56,8 +56,8 @@ class GithubNavigationMarkdown(val fileWithDirective: MarkdownFile, val previous
     private fun previousFileLink(): String {
         return if (previousFile != null) {
             val relativePath = fileWithDirective.absolutePath().parent.relativize(previousFile.absolutePath())
-            val linkMarkdown = LinkMarkdown("&larr;", relativePath.toString())
-            "${linkMarkdown.markdownString()}&nbsp;&nbsp;&nbsp;"
+            val linkMarkdown = GithubLinkMarkdown.createLinkMarkdown("&larr;", relativePath.toString())
+            "$linkMarkdown&nbsp;&nbsp;&nbsp;"
         } else {
             ""
         }
@@ -65,15 +65,14 @@ class GithubNavigationMarkdown(val fileWithDirective: MarkdownFile, val previous
 
     private fun overviewLink(): String {
         val relativePath = fileWithDirective.absolutePath().parent.relativize(overviewFile.absolutePath())
-        val linkMarkdown = LinkMarkdown("Overview", relativePath.toString())
-        return linkMarkdown.markdownString()
+        return GithubLinkMarkdown.createLinkMarkdown("Overview", relativePath.toString())
     }
 
     private fun nextFileLink(): String {
         return if (nextFile != null) {
             val relativePath = fileWithDirective.absolutePath().parent.relativize(nextFile.absolutePath())
-            val linkMarkdown = LinkMarkdown("&rarr;", relativePath.toString())
-            "&nbsp;&nbsp;&nbsp;${linkMarkdown.markdownString()}"
+            val linkMarkdown = GithubLinkMarkdown.createLinkMarkdown("&rarr;", relativePath.toString())
+            "&nbsp;&nbsp;&nbsp;$linkMarkdown"
         } else {
             ""
         }

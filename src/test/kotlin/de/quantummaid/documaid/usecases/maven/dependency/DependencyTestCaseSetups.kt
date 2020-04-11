@@ -21,8 +21,8 @@
 
 package de.quantummaid.documaid.usecases.maven.dependency
 
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithADifferentGeneratedDependency
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAnAlreadyGeneratedDependency
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithOneDependency

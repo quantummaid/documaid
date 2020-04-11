@@ -1,7 +1,7 @@
 package de.quantummaid.documaid.shared.samplesFiles
 
-import de.quantummaid.documaid.shared.NotProcessedSourceFile
-import de.quantummaid.documaid.shared.PhysicalFileBuilder
+import de.quantummaid.documaid.shared.filesystem.NotProcessedSourceFile
+import de.quantummaid.documaid.shared.filesystem.PhysicalFileBuilder
 
 class SampleJavaFileWithOneSnippet private constructor(val fileName: String,
                                                        val snippet: String,

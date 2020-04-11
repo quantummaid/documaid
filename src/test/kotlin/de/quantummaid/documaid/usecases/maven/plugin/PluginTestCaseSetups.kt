@@ -21,8 +21,8 @@
 
 package de.quantummaid.documaid.usecases.maven.plugin
 
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAPluginDirective
 
 fun aFileWithASingleFullyDefinedPlugin(basePath: String): SetupUpdate {

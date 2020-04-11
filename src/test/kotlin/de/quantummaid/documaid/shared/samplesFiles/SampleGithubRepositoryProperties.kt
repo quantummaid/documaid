@@ -19,28 +19,12 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.config
+package de.quantummaid.documaid.shared.samplesFiles
 
-import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
-import de.quantummaid.documaid.logging.Logger
-
-import java.nio.file.Path
-
-class DocuMaidConfiguration(
-    val basePath: Path,
-    val goal: Goal,
-    val logger: Logger,
-    val mavenConfiguration: MavenConfiguration,
-    val skippedPaths: List<Path>,
-    val platform: Platform = Platform.GITHUB,
-    val hugoOutputPath: String = "hugo",
-    val repository: Repository? = null
-) {
+class SampleGithubRepositoryProperties {
     companion object {
-        val DOCUMAID_CONFIGURATION_KEY = CollectedInformationKey<DocuMaidConfiguration>("DOCUMAID_CONFIGURATION_KEY")
-
-        fun aDocuMaidConfiguration(): DocuMaidConfigurationBuilder {
-            return DocuMaidConfigurationBuilder.builder()
-        }
+        val URL = "https://github.com/quantummaid/documaid"
+        val BRANCH = "master"
+        val EXPECTED_URL_PREFIX = "$URL/blob/$BRANCH"
     }
 }

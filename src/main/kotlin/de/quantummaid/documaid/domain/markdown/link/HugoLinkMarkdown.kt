@@ -19,28 +19,25 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.config
+package de.quantummaid.documaid.domain.markdown.link
 
-import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
-import de.quantummaid.documaid.logging.Logger
+import de.quantummaid.documaid.config.Repository
 
-import java.nio.file.Path
+class HugoLinkMarkdown(val name: String, val target: String, val linkDirective: LinkDirective, val repository: Repository) {
 
-class DocuMaidConfiguration(
-    val basePath: Path,
-    val goal: Goal,
-    val logger: Logger,
-    val mavenConfiguration: MavenConfiguration,
-    val skippedPaths: List<Path>,
-    val platform: Platform = Platform.GITHUB,
-    val hugoOutputPath: String = "hugo",
-    val repository: Repository? = null
-) {
     companion object {
-        val DOCUMAID_CONFIGURATION_KEY = CollectedInformationKey<DocuMaidConfiguration>("DOCUMAID_CONFIGURATION_KEY")
 
-        fun aDocuMaidConfiguration(): DocuMaidConfigurationBuilder {
-            return DocuMaidConfigurationBuilder.builder()
+        fun create(linkDirective: LinkDirective, repository: Repository): HugoLinkMarkdown {
+            val name = linkDirective.options.name
+            val originalPathString = linkDirective.options.originalPathString
+            return HugoLinkMarkdown(name, originalPathString, linkDirective, repository)
         }
+
+    }
+
+    fun generateMarkdown(): String {
+        val githubUrl = repository.urlToFile(target)
+        val markdownLink = "[$name]($githubUrl)"
+        return "${linkDirective.directive.completeString}\n$markdownLink"
     }
 }

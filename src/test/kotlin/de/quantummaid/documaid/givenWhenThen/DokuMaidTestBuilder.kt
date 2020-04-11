@@ -28,11 +28,11 @@ import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment.Companion.emptyTestEnvironment
-import de.quantummaid.documaid.shared.SampleMavenProjectProperties
-import de.quantummaid.documaid.shared.Setup
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.SutFileStructure
-import de.quantummaid.documaid.shared.SutFileStructure.Companion.aFileStructureForDocuMaidToProcess
+import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties
+import de.quantummaid.documaid.shared.filesystem.Setup
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure.Companion.aFileStructureForDocuMaidToProcess
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import java.nio.file.Path
 

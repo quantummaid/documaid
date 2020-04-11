@@ -21,9 +21,9 @@
 
 package de.quantummaid.documaid.usecases.codeSnippet
 
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.SutDirectory
-import de.quantummaid.documaid.shared.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.SutDirectory
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithACommentsInSnippet.Companion.aJavaFileWithACommentsInSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithADifferentSnippet.Companion.aJavaFileWithADifferentSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithFullClassSnippet.Companion.aJavaFileWithOneFullSnippet

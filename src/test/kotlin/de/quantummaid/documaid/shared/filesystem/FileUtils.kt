@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.filesystem
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.io.IOException

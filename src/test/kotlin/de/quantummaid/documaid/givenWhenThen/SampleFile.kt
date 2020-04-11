@@ -21,7 +21,7 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
-import de.quantummaid.documaid.shared.PhysicalFileBuilder
+import de.quantummaid.documaid.shared.filesystem.PhysicalFileBuilder
 import java.nio.file.Paths
 
 class SampleFile(val contentInput: String, val expectedContentOutput: String?, val fileName: String, val baseDirRelativePath: String) {

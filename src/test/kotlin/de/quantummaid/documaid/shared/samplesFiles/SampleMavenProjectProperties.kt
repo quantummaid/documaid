@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.shared
+package de.quantummaid.documaid.shared.samplesFiles
 
 class SampleMavenProjectProperties {
     companion object {

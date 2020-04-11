@@ -1,11 +1,11 @@
 package de.quantummaid.documaid.givenWhenThen
 
-import de.quantummaid.documaid.shared.PhysicalDirectory
-import de.quantummaid.documaid.shared.PhysicalFile
-import de.quantummaid.documaid.shared.PhysicalFileObject
-import de.quantummaid.documaid.shared.PhysicalFileSystemStructure
-import de.quantummaid.documaid.shared.assertDirectoryExists
-import de.quantummaid.documaid.shared.assertFileWithContent
+import de.quantummaid.documaid.shared.filesystem.PhysicalDirectory
+import de.quantummaid.documaid.shared.filesystem.PhysicalFile
+import de.quantummaid.documaid.shared.filesystem.PhysicalFileObject
+import de.quantummaid.documaid.shared.filesystem.PhysicalFileSystemStructure
+import de.quantummaid.documaid.shared.filesystem.assertDirectoryExists
+import de.quantummaid.documaid.shared.filesystem.assertFileWithContent
 
 class TestFileStructureCorrectnessChecker {
 

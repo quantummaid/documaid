@@ -29,52 +29,58 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Compa
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
+import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
 interface LinkSpecs {
 
     @Test
-    fun canInsertSimpleCodeLinks() {
+    fun canInsertSimpleCodeLinks(platformConfiguration: PlatformConfiguration) {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithASingleLink(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun canInsertTwoLinks() {
+    fun canInsertTwoLinks(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithTwoLinks(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun canInsertTheSameLinkTwice() {
+    fun canInsertTheSameLinkTwice(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithTheSameLinksTwice(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun canReplaceAWrongLink() {
+    fun canReplaceAWrongLink(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithWrongLink(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun failsForSeveralNotExistingLinkTarget() {
+    fun failsForSeveralNotExistingLinkTarget(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithLinksToNotExistingFiles")
         given(aDokuMaid()
             .configuredWith(aFileWithLinksToNotExistingFiles(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
@@ -84,19 +90,21 @@ interface LinkSpecs {
     }
 
     @Test
-    fun canValidateCorrectLinks() {
+    fun canValidateCorrectLinks(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aCorrectlyGeneratedFileWithTwoLinks(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun failsForMissingLink() {
+    fun failsForMissingLink(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithAMissingLink")
         given(aDokuMaid()
             .configuredWith(aFileWithAMissingLink(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for '<!---[Link] ( source.java linkName)-->' " +
@@ -104,10 +112,11 @@ interface LinkSpecs {
     }
 
     @Test
-    fun failsForWrongLink() {
+    fun failsForWrongLink(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithWrongLink")
         given(aDokuMaid()
             .configuredWith(aFileWithWrongLink(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName)-->' " +
@@ -115,10 +124,11 @@ interface LinkSpecs {
     }
 
     @Test
-    fun failsIfLinkDoesNotPointToAExistingFileAnymore() {
+    fun failsIfLinkDoesNotPointToAExistingFileAnymore(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithLinkANotExistingFile")
         given(aDokuMaid()
             .configuredWith(aFileWithLinkANotExistingFile(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' " +
@@ -126,10 +136,11 @@ interface LinkSpecs {
     }
 
     @Test
-    fun capturesMultipleErrors() {
+    fun capturesMultipleErrors(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithMultipleLinkErrors")
         given(aDokuMaid()
             .configuredWith(aFileWithMultipleLinkErrors(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
@@ -140,18 +151,20 @@ interface LinkSpecs {
     }
 
     @Test
-    fun canInsertCodeLinkAtTheEndOfFileWithoutNewline() {
+    fun canInsertCodeLinkAtTheEndOfFileWithoutNewline(platformConfiguration: PlatformConfiguration) {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithASingleLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun canReplaceCodeLinkAtTheEndOfFileWithoutNewline() {
+    fun canReplaceCodeLinkAtTheEndOfFileWithoutNewline(platformConfiguration: PlatformConfiguration) {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithWrongLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())

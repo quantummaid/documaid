@@ -21,10 +21,10 @@
 
 package de.quantummaid.documaid.usecases.tableOfContents.toc
 
-import de.quantummaid.documaid.shared.EmptySutFile.Companion.aFile
-import de.quantummaid.documaid.shared.SetupUpdate
-import de.quantummaid.documaid.shared.SutDirectory.Companion.aDirectory
-import de.quantummaid.documaid.shared.TemporaryTestDirectory.Companion.aTemporyTestDirectory
+import de.quantummaid.documaid.shared.filesystem.EmptySutFile.Companion.aFile
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongToc
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongTocAtEndOfFile
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithToc
