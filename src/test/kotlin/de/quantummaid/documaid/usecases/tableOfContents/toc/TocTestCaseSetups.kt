@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.usecases.tableOfContents
+package de.quantummaid.documaid.usecases.tableOfContents.toc
 
 import de.quantummaid.documaid.shared.EmptySutFile.Companion.aFile
 import de.quantummaid.documaid.shared.SetupUpdate
@@ -266,7 +266,7 @@ fun aTocInReadmeWithCorrectToc(basePath: Path): SetupUpdate {
     return { (_, _, sutFileStructure, _, _) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithTocAlreadyGenerated("README.md", expectedToc, ""),
+                aMarkdownFileWithTocAlreadyGenerated("README.md", ".", expectedToc),
                 aFile("0_Overview.md"),
                 aFile("1_Introduction.md"),
                 aDirectory("02_docs")

@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.usecases.tableOfContents
+package de.quantummaid.documaid.usecases.tableOfContents.nav
 
 import de.quantummaid.documaid.shared.EmptySutFile
 import de.quantummaid.documaid.shared.SetupUpdate
@@ -299,5 +299,48 @@ fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path
                             "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+    }
+}
+
+fun aReadmeWithAMissingTocAndASingleWithCorrectNavigationForHugo(basePath: Path): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "correctNav")
+
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithToc("README.md", "./docs", ""),
+                SutDirectory.aDirectory("docs")
+                    .with(
+                        aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)")))
+    }
+}
+
+fun aReadmeWithTocAndAFileWithASingleWrongNavForHugo(basePath: Path): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "wrongNav")
+
+    return { (_, _, sutFileStructure, _, _) ->
+
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithToc("README.md", "./docs", ""),
+                SutDirectory.aDirectory("docs")
+                    .with(
+                        aMarkdownFileWithAWrongNav("1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)")))
+    }
+}
+
+fun aReadmeWithTocAndAFileWithASingleMissingNavForHugo(basePath: Path): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "missingNav")
+
+    return { (_, _, sutFileStructure, _, _) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aMarkdownFileWithTocAlreadyGenerated("README.md", "./docs", ""),
+                SutDirectory.aDirectory("docs")
+                    .with(
+                        aMarkdownFileWithNav("1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)")))
     }
 }

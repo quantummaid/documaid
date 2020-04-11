@@ -2,7 +2,6 @@ package de.quantummaid.documaid.shared
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import java.nio.file.Path
-import java.nio.file.Paths
 
 class SutFileStructure internal constructor() {
     private val children = mutableListOf<SutFileObject>()
@@ -25,27 +24,38 @@ class SutFileStructure internal constructor() {
     }
 
     fun generateFileStructureForDocuMaidToProcess(): PhysicalFileSystemStructure {
-        return generate(basePath!!, GeneratedTargetFileStructureType.INPUT_FOR_DOCUMAID)
+        return generate(basePath!!)
     }
 
-    fun generateExpectedFileStructureForGithub(): PhysicalFileSystemStructure {
-        return generate(basePath!!, GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_GITHUB)
+    fun constructExpectedFileStructureForGithub(): PhysicalFileSystemStructure {
+        return construct(basePath!!, ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_GITHUB)
     }
 
-    fun generateExpectedFileStructureForHugo(config: DocuMaidConfiguration): PhysicalFileSystemStructure {
+    fun constructExpectedFileStructureForHugo(config: DocuMaidConfiguration): PhysicalFileSystemStructure {
         val hugoOutputPath = basePath!!.resolve(config.hugoOutputPath)
-        return generate(hugoOutputPath, GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_HUGO)
+        return construct(hugoOutputPath, ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO)
     }
 
-    private fun generate(basePath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalFileSystemStructure {
+    private fun generate(basePath: Path): PhysicalFileSystemStructure {
         val parentPath = basePath.parent
         createDirectoryAndParentsIfNotExisting(parentPath)
 
         val fileName = basePath.toFile().name
         val rootDirectory = SutDirectory.aDirectory(fileName)
             .with(children)
-            .generate(parentPath, generatedTargetFileStructureType)
+            .generate(parentPath)
         return PhysicalFileSystemStructure(rootDirectory)
+    }
+
+    private fun construct(basePath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileSystemStructure {
+        val parentPath = basePath.parent
+        createDirectoryAndParentsIfNotExisting(parentPath)
+
+        val fileName = basePath.toFile().name
+        val rootDirectory = SutDirectory.aDirectory(fileName)
+            .with(children)
+            .construct(parentPath, constructionForPlatformType)
+        return PhysicalFileSystemStructure(rootDirectory!!)
     }
 
     fun cleanUp() {
@@ -54,15 +64,15 @@ class SutFileStructure internal constructor() {
 
 }
 
-enum class GeneratedTargetFileStructureType {
-    INPUT_FOR_DOCUMAID,
+enum class ConstructionForPlatformType {
     EXPECTED_OUTPUT_FOR_GITHUB,
     EXPECTED_OUTPUT_FOR_HUGO,
 }
 
 interface SutFileObject {
 
-    fun generate(parentPath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalFileObject
+    fun generate(parentPath: Path): PhysicalFileObject
+    fun construct(parentPath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileObject?
 }
 
 class SutDirectory private constructor(private val name: String) : SutFileObject {
@@ -86,16 +96,32 @@ class SutDirectory private constructor(private val name: String) : SutFileObject
         return this
     }
 
-    override fun generate(parentPath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalDirectory {
-        val physicalDirectoryBuilder = PhysicalDirectoryBuilder.aDirectory(name)
-        val physicalDirectory = when (generatedTargetFileStructureType) {
-            GeneratedTargetFileStructureType.INPUT_FOR_DOCUMAID -> physicalDirectoryBuilder.create(parentPath)
-            GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_GITHUB -> physicalDirectoryBuilder.construct(parentPath)
-            GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_HUGO -> physicalDirectoryBuilder.construct(parentPath)
-        }
-        val physicalChildren = children.map { it.generate(physicalDirectory.path, generatedTargetFileStructureType) }
+    override fun generate(parentPath: Path): PhysicalDirectory {
+        val physicalDirectory = PhysicalDirectoryBuilder.aDirectory(name)
+            .create(parentPath)
+        val physicalChildren = children.map { it.generate(physicalDirectory.path) }
         physicalDirectory.add(physicalChildren)
         return physicalDirectory
+    }
+
+    override fun construct(parentPath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalDirectory? {
+        val physicalDirectory = PhysicalDirectoryBuilder.aDirectory(name)
+            .construct(parentPath)
+        val physicalChildren = children.map { it.construct(physicalDirectory.path, constructionForPlatformType) }
+            .filterNotNull()
+        physicalDirectory.add(physicalChildren)
+        return when (constructionForPlatformType) {
+            ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_GITHUB -> {
+                physicalDirectory
+            }
+            ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO -> {
+                if(physicalChildren.isNotEmpty()){
+                    physicalDirectory
+                }else{
+                    null
+                }
+            }
+        }
     }
 }
 
@@ -166,11 +192,20 @@ open class SimpleProcessedFile(private val originalFile: PhysicalFileBuilder,
         return processedFileInHugoFormat
     }
 
-    override fun generate(parentPath: Path, generatedTargetFileStructureType: GeneratedTargetFileStructureType): PhysicalFileObject {
-        return when (generatedTargetFileStructureType) {
-            GeneratedTargetFileStructureType.INPUT_FOR_DOCUMAID -> originalFile.create(parentPath)
-            GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_GITHUB -> processedFile.construct(parentPath)
-            GeneratedTargetFileStructureType.EXPECTED_OUTPUT_FOR_HUGO -> processedFileInHugoFormat.construct(parentPath)
+    override fun generate(parentPath: Path): PhysicalFileObject {
+        return originalFile.create(parentPath)
+    }
+
+    override fun construct(parentPath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileObject? {
+        return when (constructionForPlatformType) {
+            ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_GITHUB -> processedFile.construct(parentPath)
+            ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO -> {
+                return if(originalFile.name.endsWith(".md")) {
+                    processedFileInHugoFormat.construct(parentPath)
+                }else{
+                    null
+                }
+            }
         }
     }
 }

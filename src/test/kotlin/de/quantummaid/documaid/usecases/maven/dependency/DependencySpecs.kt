@@ -38,7 +38,7 @@ interface DependencySpecs {
     fun canGenerateFullyDefinedDependencyInMarkdownFile(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithASingleFullyDefinedDependency(BASE_PATH))
-            .withPlatformConfiguration(platformConfiguration)
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())

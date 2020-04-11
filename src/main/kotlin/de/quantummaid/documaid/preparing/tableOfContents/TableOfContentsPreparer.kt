@@ -28,7 +28,7 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective
 import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContentsCreator
 import de.quantummaid.documaid.domain.tableOfContents.TocTraversalDecision
@@ -76,7 +76,7 @@ class TableOfContentsPreparer : PreparingVisitor {
             val traversalDecision = object : TocTraversalDecision {
                 override fun directoryShouldBeTraversed(directory: Directory): Boolean {
                     val fileName = directory.absolutePath().fileName.toString()
-                    return TableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matches(fileName)
+                    return GithubTableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matches(fileName)
                 }
             }
             val tableOfContentsCollector = TableOfContentsCreator(traversalDecision)

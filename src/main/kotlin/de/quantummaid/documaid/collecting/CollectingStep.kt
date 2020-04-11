@@ -26,7 +26,7 @@ import de.quantummaid.documaid.collecting.snippets.SnippetsCollector
 import de.quantummaid.documaid.collecting.structure.FileObjectVisitorAdapter
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.traversaldecision.CollectingTraversalDecision
-import java.nio.file.Path
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 
 class CollectingStep private constructor(private val collectors: List<FileObjectVisitorAdapter>) {
 
@@ -40,8 +40,8 @@ class CollectingStep private constructor(private val collectors: List<FileObject
         }
     }
 
-    fun collect(basePath: Path, collectingTraversalDecision: CollectingTraversalDecision): Project {
+    fun collect(docuMaidConfig: DocuMaidConfiguration, collectingTraversalDecision: CollectingTraversalDecision): Project {
         val collector = FullCollector()
-        return collector.collectData(basePath, collectors, collectingTraversalDecision)
+        return collector.collectData(docuMaidConfig, collectors, collectingTraversalDecision)
     }
 }

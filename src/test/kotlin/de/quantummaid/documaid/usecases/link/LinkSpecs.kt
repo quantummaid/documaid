@@ -32,7 +32,7 @@ import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-internal class LinkSpecs {
+interface LinkSpecs {
 
     @Test
     fun canInsertSimpleCodeLinks() {

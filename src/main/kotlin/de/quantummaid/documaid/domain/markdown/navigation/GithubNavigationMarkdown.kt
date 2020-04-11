@@ -19,14 +19,14 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.domain.navigation
+package de.quantummaid.documaid.domain.markdown.navigation
 
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.link.LinkMarkdown
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 
-class NavigationMarkdown(val fileWithDirective: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
+class GithubNavigationMarkdown(val fileWithDirective: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
 
     companion object {
         val NAV_MARKDOWN_REGEX = """\n? *(\[&larr;]\([^)]+\)&nbsp;&nbsp;&nbsp;)?\[Overview]\([^)]+\)(&nbsp;&nbsp;&nbsp;\[&rarr;]\([^)]+\))?""".toRegex()
@@ -46,9 +46,12 @@ class NavigationMarkdown(val fileWithDirective: MarkdownFile, val previousFile: 
         }
     }
 
-    fun generateMarkdown(): String {
-        return "${previousFileLink()}${overviewLink()}${nextFileLink()}"
+    fun generateMarkdown(navigationDirective: NavigationDirective): String {
+        val directiveString = navigationDirective.directive.completeString
+        val navMarkdown = "${previousFileLink()}${overviewLink()}${nextFileLink()}"
+        return "$directiveString\n$navMarkdown"
     }
+
 
     private fun previousFileLink(): String {
         return if (previousFile != null) {

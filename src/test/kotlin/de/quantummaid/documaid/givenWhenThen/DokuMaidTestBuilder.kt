@@ -52,7 +52,7 @@ class DokuMaidTestBuilder private constructor() {
         return configuredWithBasePath(basePath.toString())
     }
 
-    fun withPlatformConfiguration(platformConfiguration: PlatformConfiguration): DokuMaidTestBuilder {
+    fun configuredwith(platformConfiguration: PlatformConfiguration): DokuMaidTestBuilder {
         platformConfiguration.apply(docuMaidConfigurationBuilder)
         return this
     }

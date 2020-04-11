@@ -2,7 +2,7 @@ package de.quantummaid.documaid.shared.samplesFiles
 
 import de.quantummaid.documaid.shared.ProcessedFile
 import de.quantummaid.documaid.shared.ProcessedFileBuilder
-import de.quantummaid.documaid.usecases.tableOfContents.S
+import de.quantummaid.documaid.usecases.tableOfContents.nav.S
 
 fun aMarkdownFileWithNav(fileName: String, navigationString: String): ProcessedFile {
     val contentInput = " A file type A\n" +
@@ -100,11 +100,17 @@ fun aMarkdownFileWithAWrongNavAtEndOfFile(fileName: String, navigationString: St
         "and a navigation at the bottom\n" +
         "\n" +
         "<!---[Nav]-->\n"+
-        navigationString+""
+        navigationString
+    val expectedContentOutputHugo = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->"
 
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
-        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutputHugo)
         .build()
 }

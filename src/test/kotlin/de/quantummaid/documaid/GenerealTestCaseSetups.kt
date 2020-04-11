@@ -29,7 +29,7 @@ import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAllDirective
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAllDirectivesAlreadyGenerated
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedNav
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithNav
-import de.quantummaid.documaid.usecases.tableOfContents.S
+import de.quantummaid.documaid.usecases.tableOfContents.nav.S
 
 fun severalFilesWithLinksAndSnippets(basePath: String): SetupUpdate {
 

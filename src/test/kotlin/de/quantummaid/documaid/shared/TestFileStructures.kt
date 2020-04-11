@@ -142,7 +142,7 @@ class PhysicalDirectory internal constructor(path: Path, val children: MutableLi
     }
 }
 
-class PhysicalFileBuilder private constructor(private val name: String) : PhysicalFileObjectBuilder {
+class PhysicalFileBuilder private constructor(val name: String) : PhysicalFileObjectBuilder {
 
     private var content: String = ""
 

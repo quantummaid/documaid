@@ -28,19 +28,18 @@ import de.quantummaid.documaid.domain.markdown.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.markdown.navigation.NavigationDirective.Companion.NAV_TAG
-import de.quantummaid.documaid.domain.navigation.NavigationMarkdown.Companion.startsWithNavigationMarkdown
+import de.quantummaid.documaid.domain.markdown.navigation.GithubNavigationMarkdown.Companion.startsWithNavigationMarkdown
 import de.quantummaid.documaid.errors.VerificationError
 
-class NavigationMarkdownHandler : MarkdownTagHandler {
+class GithubNavigationMarkdownHandler : MarkdownTagHandler {
 
     override fun tag(): String = NAV_TAG.toString()
 
     override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
-        val navigationDirective = NavigationDirective.create(directive, file, project)
-        val markdown = navigationDirective.generateMarkdown()
+        val newMarkdown = generateNewMarkdown(directive, file, project)
         val (textToBeReplaced) = textToBeReplaced(directive)
-        val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
-        val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, markdown)
+        val rangeToReplaceIn = rangeToReplaceIn(directive, newMarkdown, textToBeReplaced)
+        val markdownReplacement = MarkdownReplacement(rangeToReplaceIn, textToBeReplaced, newMarkdown)
         return Pair(markdownReplacement, emptyList())
     }
 
@@ -59,12 +58,11 @@ class NavigationMarkdownHandler : MarkdownTagHandler {
     }
 
     override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
-        val navigationDirective = NavigationDirective.create(directive, file, project)
-        val markdown = navigationDirective.generateMarkdown()
+        val markdown = generateNewMarkdown(directive, file, project)
         val (textToBeReplaced, matchResult) = textToBeReplaced(directive)
         return if (markdown != textToBeReplaced) {
-            val linkFound = matchResult.matches
-            if (linkFound) {
+            val navFound = matchResult.matches
+            if (navFound) {
                 listOf(VerificationError.create("Found [${tag()}] tag with wrong navigation", file))
             } else {
                 listOf(VerificationError.create("Found [${tag()}] tag with missing navigation", file))
@@ -72,5 +70,14 @@ class NavigationMarkdownHandler : MarkdownTagHandler {
         } else {
             emptyList()
         }
+    }
+
+    private fun generateNewMarkdown(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): String {
+        val navDirective = NavigationDirective.create(directive, file, project)
+        val previousFile = navDirective.previousFile
+        val overviewFile = navDirective.overviewFile
+        val nextFile = navDirective.nextFile
+        val markdown = GithubNavigationMarkdown(file, previousFile, overviewFile, nextFile)
+        return markdown.generateMarkdown(navDirective)
     }
 }

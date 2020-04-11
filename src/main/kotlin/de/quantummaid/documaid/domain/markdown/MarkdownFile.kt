@@ -24,12 +24,8 @@ package de.quantummaid.documaid.domain.markdown
 import de.quantummaid.documaid.collecting.structure.FileType
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
-import de.quantummaid.documaid.domain.markdown.codeSnippet.SnippetMarkdownHandler
-import de.quantummaid.documaid.domain.markdown.dependency.DependencyMarkdownHandler
-import de.quantummaid.documaid.domain.markdown.link.LinkMarkdownTagHandler
-import de.quantummaid.documaid.domain.markdown.navigation.NavigationMarkdownHandler
-import de.quantummaid.documaid.domain.markdown.plugin.PluginMarkdownHandler
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.domain.markdown.MarkdownTagHandlerFactory.Companion.obtainMarkdownHandlersFor
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
@@ -39,17 +35,10 @@ import java.nio.file.Path
 class MarkdownFile private constructor(private val path: Path, val directives: List<RawMarkdownDirective>, val tagHandlers: List<MarkdownTagHandler>) : ProjectFile {
 
     companion object {
-        val tagHandlers = listOf(
-            SnippetMarkdownHandler(),
-            LinkMarkdownTagHandler(),
-            TableOfContentsMarkdownTagHandler(),
-            NavigationMarkdownHandler(),
-            DependencyMarkdownHandler(),
-            PluginMarkdownHandler()
-        )
 
-        fun create(path: Path): MarkdownFile {
+        fun create(path: Path, docuMaidConfig: DocuMaidConfiguration): MarkdownFile {
             val content = path.toFile().readText()
+            val tagHandlers = obtainMarkdownHandlersFor(docuMaidConfig)
             val tagsGroup = tagHandlers.map { it.tag() }
                 .joinToString(separator = "|", prefix = "(", postfix = ")") { it }
             val regex = "<!--- *\\[(?<tag>$tagsGroup)](?<options>.*?) *-->".toRegex()

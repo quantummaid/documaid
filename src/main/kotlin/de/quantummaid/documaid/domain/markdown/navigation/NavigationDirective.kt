@@ -25,7 +25,6 @@ import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.domain.markdown.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RawMarkdownDirective
-import de.quantummaid.documaid.domain.navigation.NavigationMarkdown
 import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupData
 
 class NavigationDirective private constructor(val directive: RawMarkdownDirective, val file: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
@@ -43,8 +42,4 @@ class NavigationDirective private constructor(val directive: RawMarkdownDirectiv
         }
     }
 
-    fun generateMarkdown(): String {
-        val navigationMarkdown = NavigationMarkdown(file, previousFile, overviewFile, nextFile)
-        return "${directive.completeString}\n${navigationMarkdown.generateMarkdown()}"
-    }
 }

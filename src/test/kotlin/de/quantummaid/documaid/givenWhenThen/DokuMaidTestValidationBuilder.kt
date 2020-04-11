@@ -44,6 +44,12 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             }
         }
 
+        fun expectNoException(): DokuMaidTestValidationBuilder {
+            return DokuMaidTestValidationBuilder { testEnvironment ->
+                assertNoExceptionThrown(testEnvironment)
+            }
+        }
+
         fun expectAnExceptionWithMessage(expectedMessage: String): DokuMaidTestValidationBuilder {
             return DokuMaidTestValidationBuilder { testEnvironment -> assertExceptionWithMessage(expectedMessage, testEnvironment) }
         }
@@ -80,8 +86,8 @@ class DokuMaidTestValidationBuilder private constructor(private val testValidati
             val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
             val config:DocuMaidConfiguration = testEnvironment.getPropertyAsType(TestEnvironmentProperty.DOCU_MAID_CONFIG)
             val expectedFileStructure = when (config.platform) {
-                Platform.GITHUB -> sutFileStructure.generateExpectedFileStructureForGithub()
-                Platform.HUGO -> sutFileStructure.generateExpectedFileStructureForHugo(config)
+                Platform.GITHUB -> sutFileStructure.constructExpectedFileStructureForGithub()
+                Platform.HUGO -> sutFileStructure.constructExpectedFileStructureForHugo(config)
             }
             TestFileStructureCorrectnessChecker.checkForCorrectness(expectedFileStructure)
         }

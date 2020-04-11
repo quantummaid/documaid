@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.usecases.tableOfContents
+package de.quantummaid.documaid.usecases.tableOfContents.nav
 
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.Goal.GENERATE
@@ -30,33 +30,37 @@ import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDoku
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
+import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-class TableOfContentWithNavigationSpecs {
+interface TableOfContentWithNavigationSpecs {
 
     @Test
-    fun canGenerateNavigationForIndexFiles() {
+    fun canGenerateNavigationForIndexFiles(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun canGenerateNavigationForDeeplyNestedStructure() {
+    fun canGenerateNavigationForDeeplyNestedStructure(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithADeeplyNestedStructure(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun navigationFailsForFileWithMissingNavigation() {
+    fun navigationFailsForFileWithMissingNavigation(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocInReadmeWithAnIndexFileWithoutNavigation(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found file indexed by table of contents but without [$NAV_TAG] tag " +
@@ -64,9 +68,10 @@ class TableOfContentWithNavigationSpecs {
     }
 
     @Test
-    fun navigationFailsForFileWithNavigationButNotIncludedInTableOfContents() {
+    fun navigationFailsForFileWithNavigationButNotIncludedInTableOfContents(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocInReadmeWithFileWithNavigationButNotIndexedByToc(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag for file not indexed by table of contents " +
@@ -74,27 +79,30 @@ class TableOfContentWithNavigationSpecs {
     }
 
     @Test
-    fun navigationFailsForFileWithNavigationWithoutATableOfContents() {
+    fun navigationFailsForFileWithNavigationWithoutATableOfContents(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithNavigationButNoFileWithToc(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tags without a [$TOC_TAG]"))
     }
 
     @Test
-    fun navigationValidationSucceedsForCorrectNavigations() {
+    fun navigationValidationWithCorrectNavigations(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aReadmeWithTocAndSeveralFilesWithCorrectNavigation(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun navigationValidationFailsForMissingNavigation() {
+    fun navigationValidationForMissingNavigation(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aReadmeWithTocAndAFileWithMissingNav(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with missing navigation " +
@@ -102,27 +110,30 @@ class TableOfContentWithNavigationSpecs {
     }
 
     @Test
-    fun navigationValidationFailsForWrongNavigation() {
+    fun navigationValidationForWrongNavigation(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with wrong navigation (in path ${absPath("wrongNav/docs/003_ADifferentChapter.md")})"))
     }
 
     @Test
-    fun canGenerateNavigationAtTheEndOfFileWithoutNewLine() {
+    fun canGenerateNavigationAtTheEndOfFileWithoutNewLine(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
-    fun canReplaceNavigationAtTheEndOfFileWithoutNewLine() {
+    fun canReplaceNavigationAtTheEndOfFileWithoutNewLine(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
+            .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
@@ -133,6 +144,6 @@ class TableOfContentWithNavigationSpecs {
     }
 
     companion object {
-        private val BASE_PATH = Paths.get("target/tempTestDirs/tableOfContents/")
+        private val BASE_PATH = Paths.get("target/tempTestDirs/nav/")
     }
 }

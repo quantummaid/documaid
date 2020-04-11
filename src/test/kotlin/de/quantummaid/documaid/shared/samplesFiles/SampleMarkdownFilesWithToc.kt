@@ -37,10 +37,17 @@ fun aMarkdownFileWithTocAlreadyGenerated(fileName: String, tocPath: String, toc:
         "\n<!---EndOfToc-->\n" +
         "\n" +
         "and a little bit more text\n"
+    val expectedContentOutputHugo = " Some Heading" +
+        "with some Text" +
+        "underneath for very very good explanation" +
+        "\n" +
+        "<!---[TOC]($tocPath)-->\n" +
+        "\n" +
+        "and a little bit more text\n"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, expectedContentOutput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
-        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutputHugo)
         .build()
 }
 
@@ -110,9 +117,14 @@ fun aMarkdownFileWithAWrongTocAtEndOfFile(fileName: String, tocPath: String, exp
         "<!---[TOC]($tocPath)-->\n" +
         expectedToc +
         "\n<!---EndOfToc-->"
+    val expectedContentOutputHugo = " Some Heading" +
+        "with some Text" +
+        "underneath for very very good explanation" +
+        "\n" +
+        "<!---[TOC]($tocPath)-->"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
-        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutputHugo)
         .build()
 }

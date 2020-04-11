@@ -27,7 +27,7 @@ import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 
-class TableOfContentsMarkdown(private val rawMarkdownDirective: RawMarkdownDirective, private val tableOfContents: TableOfContents, private val file: MarkdownFile) {
+class GithubTableOfContentsMarkdown(private val rawMarkdownDirective: RawMarkdownDirective, private val tableOfContents: TableOfContents, private val file: MarkdownFile) {
 
     companion object {
         val TOC_REGEX = """^\n1\. \[ *.*(?=<!---EndOfToc-->)<!---EndOfToc-->""".toRegex(RegexOption.DOT_MATCHES_ALL)
