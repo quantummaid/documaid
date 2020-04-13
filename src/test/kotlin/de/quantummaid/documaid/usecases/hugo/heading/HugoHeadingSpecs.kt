@@ -64,7 +64,7 @@ class HugoHeadingSpecs {
     }
 
     @Test
-    fun ignoresHeadingWhenTextOccursBefore() {
+    fun removesHeadingWhenTextOccursBefore() {
         given(aDokuMaid()
             .configuredWith(aFileWithTextBeforeHeading(BASE_PATH))
             .configuredWith(Platform.HUGO)

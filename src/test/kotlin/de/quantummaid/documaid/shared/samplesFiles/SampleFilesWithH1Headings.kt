@@ -72,7 +72,7 @@ fun aMarkdownFileWithTextBeforeHeading(fileName: String, weight: String): Proces
     val contentInput = " SomeText\n" +
         "# This is my Heading\n" +
         "someOtherText"
-    val expectedContentOutput = " SomeText\n" +
+    val expectedContentOutput = "" +
         "---\n" +
         "title: \"This is my Heading\"\n" +
         "weight: $weight\n" +

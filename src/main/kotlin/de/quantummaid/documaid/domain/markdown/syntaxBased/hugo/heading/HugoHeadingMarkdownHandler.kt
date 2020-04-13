@@ -34,11 +34,13 @@ class HugoHeadingMarkdownHandler : SyntaxBasedMarkdownHandler {
         val content = file.content()
         val (lineWithH1Heading, headingStart) = locateLeadingH1Heading(content)
         return if (lineWithH1Heading != null) {
+            val endIndexOfHeading = headingStart + lineWithH1Heading.length
+            val textToBeReplaced = content.substring(0, endIndexOfHeading)
             val docuMaidConfiguration = project.getInformation(DocuMaidConfiguration.DOCUMAID_CONFIGURATION_KEY)
             val headingMarkdown = HugoHeadingMarkdown.create(lineWithH1Heading, file, docuMaidConfiguration)
             val newMarkdown = headingMarkdown.generateMarkdown()
-            val range = IntRange(headingStart, headingStart + newMarkdown.length)
-            Pair(MarkdownReplacement(range, lineWithH1Heading, newMarkdown), emptyList())
+            val range = IntRange(0, headingStart + newMarkdown.length)
+            Pair(MarkdownReplacement(range, textToBeReplaced, newMarkdown), emptyList())
         } else {
             Pair(MarkdownReplacement.noReplacement(), emptyList())
         }
