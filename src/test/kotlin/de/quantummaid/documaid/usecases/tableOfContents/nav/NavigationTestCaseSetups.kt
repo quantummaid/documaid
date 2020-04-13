@@ -34,13 +34,12 @@ import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithToc
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTocAlreadyGenerated
 import java.nio.file.Path
 
-
 const val S = "&nbsp;&nbsp;&nbsp;"
 
 fun aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndMultipleMarkdownFilesWithNavigation")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -65,7 +64,7 @@ fun aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(basePath: Pa
 fun aTocTagInReadmeWithADeeplyNestedStructure(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithADeeplyNestedStructure")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. Docs
@@ -130,7 +129,7 @@ fun aTocTagInReadmeWithADeeplyNestedStructure(basePath: Path): SetupUpdate {
 fun aTocInReadmeWithAnIndexFileWithoutNavigation(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "fileWithoutNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -149,7 +148,7 @@ fun aTocInReadmeWithAnIndexFileWithoutNavigation(basePath: Path): SetupUpdate {
 fun aTocInReadmeWithFileWithNavigationButNotIndexedByToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "fileOutsideOfToc")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -170,7 +169,7 @@ fun aTocInReadmeWithFileWithNavigationButNotIndexedByToc(basePath: Path): SetupU
 fun aFileWithNavigationButNoFileWithToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "navWithoutToc")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithNav("1_error.md", ""))
@@ -180,7 +179,7 @@ fun aFileWithNavigationButNoFileWithToc(basePath: Path): SetupUpdate {
 fun aReadmeWithTocAndSeveralFilesWithCorrectNavigation(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "correctNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -205,7 +204,7 @@ fun aReadmeWithTocAndSeveralFilesWithCorrectNavigation(basePath: Path): SetupUpd
 fun aReadmeWithTocAndAFileWithMissingNav(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "missingNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -230,7 +229,7 @@ fun aReadmeWithTocAndAFileWithMissingNav(basePath: Path): SetupUpdate {
 fun aReadmeWithTocAndAFileWithWrongNav(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "wrongNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -255,7 +254,7 @@ fun aReadmeWithTocAndAFileWithWrongNav(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -280,7 +279,7 @@ fun aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): Se
 fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -305,7 +304,7 @@ fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path
 fun aReadmeWithAMissingTocAndASingleWithCorrectNavigationForHugo(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "correctNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", "./docs", ""),
@@ -319,7 +318,7 @@ fun aReadmeWithAMissingTocAndASingleWithCorrectNavigationForHugo(basePath: Path)
 fun aReadmeWithTocAndAFileWithASingleWrongNavForHugo(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "wrongNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -334,7 +333,7 @@ fun aReadmeWithTocAndAFileWithASingleWrongNavForHugo(basePath: Path): SetupUpdat
 fun aReadmeWithTocAndAFileWithASingleMissingNavForHugo(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "missingNav")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithTocAlreadyGenerated("README.md", "./docs", ""),

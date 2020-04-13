@@ -27,19 +27,16 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
-import de.quantummaid.documaid.domain.markdown.tagBased.link.LinkDirective.Companion.LINK_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.link.GithubLinkMarkdown.Companion.startsWithLinkMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.link.LinkDirective.Companion.LINK_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.errors.VerificationError
-import java.lang.IllegalArgumentException
 
 class HugoLinkMarkdownTagHandler : MarkdownTagHandler {
 
     override fun tag(): String = LINK_TAG.toString()
 
-    override fun generate(directive: RawMarkdownDirective,
-                          file: MarkdownFile,
-                          project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
         val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
@@ -84,13 +81,11 @@ class HugoLinkMarkdownTagHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective,
-                                 textToReplace: String,
-                                 textToBeReplaced: String): IntRange {
+    private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String, textToBeReplaced: String): IntRange {
         val startIndex = markdownDirective.range.first
         val endIndexInitialTag = markdownDirective.range.last
         val lengthNewContent = textToReplace.length
-        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex+lengthNewContent, startIndex+textToBeReplaced.length))
+        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex + lengthNewContent, startIndex + textToBeReplaced.length))
         return IntRange(startIndex, endIndex)
     }
 }

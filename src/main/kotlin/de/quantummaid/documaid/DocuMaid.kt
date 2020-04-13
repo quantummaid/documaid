@@ -64,7 +64,7 @@ class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidCo
         if (processingResultsWithErrors.isNotEmpty()) {
             val errors = processingResultsWithErrors.flatMap { it.errors }
             throw ErrorsEncounteredInDokuMaidException.fromVerificationErrors(errors)
-        }else {
+        } else {
             return processingResults
         }
     }

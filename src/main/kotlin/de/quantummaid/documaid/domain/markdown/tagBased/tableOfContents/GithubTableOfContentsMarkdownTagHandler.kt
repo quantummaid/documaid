@@ -27,8 +27,8 @@ import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
-import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdown.Companion.startsWithTrailingTableOfContentsMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupData.Companion.TOC_LOOKUP_KEY

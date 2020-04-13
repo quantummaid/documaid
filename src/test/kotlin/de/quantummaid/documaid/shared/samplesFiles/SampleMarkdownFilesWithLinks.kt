@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2019 Richard Hauswald - https://quantummaid.de/.
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package de.quantummaid.documaid.shared.samplesFiles
 
 import de.quantummaid.documaid.shared.filesystem.ProcessedFile
@@ -22,9 +43,7 @@ fun aMarkdownFileWithALinkDirective(fileName: String, linkPath: String, linkName
         .build()
 }
 
-fun aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine(fileName: String,
-                                                                linkPath: String,
-                                                                linkName: String): ProcessedFile {
+fun aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine(fileName: String, linkPath: String, linkName: String): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!--- [Link]($linkPath  $linkName ) -->"
 
@@ -42,15 +61,10 @@ fun aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine(fileName: String
         .build()
 }
 
-fun aMarkdownFileWithTwoLinkDirectives(fileName: String,
-                                       linkPath1: String,
-                                       linkName1: String,
-                                       linkPath2: String,
-                                       linkName2: String): ProcessedFile {
+fun aMarkdownFileWithTwoLinkDirectives(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "text with the link <!---[Link] ($linkPath2 \"$linkName2\")-->\n"
-    //TODO: text hinter link
     val expectedContentOutput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "[$linkName1]($linkPath1)\n" +
@@ -88,10 +102,7 @@ fun aMarkdownFileWithWrongLinkInserted(fileName: String, linkPath: String, linkN
         .build()
 }
 
-
-fun aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline(fileName: String,
-                                                                linkPath: String,
-                                                                linkName: String): ProcessedFile {
+fun aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline(fileName: String, linkPath: String, linkName: String): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!---[Link] ( $linkPath $linkName)-->\n" +
         "[somethingDifferent](./someDifferentFile)"
@@ -108,11 +119,7 @@ fun aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline(fileName: String
         .build()
 }
 
-fun aMarkdownFileWithTwoAlreadyGeneratedLinks(fileName: String,
-                                              linkPath1: String,
-                                              linkName1: String,
-                                              linkPath2: String,
-                                              linkName2: String): ProcessedFile {
+fun aMarkdownFileWithTwoAlreadyGeneratedLinks(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
     val expectedContentOutput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "[$linkName1]($linkPath1)\n" +
@@ -125,11 +132,7 @@ fun aMarkdownFileWithTwoAlreadyGeneratedLinks(fileName: String,
         .build()
 }
 
-fun aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(fileName: String,
-                                                     linkPath1: String,
-                                                     linkName1: String,
-                                                     linkPath2: String,
-                                                     linkName2: String): ProcessedFile {
+fun aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
     val expectedContentOutput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "[$linkName1](${SampleGithubRepositoryProperties.EXPECTED_URL_PREFIX}/$linkPath1)\n" +
@@ -142,20 +145,16 @@ fun aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(fileName: String,
         .build()
 }
 
-fun aMarkdownFileWithWrongLinkInsertedAndAMissingLink(fileName: String,
-                                                      linkPath1: String,
-                                                      linkName1: String,
-                                                      linkPath2: String,
-                                                      linkName2: String): ProcessedFile {
+fun aMarkdownFileWithWrongLinkInsertedAndAMissingLink(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!---[Link] ( $linkPath1 $linkName1)-->" +
         "[somethingDifferent](./someDifferentFile)" +
-        "someOtherText"+
+        "someOtherText" +
         "<!---[Link] ( $linkPath2 $linkName2)-->\n"
     val expectedContentOutput = "Test File\n" +
         "<!---[Link] ( $linkPath1 $linkName1)-->\n" +
         "[$linkName1]($linkPath1)" +
-        "someOtherText"+
+        "someOtherText" +
         "<!---[Link] ( $linkPath2 $linkName2)-->\n"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)

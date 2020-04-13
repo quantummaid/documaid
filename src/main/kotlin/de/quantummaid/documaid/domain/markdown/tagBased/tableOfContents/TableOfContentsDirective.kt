@@ -24,8 +24,8 @@ package de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents
 import de.quantummaid.documaid.collecting.fastLookup.FileObjectsFastLookUpTable
 import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.OptionsString
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG

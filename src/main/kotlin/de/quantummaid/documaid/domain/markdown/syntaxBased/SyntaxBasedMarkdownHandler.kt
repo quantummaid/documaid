@@ -24,7 +24,6 @@ package de.quantummaid.documaid.domain.markdown.syntaxBased
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
-import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.errors.VerificationError
 
 interface SyntaxBasedMarkdownHandler {

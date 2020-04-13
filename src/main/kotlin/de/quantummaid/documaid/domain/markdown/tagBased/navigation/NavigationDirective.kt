@@ -22,8 +22,8 @@
 package de.quantummaid.documaid.domain.markdown.tagBased.navigation
 
 import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupData
 
@@ -41,5 +41,4 @@ class NavigationDirective private constructor(val directive: RawMarkdownDirectiv
             return NavigationDirective(rawMarkdownDirective, file, previousFile, overviewFile, nextFile)
         }
     }
-
 }

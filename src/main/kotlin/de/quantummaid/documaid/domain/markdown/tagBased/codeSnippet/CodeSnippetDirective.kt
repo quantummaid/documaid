@@ -26,9 +26,9 @@ import de.quantummaid.documaid.collecting.snippets.CodeSnippetsLookupTable
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.java.JavaFile
-import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.MarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.codeSnippet.CodeSnippetDirective.Companion.CODE_SNIPPET_TAG
 import de.quantummaid.documaid.domain.snippet.SnippetId

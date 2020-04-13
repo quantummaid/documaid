@@ -52,7 +52,6 @@ class GithubNavigationMarkdown(val fileWithDirective: MarkdownFile, val previous
         return "$directiveString\n$navMarkdown"
     }
 
-
     private fun previousFileLink(): String {
         return if (previousFile != null) {
             val relativePath = fileWithDirective.absolutePath().parent.relativize(previousFile.absolutePath())

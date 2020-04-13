@@ -35,7 +35,7 @@ fun severalFilesWithLinksAndSnippets(basePath: String): SetupUpdate {
 
     val testDir = aTemporyTestDirectory(basePath, "severalFilesWithLinksAndSnippets")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -64,7 +64,7 @@ fun aCorrectlyGeneratedFileWithLinksAndSnippets(basePath: String): SetupUpdate {
 
     val testDir = aTemporyTestDirectory(basePath, "aCorrectlyGeneratedFileWithLinksAndSnippets")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)

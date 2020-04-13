@@ -46,13 +46,13 @@ class ProcessingStep private constructor(private val visitors: List<ProcessingVi
     private fun processDirectory(directory: Directory, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<ProcessingResult> {
         visitors.forEach { it.beforeDirectoryProcessing(directory, project, goal) }
         val processingResults = directory.children()
-                .flatMap {
-                    when (it) {
-                        is Directory -> processDirectory(it, methodCaller, project, goal)
-                        is ProjectFile -> processFile(it, methodCaller, project, goal)
-                        else -> emptyList()
-                    }
+            .flatMap {
+                when (it) {
+                    is Directory -> processDirectory(it, methodCaller, project, goal)
+                    is ProjectFile -> processFile(it, methodCaller, project, goal)
+                    else -> emptyList()
                 }
+            }
         visitors.forEach { it.afterDirectoryProcessing(directory, project, goal) }
         return processingResults
     }
@@ -84,9 +84,9 @@ internal interface FileObjectMethodCaller {
                     override fun call(file: ProjectFile, project: Project): ProcessingResult {
                         return try {
                             val errors = file.validate(project)
-                            if(errors.isEmpty()){
+                            if (errors.isEmpty()) {
                                 contentNotChangedProcessingResult(file)
-                            }else{
+                            } else {
                                 erroneousProcessingResult(file, errors)
                             }
                         } catch (e: Exception) {

@@ -30,10 +30,6 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
     fun then(dokuMaidTestValidationBuilder: DokuMaidTestValidationBuilder) {
         val testEnvironment = dokuMaidTestBuilder.build()
         try {
-            val setupSteps = getSetupSteps(testEnvironment)
-            for (setupStep in setupSteps) {
-                setupStep.invoke()
-            }
 
             val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
             val fileStructureForDocuMaidToProcess = sutFileStructure.generateFileStructureForDocuMaidToProcess()
@@ -57,17 +53,8 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
         }
     }
 
-    private fun getSetupSteps(testEnvironment: TestEnvironment): List<() -> Unit> {
-        @Suppress("UNCHECKED_CAST")
-        return testEnvironment.getProperty(TestEnvironmentProperty.SETUP_STEPS) as List<() -> Unit>
-    }
-
     private fun cleanUp(testEnvironment: TestEnvironment) {
         @Suppress("UNCHECKED_CAST")
-        val cleanupSteps = testEnvironment.getProperty(TestEnvironmentProperty.CLEAN_UP_STEPS) as List<() -> Unit>
-        for (cleanupStep in cleanupSteps) {
-            cleanupStep.invoke()
-        }
         val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
         sutFileStructure.cleanUp()
     }

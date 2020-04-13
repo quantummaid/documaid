@@ -32,7 +32,6 @@ class HugoLinkMarkdown(val name: String, val target: String, val linkDirective: 
             val originalPathString = linkDirective.options.originalPathString
             return HugoLinkMarkdown(name, originalPathString, linkDirective, repository)
         }
-
     }
 
     fun generateMarkdown(): String {

@@ -26,8 +26,8 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
-import de.quantummaid.documaid.domain.markdown.tagBased.link.LinkDirective.Companion.LINK_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.link.GithubLinkMarkdown.Companion.startsWithLinkMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.link.LinkDirective.Companion.LINK_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.errors.VerificationError
 
@@ -79,7 +79,7 @@ class GithubLinkMarkdownTagHandler : MarkdownTagHandler {
         val startIndex = markdownDirective.range.first
         val endIndexInitialTag = markdownDirective.range.last
         val lengthNewContent = textToReplace.length
-        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex+lengthNewContent, startIndex+textToBeReplaced.length))
+        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex + lengthNewContent, startIndex + textToBeReplaced.length))
         return IntRange(startIndex, endIndex)
     }
 }

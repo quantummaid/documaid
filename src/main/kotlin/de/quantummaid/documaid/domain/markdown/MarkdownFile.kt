@@ -40,10 +40,7 @@ import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.erroneousProcessingResult
 import java.nio.file.Path
 
-class MarkdownFile private constructor(private val path: Path,
-                                       val directives: List<RawMarkdownDirective>,
-                                       val tagHandlers: List<MarkdownTagHandler>,
-                                       val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>) : ProjectFile {
+class MarkdownFile private constructor(private val path: Path, val directives: List<RawMarkdownDirective>, val tagHandlers: List<MarkdownTagHandler>, val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>) : ProjectFile {
 
     companion object {
 
@@ -104,14 +101,12 @@ class MarkdownFile private constructor(private val path: Path,
             return erroneousProcessingResult(this, syntaxBasedHandlerErrors)
         }
 
-        //TODO: simplify
-        val (processedMarkdownTags, creationErrors) = createMarkdownTags(project)
-        if (creationErrors.isNotEmpty()) {
-            return ProcessingResult.erroneousProcessingResult(this, creationErrors)
+        val (completelyProcessedContent, tagProcessErrors) = processMarkdownTags(syntaxProcessContent!!, project)
+        if (tagProcessErrors.isNotEmpty()) {
+            return ProcessingResult.erroneousProcessingResult(this, tagProcessErrors)
         }
-        val completelyProcessedContent = processMarkdownTags(syntaxProcessContent!!, processedMarkdownTags)
 
-        return ProcessingResult.successfulProcessingResult(this, completelyProcessedContent)
+        return ProcessingResult.successfulProcessingResult(this, completelyProcessedContent!!)
     }
 
     private fun processSyntaxChanges(initialContent: String, project: Project): Pair<String?, List<VerificationError>> {
@@ -128,7 +123,7 @@ class MarkdownFile private constructor(private val path: Path,
             }
             .forEach {
                 val (range, textToBeReplaced, textToReplace) = it
-                if (!range.isEmpty()) { //TODO: doppelt
+                if (!range.isEmpty()) {
                     val startIndex = range.start + indexOffsets
                     val endIndex = Math.min(range.last + indexOffsets, content.length)
                     val contentToChange = content.substring(startIndex, endIndex)
@@ -140,37 +135,44 @@ class MarkdownFile private constructor(private val path: Path,
         return Pair(content, emptyList())
     }
 
-    private fun processMarkdownTags(initialContent: String, processedMarkdownTags: List<MarkdownReplacement>?): String {
+    private fun processMarkdownTags(initialContent: String, project: Project): Pair<String?, List<VerificationError>> {
+        val (processedMarkdownTags, creationErrors) = createMarkdownTags(project)
+        if (creationErrors.isNotEmpty()) {
+            return Pair(null, creationErrors)
+        }
+
         var content = initialContent
         var indexOffsets = 0
         processedMarkdownTags!!
             .forEach {
                 val (range, textToBeReplaced, textToReplace) = it
-                val startIndex = range.start + indexOffsets
-                val endIndex = Math.min(range.last + indexOffsets, content.length)
-                val contentToChange = content.substring(startIndex, endIndex)
-                val changed = contentToChange.replaceFirst(textToBeReplaced, textToReplace)
-                content = content.substring(0, startIndex) + changed + content.substring(endIndex)
-                indexOffsets += textToReplace.length - textToBeReplaced.length
+                if (!range.isEmpty()) {
+                    val startIndex = range.start + indexOffsets
+                    val endIndex = Math.min(range.last + indexOffsets, content.length)
+                    val contentToChange = content.substring(startIndex, endIndex)
+                    val changed = contentToChange.replaceFirst(textToBeReplaced, textToReplace)
+                    content = content.substring(0, startIndex) + changed + content.substring(endIndex)
+                    indexOffsets += textToReplace.length - textToBeReplaced.length
+                }
             }
-        return content
+        return Pair(content, emptyList())
     }
 
     private fun createMarkdownTags(project: Project): Pair<List<MarkdownReplacement>?, List<VerificationError>> {
         val tagHandlerPairs = createTagHandlerPairs()
-        val processedSnippetsErrorPairs: List<Pair<MarkdownReplacement?, List<VerificationError>>> = tagHandlerPairs
-            .map { invokeGenerateOnHandler(it, this, project) }
-
-        val errors = processedSnippetsErrorPairs
-            .map { it.second }
-            .flatten()
-        if (errors.isNotEmpty()) {
-            return Pair(null, errors)
+        val verificationErrors = mutableListOf<VerificationError>()
+        val processedSnippets = tagHandlerPairs.mapNotNull {
+            val (processedTags, errors) = invokeGenerateOnHandler(it, this, project)
+            if (errors.isNotEmpty()) {
+                verificationErrors.addAll(errors)
+            }
+            processedTags
         }
-        val markdownTagsWithoutErrors = processedSnippetsErrorPairs
-            .filter { it.first != null }
-            .map { it.first!! }
-        return Pair(markdownTagsWithoutErrors, emptyList())
+
+        if (verificationErrors.isNotEmpty()) {
+            return Pair(null, verificationErrors)
+        }
+        return Pair(processedSnippets, emptyList())
     }
 
     private fun invokeGenerateOnHandler(pair: Pair<RawMarkdownDirective, MarkdownTagHandler>, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {

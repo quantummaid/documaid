@@ -21,64 +21,7 @@
 
 package de.quantummaid.documaid.shared.filesystem
 
-import java.nio.file.Files
 import java.nio.file.Path
-
-class PhysicalFileSystemStructureBuilder internal constructor(private val basePath: Path, private val constructionMode: ConstructionMode) {
-    private val children = ArrayList<PhysicalFileObjectBuilder>()
-
-    companion object {
-        //TODO: remove
-        fun createAPhysicalFileSystemStructureIn(basePath: Path): PhysicalFileSystemStructureBuilder {
-            if (Files.exists(basePath)) {
-                throw IllegalArgumentException("Test directory base path already exists")
-            }
-            createDirectoryAndParents(basePath)
-            return PhysicalFileSystemStructureBuilder(basePath, ConstructionMode.CREATE_ON_DISK)
-        }
-
-        fun createAPhysicalFileSystemStructureIn(temporaryTestDirectory: TemporaryTestDirectory): PhysicalFileSystemStructureBuilder {
-            val basePath = temporaryTestDirectory.path
-            if (Files.exists(basePath)) {
-                throw IllegalArgumentException("Test directory base path already exists")
-            }
-            createDirectoryAndParents(basePath)
-            return PhysicalFileSystemStructureBuilder(basePath, ConstructionMode.CREATE_ON_DISK)
-        }
-
-        fun constructAPhysicalFileSystemStructureIn(temporaryTestDirectory: TemporaryTestDirectory): PhysicalFileSystemStructureBuilder {
-            val basePath = temporaryTestDirectory.path
-            if (!Files.exists(basePath)) {
-                createDirectoryAndParents(basePath)
-            }
-            return PhysicalFileSystemStructureBuilder(basePath, ConstructionMode.CONSTRUCT_WITHOUT_CREATING_OBJECTS)
-        }
-    }
-
-    fun with(vararg physicalFileObjectBuilders: PhysicalFileObjectBuilder): PhysicalFileSystemStructureBuilder {
-        physicalFileObjectBuilders.forEach {
-            children.add(it)
-        }
-        return this
-    }
-
-    fun build(): PhysicalFileSystemStructure {
-        val childrenObjects = children
-            .map {
-                when (constructionMode) {
-                    ConstructionMode.CREATE_ON_DISK -> it.create(basePath)
-                    ConstructionMode.CONSTRUCT_WITHOUT_CREATING_OBJECTS -> it.construct(basePath)
-                }
-            }
-        val baseDirectory = PhysicalDirectory(basePath, childrenObjects.toMutableList())
-        return PhysicalFileSystemStructure(baseDirectory)
-    }
-}
-
-internal enum class ConstructionMode {
-    CREATE_ON_DISK,
-    CONSTRUCT_WITHOUT_CREATING_OBJECTS
-}
 
 class PhysicalFileSystemStructure internal constructor(val baseDirectory: PhysicalDirectory) {
 
@@ -132,7 +75,7 @@ class PhysicalDirectoryBuilder private constructor(private val name: String) : P
 
 class PhysicalDirectory internal constructor(path: Path, val children: MutableList<PhysicalFileObject>) : PhysicalFileObject(path) {
 
-    fun add(children: List<PhysicalFileObject>){
+    fun add(children: List<PhysicalFileObject>) {
         this.children.addAll(children)
     }
 
@@ -175,4 +118,3 @@ class PhysicalFile internal constructor(path: Path, val content: String) : Physi
         deleteFileIfExisting(path)
     }
 }
-

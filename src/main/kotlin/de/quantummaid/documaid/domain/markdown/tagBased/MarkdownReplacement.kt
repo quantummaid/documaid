@@ -28,5 +28,4 @@ data class MarkdownReplacement(val range: IntRange, val textToBeReplaced: String
             return MarkdownReplacement(IntRange.EMPTY, "", "")
         }
     }
-
 }

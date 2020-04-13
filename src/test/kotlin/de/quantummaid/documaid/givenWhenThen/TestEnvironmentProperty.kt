@@ -25,7 +25,5 @@ enum class TestEnvironmentProperty {
     DOCU_MAID_CONFIG_BUILDER,
     DOCU_MAID_CONFIG,
     SUT_FILE_STRUCTURE,
-    SETUP_STEPS,
-    CLEAN_UP_STEPS,
     EXCEPTION,
 }

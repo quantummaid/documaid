@@ -35,7 +35,7 @@ import java.nio.file.Path
 fun aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -59,7 +59,7 @@ fun aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(basePath: Path): Setu
 fun aTocTagInReadmeFromSameDirectory(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeFromSameDirectory")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](1_Introduction.md)
@@ -77,7 +77,7 @@ fun aTocTagInReadmeFromSameDirectory(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithMultipleNestedDirectories(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithMultipleNestedDirectories")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         val expectedToc = """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
@@ -120,7 +120,7 @@ fun aTocTagInReadmeWithMultipleNestedDirectories(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithNotIndexedMarkdownFiles(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithNotIndexedMarkdownFiles")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         val expectedToc = """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
@@ -152,7 +152,7 @@ fun aTocTagInReadmeWithNotIndexedMarkdownFiles(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithGeneratedOverviewFile(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithGeneratedOverviewFile")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         val expectedToc = """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
@@ -178,7 +178,7 @@ fun aTocTagInReadmeWithGeneratedOverviewFile(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithTheSameIndexTwice(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "tocWithSameIndexTwice")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", ""),
@@ -191,7 +191,7 @@ fun aTocTagInReadmeWithTheSameIndexTwice(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithMissingIndex(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "tocWithMissingIndex")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", ""),
@@ -203,7 +203,7 @@ fun aTocTagInReadmeWithMissingIndex(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "tocWithSameIndexTwiceInSubDirectory")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", ""),
@@ -219,7 +219,7 @@ fun aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(basePath: Path): SetupUpd
 fun aTocTagInReadmeWithMissingIndexInSubDirectory(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "tocWithMissingIndexInSubDirectory")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", ""),
@@ -236,7 +236,7 @@ fun aTocTagInReadmeWithMissingIndexInSubDirectory(basePath: Path): SetupUpdate {
 fun aTocTagInReadmeWithNotExistingScanDirectory(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithNotExistingScanDirectory")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", "notExisting/", ""))
@@ -247,7 +247,7 @@ fun aTocTagInReadmeWithMalFormedOptions(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithMalFormedOptions")
 
     val notACorrectOptionsString = "not a correct options String"
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", notACorrectOptionsString, ""))
@@ -263,7 +263,7 @@ fun aTocInReadmeWithCorrectToc(basePath: Path): SetupUpdate {
                          1. [First docs](02_docs/1_FirstDocs.md)
                          2. [Second docs](02_docs/2_SecondDocs.md)
                 """.trimIndent()
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithTocAlreadyGenerated("README.md", ".", expectedToc),
@@ -280,7 +280,7 @@ fun aTocInReadmeWithCorrectToc(basePath: Path): SetupUpdate {
 fun aTocInReadmeWithMissingToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocInReadmeWithMissingToc")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", ""))
@@ -289,7 +289,7 @@ fun aTocInReadmeWithMissingToc(basePath: Path): SetupUpdate {
 
 fun aTocInReadmeWithIncorrectToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocInReadmeWithIncorrectToc")
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithAWrongToc("README.md", ".", ""),
@@ -306,7 +306,7 @@ fun aTocInReadmeWithIncorrectToc(basePath: Path): SetupUpdate {
 fun aTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagAtTheEndOfFileWithoutNewline")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)
@@ -330,7 +330,7 @@ fun aTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
 fun aWrongTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aWrongTocTagAtTheEndOfFileWithoutNewline")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
 
         val expectedToc = """
                      1. [Introduction](docs/1_Introduction.md)

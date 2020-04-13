@@ -31,7 +31,7 @@ import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithOneDependenc
 fun aFileWithASingleFullyDefinedDependency(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithOneDependency("dependency.md",
@@ -43,7 +43,7 @@ fun aFileWithASingleFullyDefinedDependency(basePath: String): SetupUpdate {
 fun aFileWithADependencyWithoutAnythingDefined(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithADependencyWithoutAnythingDefined")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithOneDependency("dependency.md")
@@ -54,7 +54,7 @@ fun aFileWithADependencyWithoutAnythingDefined(basePath: String): SetupUpdate {
 fun aFileWithAWrongGeneratedDependency(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAWrongGeneratedDependency")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithADifferentGeneratedDependency("dependency.md", groupId = "local", version = "1.0.0")
@@ -66,7 +66,7 @@ fun aFileWithUnparsableDependencyOptionsString(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithUnparsableDependencyOptionsString")
 
     val incorrectGroupId = "not correct"
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithADifferentGeneratedDependency("dependency.md", groupId = incorrectGroupId)
@@ -77,7 +77,7 @@ fun aFileWithUnparsableDependencyOptionsString(basePath: String): SetupUpdate {
 fun aFileWithACorrectlyGeneratedDependency(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithACorrectlyGeneratedDependency")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithAnAlreadyGeneratedDependency("dependency.md",
@@ -89,7 +89,7 @@ fun aFileWithACorrectlyGeneratedDependency(basePath: String): SetupUpdate {
 fun aFileWithDependencyWithMissingCode(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithDependencyWithMissingCode")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithOneDependency("dependency.md", artifactId = "test", version = "1", scope = "compile"))
@@ -99,7 +99,7 @@ fun aFileWithDependencyWithMissingCode(basePath: String): SetupUpdate {
 fun aFileWithASingleDependencyAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline("dependency.md",
@@ -109,7 +109,7 @@ fun aFileWithASingleDependencyAtTheEndOfFileWithoutNewLine(basePath: String): Se
 fun aFileWithAWrongDependencyAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline("dependency.md",

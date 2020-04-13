@@ -40,8 +40,6 @@ import java.nio.file.Path
 class DokuMaidTestBuilder private constructor() {
     private val testEnvironment = emptyTestEnvironment()
     private val docuMaidConfigurationBuilder = DocuMaidConfiguration.aDocuMaidConfiguration()
-    private val setupSteps: MutableCollection<() -> Unit> = ArrayList()
-    private val cleanupSteps: MutableCollection<() -> Unit> = ArrayList()
     private val sutFileStructure: SutFileStructure = aFileStructureForDocuMaidToProcess()
 
     fun configuredWithGoal(goal: Goal): DokuMaidTestBuilder {
@@ -64,7 +62,7 @@ class DokuMaidTestBuilder private constructor() {
     }
 
     fun configuredWith(setupUpdate: SetupUpdate): DokuMaidTestBuilder {
-        val setup = Setup(testEnvironment, docuMaidConfigurationBuilder, sutFileStructure, setupSteps, cleanupSteps)
+        val setup = Setup(testEnvironment, sutFileStructure)
         setupUpdate(setup)
         return this
     }
@@ -87,8 +85,6 @@ class DokuMaidTestBuilder private constructor() {
         docuMaidConfigurationBuilder.withLogger(NoopTestLogger.noopTestLogger())
         testEnvironment.setProperty(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER, docuMaidConfigurationBuilder)
         testEnvironment.setProperty(TestEnvironmentProperty.SUT_FILE_STRUCTURE, sutFileStructure)
-        testEnvironment.setProperty(TestEnvironmentProperty.SETUP_STEPS, setupSteps)
-        testEnvironment.setProperty(TestEnvironmentProperty.CLEAN_UP_STEPS, cleanupSteps)
         return testEnvironment
     }
 

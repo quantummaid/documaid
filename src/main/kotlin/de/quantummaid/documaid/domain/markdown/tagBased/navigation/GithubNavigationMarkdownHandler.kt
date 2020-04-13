@@ -27,8 +27,8 @@ import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
-import de.quantummaid.documaid.domain.markdown.tagBased.navigation.NavigationDirective.Companion.NAV_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.navigation.GithubNavigationMarkdown.Companion.startsWithNavigationMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.navigation.NavigationDirective.Companion.NAV_TAG
 import de.quantummaid.documaid.errors.VerificationError
 
 class GithubNavigationMarkdownHandler : MarkdownTagHandler {

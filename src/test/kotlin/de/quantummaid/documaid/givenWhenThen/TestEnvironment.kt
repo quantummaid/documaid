@@ -35,7 +35,7 @@ class TestEnvironment private constructor() {
         if (has(name)) {
             throw IllegalArgumentException("Property $name already set.")
         }
-        if(o != null) {
+        if (o != null) {
             definedPropertiesMap[name] = o
         }
     }

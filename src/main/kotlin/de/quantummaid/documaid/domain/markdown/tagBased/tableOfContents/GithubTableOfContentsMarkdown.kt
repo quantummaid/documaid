@@ -22,8 +22,8 @@
 package de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents
 
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
+import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 

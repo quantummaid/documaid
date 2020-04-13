@@ -29,7 +29,6 @@ import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-
 interface PluginSpecs {
 
     @Test

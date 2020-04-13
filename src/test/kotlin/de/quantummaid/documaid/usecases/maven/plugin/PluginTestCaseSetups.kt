@@ -28,7 +28,7 @@ import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAPluginDirec
 fun aFileWithASingleFullyDefinedPlugin(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAPluginDirective")
 
-    return { (_, _, sutFileStructure, _, _) ->
+    return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithAPluginDirective("md1.md",

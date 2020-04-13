@@ -19,5 +19,4 @@ class IndexedFile private constructor(val name: String, val index: Int, val file
             return IndexedFile(name, indexInt, file)
         }
     }
-
 }

@@ -170,7 +170,6 @@ interface LinkSpecs {
             .then(expectAllFilesToBeCorrect())
     }
 
-
     companion object {
         private const val BASE_PATH = "target/tempTestDirs/link/"
     }

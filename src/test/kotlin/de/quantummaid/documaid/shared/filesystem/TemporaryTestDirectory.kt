@@ -19,10 +19,21 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.usecases.codeSnippet
+package de.quantummaid.documaid.shared.filesystem
 
-import de.quantummaid.documaid.shared.testparams.HugoPlatformProvider
-import org.junit.jupiter.api.extension.ExtendWith
+import java.nio.file.Path
+import java.nio.file.Paths
 
-@ExtendWith(HugoPlatformProvider::class)
-class HugoCodeSnippetSpecs : CodeSnippetSpecs
+class TemporaryTestDirectory(val path: Path) {
+
+    companion object {
+        fun aTemporyTestDirectory(basePath: Path, testDirectoryName: String): TemporaryTestDirectory {
+            return aTemporyTestDirectory(basePath.toString(), testDirectoryName)
+        }
+
+        fun aTemporyTestDirectory(basePath: String, testDirectoryName: String): TemporaryTestDirectory {
+            val path = Paths.get(basePath, testDirectoryName)
+            return TemporaryTestDirectory(path)
+        }
+    }
+}
