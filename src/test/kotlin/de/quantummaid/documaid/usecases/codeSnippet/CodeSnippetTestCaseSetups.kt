@@ -28,6 +28,7 @@ import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithACommentsIn
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithADifferentSnippet.Companion.aJavaFileWithADifferentSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithFullClassSnippet.Companion.aJavaFileWithOneFullSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
+import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithTwoSnippets.Companion.aJavaFileWithTwoSnippets
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet
@@ -253,6 +254,21 @@ fun aFileWithAlreadyExistingCodeSnippetAtTheEndOfFileWithoutNewLine(basePath: St
             .with(
                 javaFileWithSnippet,
                 aMarkdownFileWithWrongGeneratedSnippetAtEndOfFile("md1.md", "testSnippet", javaFileWithSnippet.snippet)
+            )
+    }
+}
+
+fun aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond")
+
+    val javaFile = aJavaFileWithTwoSnippets("source1.java", "testSnippet", "testSnippet1")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithTwoSnippets("md1.md",
+                    "testSnippet", javaFile.snippet1,
+                    "testSnippet1", javaFile.snippet2)
             )
     }
 }

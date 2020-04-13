@@ -81,6 +81,16 @@ class DokuMaidTestBuilder private constructor() {
         return this
     }
 
+    fun configuredWithFlavorType(flavorType: String): DokuMaidTestBuilder {
+        docuMaidConfigurationBuilder.withGenerationFlavorType(flavorType)
+        return this
+    }
+
+    fun configuredWithHugoOutputPath(hugoOutputPath: String): DokuMaidTestBuilder {
+        docuMaidConfigurationBuilder.withHugoOutputPath(hugoOutputPath)
+        return this
+    }
+
     fun build(): TestEnvironment {
         docuMaidConfigurationBuilder.withLogger(NoopTestLogger.noopTestLogger())
         testEnvironment.setProperty(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER, docuMaidConfigurationBuilder)

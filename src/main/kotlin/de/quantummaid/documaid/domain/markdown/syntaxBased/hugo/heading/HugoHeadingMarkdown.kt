@@ -21,28 +21,49 @@
 
 package de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading
 
-import de.quantummaid.documaid.domain.IndexedFile
-import de.quantummaid.documaid.domain.IndexedFile.Companion.anIndexedFile
+import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.domain.IndexedPath
+import de.quantummaid.documaid.domain.IndexedPath.Companion.anIndexedPath
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 
-class HugoHeadingMarkdown private constructor(private val title: String, private val indexedFile: IndexedFile) {
+class HugoHeadingMarkdown private constructor(private val title: String, private val index: Int) {
 
     companion object {
-
         private val RAW_HEADING_PATTERN = Regex("# ?(?<title>[^\n]+)\n")
-        fun create(rawHeadingString: String, file: MarkdownFile): HugoHeadingMarkdown {
+        private const val DEFAULT_INDEX = 1
+
+        fun create(rawHeadingString: String, file: MarkdownFile, docuMaidConfiguration: DocuMaidConfiguration): HugoHeadingMarkdown {
             val matchEntire = RAW_HEADING_PATTERN.matchEntire(rawHeadingString)
             val errorMessage = "Could not parse title of heading: '$rawHeadingString'"
             matchEntire ?: throw IllegalArgumentException(errorMessage)
             val title = matchEntire.groups["title"]?.value ?: throw IllegalArgumentException(errorMessage)
 
-            val indexedFile = anIndexedFile(file)
+            val indexedFile = extractIndex(file, docuMaidConfiguration)
             return HugoHeadingMarkdown(title, indexedFile)
+        }
+
+        private fun extractIndex(file: MarkdownFile, docuMaidConfiguration: DocuMaidConfiguration): Int {
+            if (IndexedPath.isIndexedPath(file)) {
+                val indexedFile = anIndexedPath(file)
+                return indexedFile.index
+            } else {
+                val isRootReadme = docuMaidConfiguration.basePath.relativize(file.path).toString() == "README.md"
+                if (isRootReadme) {
+                    val hugoOutputPath = docuMaidConfiguration.hugoOutputPath
+                    if (IndexedPath.isIndexedPath(hugoOutputPath)) {
+                        return IndexedPath.anIndexedPath(hugoOutputPath, null).index
+                    } else {
+                        return DEFAULT_INDEX
+                    }
+                } else {
+                    return DEFAULT_INDEX
+                }
+            }
         }
     }
 
     fun generateMarkdown(): String {
-        val weight = indexedFile.index * 10
+        val weight = index * 10
         return """
             ---
             title: "$title"

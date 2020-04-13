@@ -23,6 +23,7 @@ package de.quantummaid.documaid.mojos
 
 import de.quantummaid.documaid.DocuMaid.Companion.docuMaid
 import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
 import de.quantummaid.documaid.config.Platform
@@ -47,6 +48,12 @@ abstract class DocuMaidMojo : AbstractMojo() {
     private val skipPaths: List<String>? = null
     @Parameter(property = "platform")
     private val platform: String? = null
+    @Parameter(property = "hugoOutputPath")
+    private val hugoOutputPath: String = "hugo"
+    @Parameter(property = "repositoryUrl")
+    private val repositoryUrl: String? = null
+    @Parameter(property = "generationFlavor")
+    private val generationFlavor: String? = null
 
     protected abstract val goal: Goal
 
@@ -59,13 +66,18 @@ abstract class DocuMaidMojo : AbstractMojo() {
         val basePath = project!!.basedir
             .path
         val log = log
-        val configuration = DocuMaidConfiguration.aDocuMaidConfiguration()
+        val configurationBuilder = DocuMaidConfiguration.aDocuMaidConfiguration()
             .withBasePath(basePath)
             .forGoal(goal)
             .withLogger(MavenLogger.mavenLogger(log))
             .withMavenConfiguration(createMavenConfiguration())
             .withSkippedPaths(getSkippedPaths())
             .forPlatform(determinePlatform())
+            .withGenerationFlavorType(generationFlavor)
+
+        applyOptionalHugoConfiguration(configurationBuilder)
+
+        val configuration = configurationBuilder
             .build()
         val dokuMaid = docuMaid(configuration)
         try {
@@ -81,13 +93,13 @@ abstract class DocuMaidMojo : AbstractMojo() {
     }
 
     private fun createMavenConfiguration(): MavenConfiguration {
-        if (project != null) {
+        return if (project != null) {
             val groupId = GroupId.create(project.groupId)
             val artifactId = ArtifactId.create(project.artifactId)
             val version = Version.create(project.version)
-            return MavenConfiguration(groupId, artifactId, version)
+            MavenConfiguration(groupId, artifactId, version)
         } else {
-            return MavenConfiguration(null, null, null)
+            MavenConfiguration(null, null, null)
         }
     }
 
@@ -108,6 +120,17 @@ abstract class DocuMaidMojo : AbstractMojo() {
         return when (platform.toLowerCase()) {
             "hugo" -> Platform.HUGO
             else -> Platform.GITHUB
+        }
+    }
+
+    private fun applyOptionalHugoConfiguration(configurationBuilder: DocuMaidConfigurationBuilder) {
+        val resolvedPlatform = determinePlatform()
+        if (resolvedPlatform == Platform.HUGO) {
+            configurationBuilder.withHugoOutputPath(hugoOutputPath)
+
+            if (repositoryUrl != null) {
+                configurationBuilder.withRepositoryUrl(repositoryUrl)
+            }
         }
     }
 }

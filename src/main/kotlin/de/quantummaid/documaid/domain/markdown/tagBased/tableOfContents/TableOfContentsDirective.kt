@@ -64,11 +64,11 @@ class TableOfContentsDirectiveOptions(val tocScanBaseDirectory: Path) {
                 val tocScanBaseDirectory = directoryBasePath.resolve(baseDirectoryPathString)
                     .normalize()
                 if (!Files.exists(tocScanBaseDirectory)) {
-                    throw DocuMaidException.create("[$TOC_TAG] Cannot create TOC for not existing directory '$baseDirectoryPathString'", file)
+                    throw DocuMaidException.aDocuMaidException("[$TOC_TAG] Cannot create TOC for not existing directory '$baseDirectoryPathString'", file)
                 }
                 return TableOfContentsDirectiveOptions(tocScanBaseDirectory)
             } else {
-                throw DocuMaidException.create("[$TOC_TAG] Could not match TOC options '${optionsString.value}'", file)
+                throw DocuMaidException.aDocuMaidException("[$TOC_TAG] Could not match TOC options '${optionsString.value}'", file)
             }
         }
     }

@@ -22,6 +22,36 @@
 package de.quantummaid.documaid.shared.filesystem
 
 import java.nio.file.Path
+import java.nio.file.Paths
+
+class PhysicalFileSystemStructureBuilder internal constructor(val physicalDirectoryBuilder: PhysicalDirectoryBuilder) {
+
+    companion object {
+        fun aPhysicalFileStructureIn(directoryName: String): PhysicalFileSystemStructureBuilder {
+            val physicalDirectoryBuilder = PhysicalDirectoryBuilder.aDirectory(directoryName)
+            return PhysicalFileSystemStructureBuilder(physicalDirectoryBuilder)
+        }
+    }
+
+    fun with(vararg physicalFileObjectBuilders: PhysicalFileObjectBuilder): PhysicalFileSystemStructureBuilder {
+        physicalFileObjectBuilders.forEach {
+            physicalDirectoryBuilder.with(it)
+        }
+        return this
+    }
+
+    fun create(): PhysicalFileSystemStructure {
+        val currentWorkingDir = Paths.get(System.getProperty("user.dir"))
+        val rootDirectory = physicalDirectoryBuilder.create(currentWorkingDir)
+        return PhysicalFileSystemStructure(rootDirectory)
+    }
+
+    fun construct(): PhysicalFileSystemStructure {
+        val currentWorkingDir = Paths.get(System.getProperty("user.dir"))
+        val rootDirectory = physicalDirectoryBuilder.construct(currentWorkingDir)
+        return PhysicalFileSystemStructure(rootDirectory)
+    }
+}
 
 class PhysicalFileSystemStructure internal constructor(val baseDirectory: PhysicalDirectory) {
 
@@ -87,7 +117,7 @@ class PhysicalDirectory internal constructor(path: Path, val children: MutableLi
 
 class PhysicalFileBuilder private constructor(val name: String) : PhysicalFileObjectBuilder {
 
-    private var content: String = ""
+    var content: String = ""
 
     companion object {
         fun aFile(name: String): PhysicalFileBuilder {

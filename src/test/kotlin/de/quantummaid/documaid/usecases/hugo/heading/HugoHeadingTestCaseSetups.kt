@@ -73,7 +73,7 @@ fun aFileWithTextBeforeHeading(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithTextBeforeHeading("1_Introduction.md")
+                aMarkdownFileWithTextBeforeHeading("1_Introduction.md", "10")
             )
     }
 }
@@ -84,7 +84,7 @@ fun aFileWithNoIndex(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithADifferentH1Heading("Introduction.md", "-")
+                aMarkdownFileWithADifferentH1Heading("Introduction.md", "10")
             )
     }
 }

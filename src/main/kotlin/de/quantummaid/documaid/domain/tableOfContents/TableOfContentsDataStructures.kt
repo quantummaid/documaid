@@ -112,7 +112,7 @@ private fun parseName(name: String, path: Path): Pair<Int, String> {
         val normalCaseName = convertToNormalCase(title)
         return Pair(index, normalCaseName)
     } else {
-        throw DocuMaidException.create("[$TOC_TAG] Cannot parse Toc indexed name '$name'", path)
+        throw DocuMaidException.aDocuMaidException("[$TOC_TAG] Cannot parse Toc indexed name '$name'", path)
     }
 }
 
@@ -130,14 +130,14 @@ private fun verifyIndicesCorrect(list: List<TocDataFileObject>, absolutePath: Pa
             val conflictingIndexFiles = sameIndexTocDataFiles.sortedBy { it.absolutePath }
                 .map { "${it.scanRootRelativeDirectory}" }
             val message = "[$TOC_TAG] Same TOC indices$conflictingIndexes used by multiple files $conflictingIndexFiles"
-            throw DocuMaidException.create(message, absolutePath)
+            throw DocuMaidException.aDocuMaidException(message, absolutePath)
         }
     }
     list.forEachIndexed { index, tocDataFileObject ->
         val expectedIndex = index + 1
         if (expectedIndex != tocDataFileObject.index) {
             val message = "[$TOC_TAG] Missing index $expectedIndex for TOC in directory '${absolutePath.fileName}'"
-            throw DocuMaidException.create(message, absolutePath)
+            throw DocuMaidException.aDocuMaidException(message, absolutePath)
         }
     }
 }

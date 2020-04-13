@@ -39,8 +39,9 @@ import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.erroneousProcessingResult
 import java.nio.file.Path
+import java.nio.file.Paths
 
-class MarkdownFile private constructor(private val path: Path, val directives: List<RawMarkdownDirective>, val tagHandlers: List<MarkdownTagHandler>, val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>) : ProjectFile {
+class MarkdownFile private constructor(val path: Path, val directives: List<RawMarkdownDirective>, val tagHandlers: List<MarkdownTagHandler>, val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>) : ProjectFile {
 
     companion object {
 
@@ -74,7 +75,7 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
                 val range = matchResult.range
                 val optionsString: String = matchResult.groups["options"]?.value ?: ""
                 val tag = matchResult.groups["tag"]?.value
-                    ?: throw DocuMaidException.create("Could not identify tag of markdown directive", path)
+                    ?: throw DocuMaidException.aDocuMaidException("Could not identify tag of markdown directive", path)
                 val completeString = matchResult.value
                 val remainingMarkupFileContent = RemainingMarkupFileContent(content.substring(range.last + 1))
                 RawMarkdownDirective(DirectiveTag(tag), OptionsString(optionsString), completeString, range, remainingMarkupFileContent)
@@ -209,5 +210,12 @@ class MarkdownFile private constructor(private val path: Path, val directives: L
 
     fun markdownDirectivesWithIdentifier(identifier: DirectiveTag): List<RawMarkdownDirective> {
         return directives.filter { it.tag.equals(identifier) }
+    }
+
+    fun createCopyForPath(path: String): MarkdownFile {
+        return createCopyForPath(Paths.get(path))
+    }
+    fun createCopyForPath(path: Path): MarkdownFile {
+        return MarkdownFile(path, directives, tagHandlers, syntaxBasedHandlers)
     }
 }

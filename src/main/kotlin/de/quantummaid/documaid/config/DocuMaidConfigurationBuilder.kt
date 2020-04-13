@@ -34,6 +34,7 @@ class DocuMaidConfigurationBuilder private constructor() {
     private var platform: Platform = Platform.GITHUB
     private var hugoOutputPath = "hugo"
     private var repository: Repository? = null
+    private var generationFlavorType: String? = null
 
     fun withBasePath(basePath: String): DocuMaidConfigurationBuilder {
         this.basePath = Paths.get(basePath)
@@ -80,10 +81,15 @@ class DocuMaidConfigurationBuilder private constructor() {
         return this
     }
 
+    fun withGenerationFlavorType(generationFlavorType: String?): DocuMaidConfigurationBuilder {
+        this.generationFlavorType = generationFlavorType
+        return this
+    }
+
     fun build(): DocuMaidConfiguration {
         val absolutePath = basePath!!.toAbsolutePath()
         return DocuMaidConfiguration(absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths,
-            platform, hugoOutputPath, repository)
+            platform, hugoOutputPath, repository, generationFlavorType)
     }
 
     companion object {

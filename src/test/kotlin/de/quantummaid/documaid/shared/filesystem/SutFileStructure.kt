@@ -27,6 +27,7 @@ import java.nio.file.Path
 class SutFileStructure internal constructor() {
     private val children = mutableListOf<SutFileObject>()
     private var basePath: Path? = null
+    private var overriddenExpectedFileStructure: PhysicalFileSystemStructure? = null
 
     companion object {
         fun aFileStructureForDocuMaidToProcess(): SutFileStructure {
@@ -69,6 +70,10 @@ class SutFileStructure internal constructor() {
     }
 
     private fun construct(basePath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileSystemStructure {
+        if (overriddenExpectedFileStructure != null) {
+            return overriddenExpectedFileStructure!!
+        }
+
         val parentPath = basePath.parent
         createDirectoryAndParentsIfNotExisting(parentPath)
 
@@ -81,6 +86,10 @@ class SutFileStructure internal constructor() {
 
     fun cleanUp() {
         deleteDirectoryAndChildren(basePath!!)
+    }
+
+    fun overrideExpectedFileStructure(expectedFileStructure: PhysicalFileSystemStructure) {
+        this.overriddenExpectedFileStructure = expectedFileStructure
     }
 }
 

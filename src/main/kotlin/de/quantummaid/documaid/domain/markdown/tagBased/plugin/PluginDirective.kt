@@ -70,7 +70,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
                 val phase = extractPhase(matchEntire, file)
                 return DependencyDirectiveOptions(groupId, artifactId, version, goal, phase)
             } else {
-                throw DocuMaidException.create("Cannot parse options for [${PLUGIN_TAG.value}]: ${optionsString.value}", file)
+                throw DocuMaidException.aDocuMaidException("Cannot parse options for [${PLUGIN_TAG.value}]: ${optionsString.value}", file)
             }
         }
 
@@ -106,7 +106,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
             return if (goalString != null) {
                 MavenGoal.create(goalString)
             } else {
-                throw DocuMaidException.create("[${PLUGIN_TAG.value}] requires 'goal' to be defined with a value in options.", file)
+                throw DocuMaidException.aDocuMaidException("[${PLUGIN_TAG.value}] requires 'goal' to be defined with a value in options.", file)
             }
         }
 
@@ -115,7 +115,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
             return if (phaseString != null) {
                 MavenPhase.create(phaseString)
             } else {
-                throw DocuMaidException.create("[${PLUGIN_TAG.value}] requires 'phase' to be defined with a value in options.", file)
+                throw DocuMaidException.aDocuMaidException("[${PLUGIN_TAG.value}] requires 'phase' to be defined with a value in options.", file)
             }
         }
 
@@ -129,7 +129,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
                     null
                 }
             } else {
-                throw DocuMaidException.create("[${PLUGIN_TAG.value}] requires '$valueName' to be set in options.", file)
+                throw DocuMaidException.aDocuMaidException("[${PLUGIN_TAG.value}] requires '$valueName' to be set in options.", file)
             }
         }
     }

@@ -68,7 +68,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
                 val scope = extractScope(matchEntire)
                 return DependencyDirectiveOptions(groupId, artifactId, version, scope)
             } else {
-                throw DocuMaidException.create("Cannot parse options for [${DEPENDENCY_TAG.value}]: ${optionsString.value}", file)
+                throw DocuMaidException.aDocuMaidException("Cannot parse options for [${DEPENDENCY_TAG.value}]: ${optionsString.value}", file)
             }
         }
 
@@ -118,7 +118,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
                     null
                 }
             } else {
-                throw DocuMaidException.create("[${DEPENDENCY_TAG.value}] requires '$valueName' to be set in options.", file)
+                throw DocuMaidException.aDocuMaidException("[${DEPENDENCY_TAG.value}] requires '$valueName' to be set in options.", file)
             }
         }
 

@@ -52,7 +52,7 @@ class GithubTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
     private fun textToReplace(project: Project, directive: RawMarkdownDirective, file: MarkdownFile): String {
         val tableOfContentsLookupData = project.getInformation(TOC_LOOKUP_KEY)
         if (!tableOfContentsLookupData.tableOfContentsAvailable()) {
-            throw DocuMaidException.create("Found [${tag()}] without a Table of Contents being generated", file)
+            throw DocuMaidException.aDocuMaidException("Found [${tag()}] without a Table of Contents being generated", file)
         }
         val tableOfContents = tableOfContentsLookupData.getTableOfContents()
         val tocMarkdown = GithubTableOfContentsMarkdown(directive, tableOfContents, file)

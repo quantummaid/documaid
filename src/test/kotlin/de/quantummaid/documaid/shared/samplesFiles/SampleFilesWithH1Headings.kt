@@ -67,15 +67,21 @@ fun aMarkdownFileWithH2Heading(fileName: String): ProcessedFile {
         .build()
 }
 
-fun aMarkdownFileWithTextBeforeHeading(fileName: String): ProcessedFile {
+fun aMarkdownFileWithTextBeforeHeading(fileName: String, weight: String): ProcessedFile {
 
-    val contentInput = " SomeText" +
+    val contentInput = " SomeText\n" +
         "# This is my Heading\n" +
+        "someOtherText"
+    val expectedContentOutput = " SomeText\n" +
+        "---\n" +
+        "title: \"This is my Heading\"\n" +
+        "weight: $weight\n" +
+        "---\n" +
         "someOtherText"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, "")
-        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutput)
         .build()
 }
 

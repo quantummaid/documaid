@@ -217,6 +217,16 @@ interface CodeSnippetSpecs {
             .then(expectAllFilesToBeCorrect())
     }
 
+    @Test
+    fun testThatASnippetDoesNotSwallowSubsequentSnippetsWithAnIdTheFirstIdIsAPrefix(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
     companion object {
         private const val BASE_PATH = "target/tempTestDirs/codeSnippet/"
     }

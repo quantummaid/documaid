@@ -51,7 +51,7 @@ class SampleJavaFileWithADifferentSnippet private constructor(val fileName: Stri
                 "    System.out.println(\"Success\");\n" +
                 "} else {\n" +
                 "    System.out.println(\"Nope\");\n" +
-                "}\n"
+                "}"
             val content = "//Showcase start $snippetId\n" +
                 snippet +
                 "\n//Showcase end $snippetId"
@@ -106,6 +106,26 @@ class SampleJavaFileWithFullClassSnippet private constructor(val fileName: Strin
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(snippet)
             return SampleJavaFileWithFullClassSnippet(fileName, snippet, fileBuilder)
+        }
+    }
+}
+
+class SampleJavaFileWithTwoSnippets private constructor(val fileName: String, val snippet1: String, val snippet2: String, javaFileBuilder: PhysicalFileBuilder) : NotProcessedSourceFile(javaFileBuilder) {
+
+    companion object {
+        fun aJavaFileWithTwoSnippets(fileName: String, snippetId1: String, snippetId2: String): SampleJavaFileWithTwoSnippets {
+            val snippet = "public class SampleCodeSnippets {}"
+            val content = "//Showcase start $snippetId1\n" +
+                snippet +
+                "\n//Showcase end $snippetId1\n" +
+                "\n" +
+                "//Showcase start $snippetId2\n" +
+                snippet +
+                "\n//Showcase end $snippetId2\n" +
+                "\n"
+            val fileBuilder = PhysicalFileBuilder.aFile(fileName)
+                .withContent(content)
+            return SampleJavaFileWithTwoSnippets(fileName, snippet, snippet, fileBuilder)
         }
     }
 }

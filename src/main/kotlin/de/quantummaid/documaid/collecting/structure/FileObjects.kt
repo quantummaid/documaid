@@ -62,8 +62,8 @@ interface ProjectFile : FileObject {
             .toList()
         when {
             matchingSnippets.size == 1 -> return matchingSnippets[0]
-            matchingSnippets.isEmpty() -> throw DocuMaidException.create("Snippet $snippetId not found", this)
-            else -> throw DocuMaidException.create("Not unique snippet $snippetId found", this)
+            matchingSnippets.isEmpty() -> throw DocuMaidException.aDocuMaidException("Snippet $snippetId not found", this)
+            else -> throw DocuMaidException.aDocuMaidException("Not unique snippet $snippetId found", this)
         }
     }
 }

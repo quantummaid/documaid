@@ -34,7 +34,7 @@ import de.quantummaid.documaid.domain.markdown.tagBased.codeSnippet.CodeSnippetD
 import de.quantummaid.documaid.domain.snippet.SnippetId
 import de.quantummaid.documaid.domain.unclassifiedFile.UnclassifiedFile
 import de.quantummaid.documaid.domain.xml.XmlFile
-import de.quantummaid.documaid.errors.DocuMaidException
+import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 import de.quantummaid.documaid.io.readFile
 import java.nio.file.Files
 import java.nio.file.Path
@@ -57,14 +57,14 @@ class CodeSnippetDirective(val rawMarkdownDirective: RawMarkdownDirective, val o
             } else if (options.filePath != null) {
                 return loadCompleteFile(options.filePath, file, rawMarkdownDirective)
             } else {
-                throw DocuMaidException.create("[$CODE_SNIPPET_TAG] could not handle config without snippetId or path", file)
+                throw aDocuMaidException("[$CODE_SNIPPET_TAG] could not handle config without snippetId or path", file)
             }
         }
 
         private fun loadSnippetCode(snippetId: SnippetId, file: MarkdownFile, project: Project, rawMarkdownDirective: RawMarkdownDirective): CodeSnippetMarkdown {
             val snippetsLookupTable = project.getInformation(CodeSnippetsLookupTable.SNIPPETS_LOOKUP_TABLE_KEY)
             if (!snippetsLookupTable.uniqueSnippetExists(snippetId)) {
-                throw DocuMaidException.create("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '${rawMarkdownDirective.completeString}'", file)
+                throw aDocuMaidException("[$CODE_SNIPPET_TAG]: A snippet with id $snippetId was not found for '${rawMarkdownDirective.completeString}'", file)
             }
             val path = snippetsLookupTable.getUniqueSnippet(snippetId)
 
@@ -75,9 +75,8 @@ class CodeSnippetDirective(val rawMarkdownDirective: RawMarkdownDirective, val o
                 is JavaFile -> fileObject.snippetForId(snippetId)
                 is XmlFile -> fileObject.snippetForId(snippetId)
                 is UnclassifiedFile -> fileObject.snippetForId(snippetId)
-                else -> null
+                else -> throw aDocuMaidException("[$CODE_SNIPPET_TAG]: Could not load snippet $snippetId from file ${fileObject?.absolutePath()} for directive '${rawMarkdownDirective.completeString}'", file)
             }
-                ?: throw DocuMaidException.create("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '${rawMarkdownDirective.completeString}'", file)
             val codeSnippet = CodeSnippet(snippet.content.trimIndent(), fileObject as ProjectFile)
             val markdownCodeSection = MarkdownCodeSection.createForFile(codeSnippet.code, fileObject)
             return CodeSnippetMarkdown.create(markdownCodeSection)
@@ -86,7 +85,7 @@ class CodeSnippetDirective(val rawMarkdownDirective: RawMarkdownDirective, val o
         private fun loadCompleteFile(path: Path, file: MarkdownFile, rawMarkdownDirective: RawMarkdownDirective): CodeSnippetMarkdown {
             val targetPath = file.absolutePath().parent.resolve(path)
             if (!(Files.exists(targetPath) && Files.isRegularFile(targetPath))) {
-                throw DocuMaidException.create("Found [$CODE_SNIPPET_TAG] referencing not existing file '$path' in '${rawMarkdownDirective.completeString}'", file)
+                throw aDocuMaidException("Found [$CODE_SNIPPET_TAG] referencing not existing file '$path' in '${rawMarkdownDirective.completeString}'", file)
             }
             val content = readFile(targetPath)
             val codeSnippet = CodeSnippet(content, UnclassifiedFile.create(targetPath))
@@ -119,7 +118,7 @@ class CodeSnippetDirectiveOptions(val snippetId: SnippetId?, val filePath: Path?
                     val filePath = Paths.get(filePathString)
                     return CodeSnippetDirectiveOptions(null, filePath)
                 } else {
-                    throw DocuMaidException.create("Found [$CODE_SNIPPET_TAG] tag with not parsable options '${directive.completeString}'", file)
+                    throw aDocuMaidException("Found [$CODE_SNIPPET_TAG] tag with not parsable options '${directive.completeString}'", file)
                 }
             }
         }

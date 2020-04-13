@@ -41,7 +41,7 @@ class LinkDirective private constructor(val directive: RawMarkdownDirective, val
             val rootRelativeTargetPath = options.rootDirRelativePath
             val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
             if (!lookUpTable.fileExists(rootRelativeTargetPath)) {
-                throw DocuMaidException.create("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
+                throw DocuMaidException.aDocuMaidException("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
             }
             return LinkDirective(directive, options)
         }
@@ -69,7 +69,7 @@ data class LinkDirectiveOptions(val rootDirRelativePath: Path, val originalPathS
                 }
                 return LinkDirectiveOptions(absolutePath, pathString, name)
             } else {
-                throw DocuMaidException.create("Found [$LINK_TAG] directive with not parsable options '${directive.completeString}'", file)
+                throw DocuMaidException.aDocuMaidException("Found [$LINK_TAG] directive with not parsable options '${directive.completeString}'", file)
             }
         }
     }

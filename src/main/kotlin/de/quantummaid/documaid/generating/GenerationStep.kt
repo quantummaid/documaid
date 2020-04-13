@@ -63,13 +63,14 @@ internal class GithubFileGenerator : FileGenerator {
     }
 }
 
-internal class HugoFileGenerator(val basePath: Path, val hugoBasePath: Path) : FileGenerator {
+internal class HugoFileGenerator(val basePath: Path, val hugoBasePath: Path, val generationFlavor: GenerationFlavor) : FileGenerator {
 
     companion object {
         fun create(docuMaidConfiguration: DocuMaidConfiguration): HugoFileGenerator {
             val basePath = docuMaidConfiguration.basePath
             val hugoBasePath = basePath.resolve(docuMaidConfiguration.hugoOutputPath)
-            return HugoFileGenerator(basePath, hugoBasePath)
+            val generationFlavor = GenerationFlavor.createFor(docuMaidConfiguration)
+            return HugoFileGenerator(basePath, hugoBasePath, generationFlavor)
         }
     }
 
@@ -77,6 +78,7 @@ internal class HugoFileGenerator(val basePath: Path, val hugoBasePath: Path) : F
 
         return try {
             processingResults.filter { it.file.fileType() == FileType.MARKDOWN }
+                .mapNotNull { generationFlavor.process(it) }
                 .filter { it.contentChanged }
                 .forEach {
                     val absoluteFilePath = it.file.absolutePath()

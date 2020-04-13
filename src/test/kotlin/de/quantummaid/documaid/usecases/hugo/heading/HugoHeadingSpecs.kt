@@ -26,7 +26,6 @@ import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
@@ -75,13 +74,13 @@ class HugoHeadingSpecs {
     }
 
     @Test
-    fun failsIfFileHasNoIndex() {
+    fun setsADefaultIndexIfFileHasNoIndex() {
         given(aDokuMaid()
             .configuredWith(aFileWithNoIndex(BASE_PATH))
             .configuredWith(Platform.HUGO)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Cannot extract index from file ${absPath("aFileWithNoIndex/Introduction.md")}"))
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
