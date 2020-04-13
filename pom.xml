@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.14</version>
+    <version>0.9.15</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -94,7 +94,7 @@
         <tidy-maven-plugin-version>1.1.0</tidy-maven-plugin-version>
         <nexus-staging-maven-plugin-version>1.6.8</nexus-staging-maven-plugin-version>
 
-        <junit-version>5.6.1</junit-version>
+        <junit-version>5.6.2</junit-version>
         <maven-plugin-dependency-version>3.6.3</maven-plugin-dependency-version>
         <maven-core-dependency-version>3.6.3</maven-core-dependency-version>
         <maven-annotations-dependency-version>3.6.0</maven-annotations-dependency-version>

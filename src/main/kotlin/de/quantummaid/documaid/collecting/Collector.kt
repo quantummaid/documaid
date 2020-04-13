@@ -26,23 +26,23 @@ import de.quantummaid.documaid.collecting.structure.FileCreator
 import de.quantummaid.documaid.collecting.structure.FileObjectVisitor
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.traversaldecision.CollectingTraversalDecision
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
 interface Collector {
-    fun collectData(basePath: Path, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project
+    fun collectData(docuMaidConfig: DocuMaidConfiguration, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project
 }
 
 class FullCollector : Collector {
 
-    override fun collectData(basePath: Path, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project {
-        val visitor = CollectingFileVisitor(visitors, collectingTraversalDecision)
-        Files.walkFileTree(basePath, visitor)
+    override fun collectData(docuMaidConfig: DocuMaidConfiguration, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project {
+        val visitor = CollectingFileVisitor(docuMaidConfig, visitors, collectingTraversalDecision)
+        Files.walkFileTree(docuMaidConfig.basePath, visitor)
         val rootDirectory = visitor.getRootDirectory()
         visitors.forEach { it.directoryVisited(rootDirectory) }
         val project = Project.create(rootDirectory)
@@ -53,7 +53,7 @@ class FullCollector : Collector {
     }
 }
 
-private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>, val collectingTraversalDecision: CollectingTraversalDecision) : SimpleFileVisitor<Any>() {
+private class CollectingFileVisitor(val docuMaidConfig: DocuMaidConfiguration, val visitors: List<FileObjectVisitor>, val collectingTraversalDecision: CollectingTraversalDecision) : SimpleFileVisitor<Any>() {
     private val currentDirectoryStack: MutableList<Directory> = mutableListOf()
 
     override fun preVisitDirectory(dir: Any?, attrs: BasicFileAttributes?): FileVisitResult {
@@ -84,7 +84,7 @@ private class CollectingFileVisitor(val visitors: List<FileObjectVisitor>, val c
         }
 
         val directory = currentDirectoryStack.last()
-        val fileObject = FileCreator.create(path)
+        val fileObject = FileCreator.create(path, docuMaidConfig)
         directory.addChild(fileObject)
 
         visitors.forEach { it.fileVisited(fileObject) }

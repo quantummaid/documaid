@@ -26,6 +26,8 @@ import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
+import de.quantummaid.documaid.processing.ProcessingResult.Companion.erroneousProcessingResult
 
 class ProcessingStep private constructor(private val visitors: List<ProcessingVisitor>) {
 
@@ -35,31 +37,31 @@ class ProcessingStep private constructor(private val visitors: List<ProcessingVi
         }
     }
 
-    fun process(project: Project, goal: Goal): List<VerificationError> {
+    fun process(project: Project, goal: Goal): List<ProcessingResult> {
         val methodCaller = FileObjectMethodCaller.create(goal)
         val directory = project.rootDirectory
         return processDirectory(directory, methodCaller, project, goal)
     }
 
-    private fun processDirectory(directory: Directory, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<VerificationError> {
+    private fun processDirectory(directory: Directory, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<ProcessingResult> {
         visitors.forEach { it.beforeDirectoryProcessing(directory, project, goal) }
-        val errors = directory.children()
-                .flatMap {
-                    when (it) {
-                        is Directory -> processDirectory(it, methodCaller, project, goal)
-                        is ProjectFile -> processFile(it, methodCaller, project, goal)
-                        else -> emptyList()
-                    }
+        val processingResults = directory.children()
+            .flatMap {
+                when (it) {
+                    is Directory -> processDirectory(it, methodCaller, project, goal)
+                    is ProjectFile -> processFile(it, methodCaller, project, goal)
+                    else -> emptyList()
                 }
+            }
         visitors.forEach { it.afterDirectoryProcessing(directory, project, goal) }
-        return errors
+        return processingResults
     }
 
-    private fun processFile(file: ProjectFile, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<VerificationError> {
+    private fun processFile(file: ProjectFile, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<ProcessingResult> {
         visitors.forEach { it.beforeFileProcessing(file, project, goal) }
-        val errors = methodCaller.call(file, project)
+        val processingResult = methodCaller.call(file, project)
         visitors.forEach { it.afterFileProcessing(file, project, goal) }
-        return errors
+        return listOf(processingResult)
     }
 }
 
@@ -69,20 +71,27 @@ internal interface FileObjectMethodCaller {
         fun create(goal: Goal): FileObjectMethodCaller {
             return when (goal) {
                 Goal.GENERATE -> object : FileObjectMethodCaller {
-                    override fun call(file: ProjectFile, project: Project): List<VerificationError> {
+                    override fun call(file: ProjectFile, project: Project): ProcessingResult {
                         return try {
-                            file.generate(project)
+                            file.process(project)
                         } catch (e: Exception) {
-                            listOf(VerificationError.createFromException(e, file))
+                            val errors = listOf(VerificationError.createFromException(e, file))
+                            erroneousProcessingResult(file, errors)
                         }
                     }
                 }
                 Goal.VALIDATE -> object : FileObjectMethodCaller {
-                    override fun call(file: ProjectFile, project: Project): List<VerificationError> {
+                    override fun call(file: ProjectFile, project: Project): ProcessingResult {
                         return try {
-                            file.validate(project)
+                            val errors = file.validate(project)
+                            if (errors.isEmpty()) {
+                                contentNotChangedProcessingResult(file)
+                            } else {
+                                erroneousProcessingResult(file, errors)
+                            }
                         } catch (e: Exception) {
-                            listOf(VerificationError.createFromException(e, file))
+                            val errors = listOf(VerificationError.createFromException(e, file))
+                            erroneousProcessingResult(file, errors)
                         }
                     }
                 }
@@ -90,5 +99,5 @@ internal interface FileObjectMethodCaller {
         }
     }
 
-    fun call(file: ProjectFile, project: Project): List<VerificationError>
+    fun call(file: ProjectFile, project: Project): ProcessingResult
 }

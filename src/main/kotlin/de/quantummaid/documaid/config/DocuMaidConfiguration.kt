@@ -31,7 +31,10 @@ class DocuMaidConfiguration(
     val goal: Goal,
     val logger: Logger,
     val mavenConfiguration: MavenConfiguration,
-    val skippedPaths: List<Path>
+    val skippedPaths: List<Path>,
+    val platform: Platform = Platform.GITHUB,
+    val hugoOutputPath: String = "hugo",
+    val repository: Repository? = null
 ) {
     companion object {
         val DOCUMAID_CONFIGURATION_KEY = CollectedInformationKey<DocuMaidConfiguration>("DOCUMAID_CONFIGURATION_KEY")

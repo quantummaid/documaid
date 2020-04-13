@@ -26,16 +26,18 @@ import java.util.concurrent.ConcurrentHashMap
 class TestEnvironment private constructor() {
     private val definedPropertiesMap = ConcurrentHashMap<String, Any>()
 
-    fun setProperty(property: TestEnvironmentProperty, o: Any) {
+    fun setProperty(property: TestEnvironmentProperty, o: Any?) {
         setPropertyIfNotSet(property, o)
     }
 
-    private fun setPropertyIfNotSet(property: TestEnvironmentProperty, o: Any) {
+    private fun setPropertyIfNotSet(property: TestEnvironmentProperty, o: Any?) {
         val name = property.name
         if (has(name)) {
             throw IllegalArgumentException("Property $name already set.")
         }
-        definedPropertiesMap[name] = o
+        if (o != null) {
+            definedPropertiesMap[name] = o
+        }
     }
 
     fun <T> getPropertyAsType(property: TestEnvironmentProperty): T {

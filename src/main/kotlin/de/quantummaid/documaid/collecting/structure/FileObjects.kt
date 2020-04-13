@@ -25,6 +25,7 @@ import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.domain.snippet.SnippetId
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Path
 
 interface FileObject {
@@ -52,7 +53,7 @@ interface ProjectFile : FileObject {
 
     fun snippets(): List<RawSnippet>
 
-    fun generate(project: Project): List<VerificationError>
+    fun process(project: Project): ProcessingResult
 
     fun validate(project: Project): List<VerificationError>
 

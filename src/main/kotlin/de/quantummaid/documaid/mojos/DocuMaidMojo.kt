@@ -21,10 +21,11 @@
 
 package de.quantummaid.documaid.mojos
 
-import de.quantummaid.documaid.DocuMaid.Companion.dokuMaid
+import de.quantummaid.documaid.DocuMaid.Companion.docuMaid
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
+import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
@@ -44,6 +45,8 @@ abstract class DocuMaidMojo : AbstractMojo() {
     private val skip: Boolean = false
     @Parameter(property = "skipPaths")
     private val skipPaths: List<String>? = null
+    @Parameter(property = "platform")
+    private val platform: String? = null
 
     protected abstract val goal: Goal
 
@@ -62,8 +65,9 @@ abstract class DocuMaidMojo : AbstractMojo() {
             .withLogger(MavenLogger.mavenLogger(log))
             .withMavenConfiguration(createMavenConfiguration())
             .withSkippedPaths(getSkippedPaths())
+            .forPlatform(determinePlatform())
             .build()
-        val dokuMaid = dokuMaid(configuration)
+        val dokuMaid = docuMaid(configuration)
         try {
             log.info("DocuMaid started")
             dokuMaid.pimpMyDocu()
@@ -94,6 +98,16 @@ abstract class DocuMaidMojo : AbstractMojo() {
             return skipPaths
                 .map { Paths.get(it) }
                 .map { it.toAbsolutePath() }
+        }
+    }
+
+    private fun determinePlatform(): Platform {
+        if (platform == null) {
+            return Platform.GITHUB
+        }
+        return when (platform.toLowerCase()) {
+            "hugo" -> Platform.HUGO
+            else -> Platform.GITHUB
         }
     }
 }

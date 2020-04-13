@@ -24,8 +24,8 @@ package de.quantummaid.documaid.domain.tableOfContents
 import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.FileObject
 import de.quantummaid.documaid.collecting.structure.ProjectFile
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
@@ -104,7 +104,7 @@ class TocDataFile(
 }
 
 private fun parseName(name: String, path: Path): Pair<Int, String> {
-    val matchResult = TableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matchEntire(name)
+    val matchResult = GithubTableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matchEntire(name)
     if (matchResult != null) {
         val (indexString, _) = matchResult.groups["index"]!!
         val index = Integer.parseInt(indexString)

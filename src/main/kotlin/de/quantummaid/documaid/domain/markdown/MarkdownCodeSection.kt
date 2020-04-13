@@ -82,7 +82,7 @@ data class TrailingMarkdownCodeSection(val untrimmedContent: String, val codeSec
             val startOfCodeContent = content.indexOf("\n", startOfCodeSection) + 1
             val endOfCodeSection = content.indexOf("```", startIndex = startOfCodeContent)
             var endOfCodeContent = endOfCodeSection + "```".length
-            if (content[endOfCodeContent] == '\n') {
+            if (content.length > endOfCodeContent && content[endOfCodeContent] == '\n') {
                 endOfCodeContent + 1
             }
             val untrimmedContent = content.substring(0, endOfCodeContent)

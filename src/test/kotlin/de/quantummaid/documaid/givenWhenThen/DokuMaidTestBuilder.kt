@@ -21,27 +21,29 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
-import de.quantummaid.documaid.Configurator
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.MavenConfiguration
+import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment.Companion.emptyTestEnvironment
-import de.quantummaid.documaid.shared.SampleMavenProjectProperties
-import de.quantummaid.documaid.shared.createFileWithContent
-import de.quantummaid.documaid.shared.deleteFileIfExisting
+import de.quantummaid.documaid.shared.filesystem.Setup
+import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure.Companion.aFileStructureForDocuMaidToProcess
+import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties
+import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import java.nio.file.Path
 
 class DokuMaidTestBuilder private constructor() {
     private val testEnvironment = emptyTestEnvironment()
-    private val dokuMaidConfigurationBuilder = DocuMaidConfiguration.aDocuMaidConfiguration()
-    private val setupSteps: MutableCollection<() -> Unit> = ArrayList()
-    private val cleanupSteps: MutableCollection<() -> Unit> = ArrayList()
+    private val docuMaidConfigurationBuilder = DocuMaidConfiguration.aDocuMaidConfiguration()
+    private val sutFileStructure: SutFileStructure = aFileStructureForDocuMaidToProcess()
 
     fun configuredWithGoal(goal: Goal): DokuMaidTestBuilder {
-        dokuMaidConfigurationBuilder.forGoal(goal)
+        docuMaidConfigurationBuilder.forGoal(goal)
         return this
     }
 
@@ -49,30 +51,19 @@ class DokuMaidTestBuilder private constructor() {
         return configuredWithBasePath(basePath.toString())
     }
 
+    fun configuredwith(platformConfiguration: PlatformConfiguration): DokuMaidTestBuilder {
+        platformConfiguration.apply(docuMaidConfigurationBuilder)
+        return this
+    }
+
     fun configuredWithBasePath(basePath: String): DokuMaidTestBuilder {
-        dokuMaidConfigurationBuilder.withBasePath(basePath)
-        testEnvironment.setProperty(TestEnvironmentProperty.BASE_PATH, basePath)
+        docuMaidConfigurationBuilder.withBasePath(basePath)
         return this
     }
 
-    fun configuredWith(sampleFilesBuilder: SampleFilesBuilder): DokuMaidTestBuilder {
-        val sampleFiles = sampleFilesBuilder.build()
-        testEnvironment.setProperty(TestEnvironmentProperty.SAMPLE_FILE, sampleFiles)
-        val fileName = sampleFiles.fileName
-        setupSteps.add {
-            val basePath = testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
-            val contentInput = sampleFiles.contentInput
-            createFileWithContent(basePath, fileName, contentInput)
-        }
-        cleanupSteps.add {
-            val basePath = testEnvironment.getPropertyAsType<String>(TestEnvironmentProperty.BASE_PATH)
-            deleteFileIfExisting(basePath, fileName)
-        }
-        return this
-    }
-
-    fun configuredWith(configurator: Configurator): DokuMaidTestBuilder {
-        configurator.invoke(testEnvironment, dokuMaidConfigurationBuilder, setupSteps, cleanupSteps)
+    fun configuredWith(setupUpdate: SetupUpdate): DokuMaidTestBuilder {
+        val setup = Setup(testEnvironment, sutFileStructure)
+        setupUpdate(setup)
         return this
     }
 
@@ -81,18 +72,19 @@ class DokuMaidTestBuilder private constructor() {
         val artifactId = ArtifactId.create(SampleMavenProjectProperties.SAMPLE_ARTIFACT_ID)
         val version = Version.create(SampleMavenProjectProperties.SAMPLE_VERSION_ID)
         val mavenConfiguration = MavenConfiguration(groupId, artifactId, version)
-        dokuMaidConfigurationBuilder.withMavenConfiguration(mavenConfiguration)
+        docuMaidConfigurationBuilder.withMavenConfiguration(mavenConfiguration)
+        return this
+    }
+
+    fun configuredWith(platform: Platform): DokuMaidTestBuilder {
+        docuMaidConfigurationBuilder.forPlatform(platform)
         return this
     }
 
     fun build(): TestEnvironment {
-        val dokuMaidConfiguration = dokuMaidConfigurationBuilder
-            .withLogger(NoopTestLogger.noopTestLogger())
-            .build()
-        val dokuMaid = de.quantummaid.documaid.DocuMaid.dokuMaid(dokuMaidConfiguration)
-        testEnvironment.setProperty(TestEnvironmentProperty.DOKU_MAID_INSTANCE, dokuMaid)
-        testEnvironment.setProperty(TestEnvironmentProperty.SETUP_STEPS, setupSteps)
-        testEnvironment.setProperty(TestEnvironmentProperty.CLEAN_UP_STEPS, cleanupSteps)
+        docuMaidConfigurationBuilder.withLogger(NoopTestLogger.noopTestLogger())
+        testEnvironment.setProperty(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER, docuMaidConfigurationBuilder)
+        testEnvironment.setProperty(TestEnvironmentProperty.SUT_FILE_STRUCTURE, sutFileStructure)
         return testEnvironment
     }
 

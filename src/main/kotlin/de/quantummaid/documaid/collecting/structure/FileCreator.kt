@@ -21,6 +21,7 @@
 
 package de.quantummaid.documaid.collecting.structure
 
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.domain.java.JavaFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.unclassifiedFile.UnclassifiedFile
@@ -30,12 +31,12 @@ import java.nio.file.Path
 class FileCreator private constructor() {
 
     companion object {
-        fun create(path: Path): ProjectFile {
+        fun create(path: Path, docuMaidConfig: DocuMaidConfiguration): ProjectFile {
             val stringPath = path.toString()
             return when {
                 stringPath.endsWith(".java") -> JavaFile.create(path)
                 stringPath.endsWith(".xml") -> XmlFile.create(path)
-                stringPath.endsWith(".md") -> MarkdownFile.create(path)
+                stringPath.endsWith(".md") -> MarkdownFile.create(path, docuMaidConfig)
                 else -> UnclassifiedFile.create(path)
             }
         }

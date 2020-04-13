@@ -25,8 +25,8 @@ import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.FileObject
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsDirective
-import de.quantummaid.documaid.domain.markdown.tableOfContents.TableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
 
@@ -68,7 +68,7 @@ class TableOfContentsCreator(private val traversalDecision: TocTraversalDecision
     }
 
     private fun isIndexedMarkdown(it: FileObject): Boolean {
-        return it is MarkdownFile && TableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matches(it.name())
+        return it is MarkdownFile && GithubTableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matches(it.name())
     }
 
     private fun mapToTocDataStructure(tocDataOnlyDirectory: Directory, rootDirectoryToRelateLinksTo: Path): Pair<TocRootDirectory?, List<VerificationError>> {

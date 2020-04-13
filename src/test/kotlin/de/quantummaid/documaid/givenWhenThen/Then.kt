@@ -21,19 +21,26 @@
 
 package de.quantummaid.documaid.givenWhenThen
 
+import de.quantummaid.documaid.DocuMaid
+import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
+import de.quantummaid.documaid.shared.filesystem.SutFileStructure
+
 class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBuilder, private val dokuMaidActionTestBuilder: DokuMaidActionTestBuilder) {
 
     fun then(dokuMaidTestValidationBuilder: DokuMaidTestValidationBuilder) {
         val testEnvironment = dokuMaidTestBuilder.build()
         try {
-            val setupSteps = getSetupSteps(testEnvironment)
-            for (setupStep in setupSteps) {
-                setupStep.invoke()
-            }
 
-            val dokuMaid = testEnvironment.getPropertyAsType<de.quantummaid.documaid.DocuMaid>(TestEnvironmentProperty.DOKU_MAID_INSTANCE)
+            val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+            val fileStructureForDocuMaidToProcess = sutFileStructure.generateFileStructureForDocuMaidToProcess()
+            val configBuilder: DocuMaidConfigurationBuilder = testEnvironment.getPropertyAsType(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER)
+            configBuilder.withBasePath(fileStructureForDocuMaidToProcess.baseDirectory.path)
+            val docuMaidConfiguration = configBuilder.build()
+            testEnvironment.setProperty(TestEnvironmentProperty.DOCU_MAID_CONFIG, docuMaidConfiguration)
+            val docuMaid = DocuMaid.docuMaid(docuMaidConfiguration)
+
             val testAction = dokuMaidActionTestBuilder.build()
-            testAction.invoke(dokuMaid)
+            testAction.invoke(docuMaid)
         } catch (e: Exception) {
             testEnvironment.setProperty(TestEnvironmentProperty.EXCEPTION, e)
         } finally {
@@ -46,16 +53,9 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
         }
     }
 
-    private fun getSetupSteps(testEnvironment: TestEnvironment): List<() -> Unit> {
-        @Suppress("UNCHECKED_CAST")
-        return testEnvironment.getProperty(TestEnvironmentProperty.SETUP_STEPS) as List<() -> Unit>
-    }
-
     private fun cleanUp(testEnvironment: TestEnvironment) {
         @Suppress("UNCHECKED_CAST")
-        val cleanupSteps = testEnvironment.getProperty(TestEnvironmentProperty.CLEAN_UP_STEPS) as List<() -> Unit>
-        for (cleanupStep in cleanupSteps) {
-            cleanupStep.invoke()
-        }
+        val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+        sutFileStructure.cleanUp()
     }
 }
