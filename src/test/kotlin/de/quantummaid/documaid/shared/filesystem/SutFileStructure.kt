@@ -69,7 +69,10 @@ class SutFileStructure internal constructor() {
         return PhysicalFileSystemStructure(rootDirectory)
     }
 
-    private fun construct(basePath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileSystemStructure {
+    private fun construct(
+        basePath: Path,
+        constructionForPlatformType: ConstructionForPlatformType
+    ): PhysicalFileSystemStructure {
         if (overriddenExpectedFileStructure != null) {
             return overriddenExpectedFileStructure!!
         }
@@ -132,7 +135,10 @@ class SutDirectory private constructor(private val name: String) : SutFileObject
         return physicalDirectory
     }
 
-    override fun construct(parentPath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalDirectory? {
+    override fun construct(
+        parentPath: Path,
+        constructionForPlatformType: ConstructionForPlatformType
+    ): PhysicalDirectory? {
         val physicalDirectory = PhysicalDirectoryBuilder.aDirectory(name)
             .construct(parentPath)
         val physicalChildren = children.map { it.construct(physicalDirectory.path, constructionForPlatformType) }
@@ -198,7 +204,11 @@ class ProcessedFileBuilder {
     }
 }
 
-open class SimpleProcessedFile(private val originalFile: PhysicalFileBuilder, private val processedFile: PhysicalFileBuilder, private val processedFileInHugoFormat: PhysicalFileBuilder) : ProcessedFile {
+open class SimpleProcessedFile(
+    private val originalFile: PhysicalFileBuilder,
+    private val processedFile: PhysicalFileBuilder,
+    private val processedFileInHugoFormat: PhysicalFileBuilder
+) : ProcessedFile {
 
     override fun originalFile(): PhysicalFileBuilder {
         return originalFile
@@ -220,7 +230,10 @@ open class SimpleProcessedFile(private val originalFile: PhysicalFileBuilder, pr
         return originalFile.create(parentPath)
     }
 
-    override fun construct(parentPath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileObject? {
+    override fun construct(
+        parentPath: Path,
+        constructionForPlatformType: ConstructionForPlatformType
+    ): PhysicalFileObject? {
         return when (constructionForPlatformType) {
             ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_GITHUB -> processedFile.construct(parentPath)
             ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO -> {
@@ -234,9 +247,14 @@ open class SimpleProcessedFile(private val originalFile: PhysicalFileBuilder, pr
     }
 }
 
-open class NotProcessedSourceFile(notChangingFileBuilder: PhysicalFileBuilder) : SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder)
+open class NotProcessedSourceFile(
+    notChangingFileBuilder: PhysicalFileBuilder
+) : SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder)
 
-open class EmptySutFile(notChangingFileBuilder: PhysicalFileBuilder) : SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder) {
+open class EmptySutFile(
+    notChangingFileBuilder: PhysicalFileBuilder
+) : SimpleProcessedFile(notChangingFileBuilder, notChangingFileBuilder, notChangingFileBuilder) {
+
     companion object {
         fun aFile(fileName: String): EmptySutFile {
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)

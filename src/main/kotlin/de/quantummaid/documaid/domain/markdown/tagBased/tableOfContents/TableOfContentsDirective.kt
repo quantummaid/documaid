@@ -29,7 +29,7 @@ import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.OptionsString
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
-import de.quantummaid.documaid.errors.DocuMaidException
+import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -42,9 +42,14 @@ class TableOfContentsDirective private constructor(
     companion object {
         val TOC_TAG = DirectiveTag("TOC")
 
-        fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): TableOfContentsDirective {
+        fun create(
+            rawMarkdownDirective: RawMarkdownDirective,
+            file: MarkdownFile,
+            project: Project
+        ): TableOfContentsDirective {
             val directoryBasePath = file.absolutePath().parent
-            val options = TableOfContentsDirectiveOptions.create(rawMarkdownDirective.optionsString, directoryBasePath, file)
+            val optionsString = rawMarkdownDirective.optionsString
+            val options = TableOfContentsDirectiveOptions.create(optionsString, directoryBasePath, file)
             val tocScanBaseDirectory = options.tocScanBaseDirectory
             val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
             val scanBaseDirectory = lookUpTable.getFileObject(tocScanBaseDirectory) as Directory
@@ -56,7 +61,11 @@ class TableOfContentsDirective private constructor(
 class TableOfContentsDirectiveOptions(val tocScanBaseDirectory: Path) {
 
     companion object {
-        fun create(optionsString: OptionsString, directoryBasePath: Path, file: MarkdownFile): TableOfContentsDirectiveOptions {
+        fun create(
+            optionsString: OptionsString,
+            directoryBasePath: Path,
+            file: MarkdownFile
+        ): TableOfContentsDirectiveOptions {
             val optionsRegex = """ *\(? *(?<baseDir>[^ )]+) *\)? *""".toRegex()
             val matchResult = optionsRegex.matchEntire(optionsString.value)
             if (matchResult != null) {
@@ -64,11 +73,12 @@ class TableOfContentsDirectiveOptions(val tocScanBaseDirectory: Path) {
                 val tocScanBaseDirectory = directoryBasePath.resolve(baseDirectoryPathString)
                     .normalize()
                 if (!Files.exists(tocScanBaseDirectory)) {
-                    throw DocuMaidException.aDocuMaidException("[$TOC_TAG] Cannot create TOC for not existing directory '$baseDirectoryPathString'", file)
+                    val message = "[$TOC_TAG] Cannot create TOC for not existing directory '$baseDirectoryPathString'"
+                    throw aDocuMaidException(message, file)
                 }
                 return TableOfContentsDirectiveOptions(tocScanBaseDirectory)
             } else {
-                throw DocuMaidException.aDocuMaidException("[$TOC_TAG] Could not match TOC options '${optionsString.value}'", file)
+                throw aDocuMaidException("[$TOC_TAG] Could not match TOC options '${optionsString.value}'", file)
             }
         }
     }

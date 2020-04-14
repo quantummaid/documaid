@@ -23,20 +23,20 @@ package de.quantummaid.documaid.usecases.link
 
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
-import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkAtTheEndOfFileWithoutNewLine
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirective
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinks
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoLinkDirectives
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkAtEndOfFileWithoutNewline
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInserted
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAndAMissingLink
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline
 
 fun aFileWithASingleLink(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleLink")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleLink")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -48,7 +48,7 @@ fun aFileWithASingleLink(basePath: String): SetupUpdate {
 }
 
 fun aFileWithTwoLinks(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTwoLinks")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTwoLinks")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     val xmlFile = aXmlFileWithOneSnippet("config.xml", "differentSnippet")
@@ -68,7 +68,7 @@ fun aFileWithTwoLinks(basePath: String): SetupUpdate {
 }
 
 fun aFileWithTheSameLinksTwice(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTheSameLinksTwice")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTheSameLinksTwice")
 
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
@@ -81,7 +81,7 @@ fun aFileWithTheSameLinksTwice(basePath: String): SetupUpdate {
 }
 
 fun aFileWithWrongLink(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithWrongLink")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithWrongLink")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -93,7 +93,7 @@ fun aFileWithWrongLink(basePath: String): SetupUpdate {
 }
 
 fun aFileWithLinksToNotExistingFiles(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithLinksToNotExistingFiles")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithLinksToNotExistingFiles")
 
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
@@ -105,7 +105,7 @@ fun aFileWithLinksToNotExistingFiles(basePath: String): SetupUpdate {
 }
 
 fun aCorrectlyGeneratedFileWithTwoLinks(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aCorrectlyGeneratedFileWithTwoLinks")
+    val testDir = aTemporyTestDirectory(basePath, "aCorrectlyGeneratedFileWithTwoLinks")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     val xmlFile = aXmlFileWithOneSnippet("config.xml", "differentSnippet")
@@ -121,7 +121,7 @@ fun aCorrectlyGeneratedFileWithTwoLinks(basePath: String): SetupUpdate {
 }
 
 fun aCorrectlyGeneratedFileWithTwoLinksForHugo(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aCorrectlyGeneratedFileWithTwoLinks")
+    val testDir = aTemporyTestDirectory(basePath, "aCorrectlyGeneratedFileWithTwoLinks")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     val xmlFile = aXmlFileWithOneSnippet("config.xml", "differentSnippet")
@@ -137,7 +137,7 @@ fun aCorrectlyGeneratedFileWithTwoLinksForHugo(basePath: String): SetupUpdate {
 }
 
 fun aFileWithAMissingLink(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAMissingLink")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithAMissingLink")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -149,17 +149,17 @@ fun aFileWithAMissingLink(basePath: String): SetupUpdate {
 }
 
 fun aFileWithLinkANotExistingFile(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithLinkANotExistingFile")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithLinkANotExistingFile")
 
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "someWhere/notExistingFile.java", "linkName"))
+                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "/notExistingFile.java", "linkName"))
     }
 }
 
 fun aFileWithMultipleLinkErrors(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithMultipleLinkErrors")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithMultipleLinkErrors")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -173,27 +173,27 @@ fun aFileWithMultipleLinkErrors(basePath: String): SetupUpdate {
 }
 
 fun aFileWithASingleLinkAtTheEndOfFileWithoutNewline(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleLinkAtEndOfFile")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleLinkAtEndOfFile")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine("md1.md", javaFile.fileName, "sampleLinkName")
+                aMarkdownFileWithALinkAtTheEndOfFileWithoutNewLine("md1.md", javaFile.fileName, "sampleLinkName")
             )
     }
 }
 
 fun aFileWithWrongLinkAtTheEndOfFileWithoutNewline(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAWrongLinkAtEndOfFile")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithAWrongLinkAtEndOfFile")
 
     val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline("md1.md", javaFile.fileName, "sampleLinkName")
+                aMarkdownFileWithWrongLinkAtEndOfFileWithoutNewline("md1.md", javaFile.fileName, "sampleLinkName")
             )
     }
 }

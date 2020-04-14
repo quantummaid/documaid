@@ -29,7 +29,7 @@ import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdown.Companion.startsWithTrailingTableOfContentsMarkdown
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
-import de.quantummaid.documaid.errors.DocuMaidException
+import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupData.Companion.TOC_LOOKUP_KEY
 
@@ -41,18 +41,23 @@ class GithubTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
 
     override fun tag(): String = TOC_TAG.toString()
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
         val textToReplace = textToReplace(project, directive, file)
         val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeStart = directive.range.first
         val rangeEnd = rangeStart + Math.max(textToBeReplaced.length, textToReplace.length)
-        return Pair(MarkdownReplacement(IntRange(rangeStart, rangeEnd), textToBeReplaced, textToReplace), emptyList())
+        val markdownReplacement = MarkdownReplacement(IntRange(rangeStart, rangeEnd), textToBeReplaced, textToReplace)
+        return Pair(markdownReplacement, emptyList())
     }
 
     private fun textToReplace(project: Project, directive: RawMarkdownDirective, file: MarkdownFile): String {
         val tableOfContentsLookupData = project.getInformation(TOC_LOOKUP_KEY)
         if (!tableOfContentsLookupData.tableOfContentsAvailable()) {
-            throw DocuMaidException.aDocuMaidException("Found [${tag()}] without a Table of Contents being generated", file)
+            throw aDocuMaidException("Found [${tag()}] without a Table of Contents being generated", file)
         }
         val tableOfContents = tableOfContentsLookupData.getTableOfContents()
         val tocMarkdown = GithubTableOfContentsMarkdown(directive, tableOfContents, file)
@@ -69,16 +74,22 @@ class GithubTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         val textToReplace = textToReplace(project, directive, file)
         val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
         return if (textToBeReplaced != textToReplace) {
             val trailingCodeFound = trailingMarkdownMatchResult.matches
             if (trailingCodeFound) {
-                val verificationError = VerificationError.create("Found [${tag()}] tag with incorrect TOC", file)
+                val message = "Found [${tag()}] tag with incorrect TOC"
+                val verificationError = VerificationError.create(message, file)
                 listOf(verificationError)
             } else {
-                val verificationError = VerificationError.create("Found [${tag()}] tag with missing TOC", file)
+                val message = "Found [${tag()}] tag with missing TOC"
+                val verificationError = VerificationError.create(message, file)
                 listOf(verificationError)
             }
         } else {

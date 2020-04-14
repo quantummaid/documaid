@@ -63,7 +63,11 @@ internal class GithubFileGenerator : FileGenerator {
     }
 }
 
-internal class HugoFileGenerator(val basePath: Path, val hugoBasePath: Path, val generationFlavor: GenerationFlavor) : FileGenerator {
+internal class HugoFileGenerator(
+    val basePath: Path,
+    val hugoBasePath: Path,
+    val generationFlavor: GenerationFlavor
+) : FileGenerator {
 
     companion object {
         fun create(docuMaidConfiguration: DocuMaidConfiguration): HugoFileGenerator {

@@ -64,7 +64,8 @@ class HugoHeadingMarkdownHandler : SyntaxBasedMarkdownHandler {
     }
 
     override fun validate(file: MarkdownFile, project: Project): List<VerificationError> {
-        // Nothing to do, because the information is lost during generation and can not be validated with its own information
+        // Nothing to do, because the information is lost during generation
+        // and can not be validated with its own information
         return emptyList()
     }
 }

@@ -27,12 +27,22 @@ import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupData
 
-class NavigationDirective private constructor(val directive: RawMarkdownDirective, val file: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
+class NavigationDirective private constructor(
+    val directive: RawMarkdownDirective,
+    val file: MarkdownFile,
+    val previousFile: MarkdownFile?,
+    val overviewFile: MarkdownFile,
+    val nextFile: MarkdownFile?
+) {
 
     companion object {
         val NAV_TAG = DirectiveTag("Nav")
 
-        fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): NavigationDirective {
+        fun create(
+            rawMarkdownDirective: RawMarkdownDirective,
+            file: MarkdownFile,
+            project: Project
+        ): NavigationDirective {
             val tableOfContentsLookupData = project.getInformation(TableOfContentsLookupData.TOC_LOOKUP_KEY)
             val tableOfContents = tableOfContentsLookupData.getTableOfContents()
             val overviewFile = tableOfContents.getFileWithToc()

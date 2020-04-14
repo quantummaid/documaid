@@ -22,12 +22,12 @@
 package de.quantummaid.documaid.usecases.link
 
 import de.quantummaid.documaid.config.Goal
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectADocuMaidExceptionCollectingTheFollowingErrors
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectADokuMaidExceptionCollectingTheFollowingErrors
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
@@ -83,9 +83,11 @@ interface LinkSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
-                "Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' (in path $testBasePath/missingLinksFile.md)",
-                "Found [Link] tag to not existing file '$testBasePath/differentNotExistingFile.java' (in path $testBasePath/missingLinksFile.md)"
+            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
+                "Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' " +
+                    "(in path $testBasePath/missingLinksFile.md)",
+                "Found [Link] tag to not existing file '$testBasePath/differentNotExistingFile.java' " +
+                    "(in path $testBasePath/missingLinksFile.md)"
             ))
     }
 
@@ -107,8 +109,8 @@ interface LinkSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for '<!---[Link] ( source.java linkName)-->' " +
-                "(in path $testBasePath/oneMissingLinkFileSampleFiles.md)"))
+            .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for " +
+                "'<!---[Link] ( source.java linkName)-->' (in path $testBasePath/oneMissingLinkFileSampleFiles.md)"))
     }
 
     @Test
@@ -119,8 +121,8 @@ interface LinkSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName)-->' " +
-                "(in path $testBasePath/md1.md)"))
+            .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: " +
+                "'<!---[Link] ( source.java linkName)-->' (in path $testBasePath/md1.md)"))
     }
 
     @Test
@@ -131,8 +133,8 @@ interface LinkSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' " +
-                "(in path $testBasePath/aLinkToANotExistingFile.md)"))
+            .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file " +
+                "'$testBasePath/someWhere/notExistingFile.java' (in path $testBasePath/aLinkToANotExistingFile.md)"))
     }
 
     @Test
@@ -143,7 +145,7 @@ interface LinkSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
+            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
                 "Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName1)-->' " +
                     "(in path $testBasePath/multipleLinkErrors.md)",
                 "Found [Link] tag without link being set for '<!---[Link] ( source.java linkName2)-->' " +

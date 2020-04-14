@@ -24,10 +24,10 @@ package de.quantummaid.documaid.usecases.tableOfContents.toc
 import de.quantummaid.documaid.config.Goal.GENERATE
 import de.quantummaid.documaid.config.Goal.VALIDATE
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
@@ -86,13 +86,24 @@ interface TableOfContentSpecs {
     }
 
     @Test
+    fun tocGeneratesCorrectTocForIncorrectToc(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aTocInReadmeWithIncorrectToc(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
     fun tocGenerationFailsForRedundantIndex(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aTocTagInReadmeWithTheSameIndexTwice(BASE_PATH))
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[$TOC_TAG] Same TOC indices[2] used by multiple files [2_One.md, 2_Two.md] " +
+            .then(expectAnExceptionWithMessage(
+                "[$TOC_TAG] Same TOC indices[2] used by multiple files [2_One.md, 2_Two.md] " +
                 "(in path ${absPath("tocWithSameIndexTwice")})"))
     }
 
@@ -103,7 +114,8 @@ interface TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[$TOC_TAG] Missing index 2 for TOC in directory 'tocWithMissingIndex' " +
+            .then(expectAnExceptionWithMessage(
+                "[$TOC_TAG] Missing index 2 for TOC in directory 'tocWithMissingIndex' " +
                 "(in path ${absPath("tocWithMissingIndex")})"))
     }
 
@@ -114,7 +126,9 @@ interface TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[$TOC_TAG] Same TOC indices[2] used by multiple files [02_docs/2_Double.md, 02_docs/2_SecondDocs.md] " +
+            .then(expectAnExceptionWithMessage(
+                "[$TOC_TAG] Same TOC indices[2] used by multiple files " +
+                    "[02_docs/2_Double.md, 02_docs/2_SecondDocs.md] " +
                 "(in path ${absPath("tocWithSameIndexTwiceInSubDirectory/02_docs")})"))
     }
 
@@ -136,7 +150,8 @@ interface TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[$TOC_TAG] Cannot create TOC for not existing directory 'notExisting/' " +
+            .then(expectAnExceptionWithMessage(
+                "[$TOC_TAG] Cannot create TOC for not existing directory 'notExisting/' " +
                 "(in path ${absPath("aTocTagInReadmeWithNotExistingScanDirectory/README.md")})"))
     }
 
@@ -147,7 +162,8 @@ interface TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[$TOC_TAG] Could not match TOC options '(not a correct options String)' " +
+            .then(expectAnExceptionWithMessage(
+                "[$TOC_TAG] Could not match TOC options '(not a correct options String)' " +
                 "(in path ${absPath("aTocTagInReadmeWithMalFormedOptions/README.md")})"))
     }
 
@@ -168,7 +184,8 @@ interface TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$TOC_TAG] tag with missing TOC (in path ${absPath("aTocInReadmeWithMissingToc/README.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [$TOC_TAG] tag with missing TOC (in path ${absPath("aTocInReadmeWithMissingToc/README.md")})"))
     }
 
     @Test
@@ -178,7 +195,9 @@ interface TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$TOC_TAG] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithIncorrectToc/README.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [$TOC_TAG] tag with incorrect TOC " +
+                    "(in path ${absPath("aTocInReadmeWithIncorrectToc/README.md")})"))
     }
 
     @Test

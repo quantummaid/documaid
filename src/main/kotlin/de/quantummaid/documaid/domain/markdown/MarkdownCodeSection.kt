@@ -76,7 +76,9 @@ data class TrailingMarkdownCodeSection(val untrimmedContent: String, val codeSec
     val codeContent = codeSection.content
 
     companion object {
-        fun extractTrailingCodeSection(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownCodeSection {
+        fun extractTrailingCodeSection(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownCodeSection {
             val content = remainingMarkupFileContent.content
             val startOfCodeSection = content.indexOf("```")
             val startOfCodeContent = content.indexOf("\n", startOfCodeSection) + 1

@@ -35,12 +35,21 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
 interface Collector {
-    fun collectData(docuMaidConfig: DocuMaidConfiguration, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project
+    fun collectData(
+        docuMaidConfig: DocuMaidConfiguration,
+        visitors: List<FileObjectVisitor>,
+        collectingTraversalDecision: CollectingTraversalDecision
+    ): Project
 }
 
 class FullCollector : Collector {
 
-    override fun collectData(docuMaidConfig: DocuMaidConfiguration, visitors: List<FileObjectVisitor>, collectingTraversalDecision: CollectingTraversalDecision): Project {
+    override fun collectData(
+        docuMaidConfig: DocuMaidConfiguration,
+        visitors: List<FileObjectVisitor>,
+        collectingTraversalDecision: CollectingTraversalDecision
+    ): Project {
+
         val visitor = CollectingFileVisitor(docuMaidConfig, visitors, collectingTraversalDecision)
         Files.walkFileTree(docuMaidConfig.basePath, visitor)
         val rootDirectory = visitor.getRootDirectory()
@@ -53,8 +62,12 @@ class FullCollector : Collector {
     }
 }
 
-private class CollectingFileVisitor(val docuMaidConfig: DocuMaidConfiguration, val visitors: List<FileObjectVisitor>, val collectingTraversalDecision: CollectingTraversalDecision) : SimpleFileVisitor<Any>() {
+private class CollectingFileVisitor(
+    val docuMaidConfig: DocuMaidConfiguration,
+    val visitors: List<FileObjectVisitor>,
+    val collectingTraversalDecision: CollectingTraversalDecision,
     private val currentDirectoryStack: MutableList<Directory> = mutableListOf()
+) : SimpleFileVisitor<Any>() {
 
     override fun preVisitDirectory(dir: Any?, attrs: BasicFileAttributes?): FileVisitResult {
         super.preVisitDirectory(dir, attrs)

@@ -24,8 +24,8 @@ package de.quantummaid.documaid.usecases.tableOfContents.toc
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.HugoPlatformProvider
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
@@ -53,7 +53,8 @@ class HugoTableOfContentSpecs : TableOfContentSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [TOC] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithCorrectToc/README.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [TOC] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithCorrectToc/README.md")})"))
     }
 
     companion object {

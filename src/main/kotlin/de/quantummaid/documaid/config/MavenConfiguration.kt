@@ -26,7 +26,11 @@ import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.errors.DocuMaidException
 
-class MavenConfiguration(private val groupId: GroupId?, private val artifactId: ArtifactId?, private val version: Version?) {
+class MavenConfiguration(
+    private val groupId: GroupId?,
+    private val artifactId: ArtifactId?,
+    private val version: Version?
+) {
 
     fun getGroupId(): GroupId {
         return groupId ?: throw DocuMaidException.createWithoutFileOrigin("Required groupId to be defined")

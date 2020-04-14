@@ -21,7 +21,11 @@
 
 package de.quantummaid.documaid.errors
 
-class ErrorsEncounteredInDokuMaidException private constructor(val errors: List<DokuMaidError>, message: String) : RuntimeException(message) {
+class ErrorsEncounteredInDokuMaidException private constructor(
+    val errors: List<DokuMaidError>,
+    message: String
+) : RuntimeException(message) {
+
     companion object {
         fun fromErrors(errors: List<DokuMaidError>): ErrorsEncounteredInDokuMaidException {
             val message = errors.joinToString(separator = "\n", transform = DokuMaidError::message)

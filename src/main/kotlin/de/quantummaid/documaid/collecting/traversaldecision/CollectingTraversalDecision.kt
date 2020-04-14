@@ -29,7 +29,9 @@ interface CollectingTraversalDecision {
     fun shouldDirectoryBeVisited(path: Path): Boolean
 }
 
-class SkippingCollectingTraversalDecision private constructor(val skippedPaths: List<Path>) : CollectingTraversalDecision {
+class SkippingCollectingTraversalDecision private constructor(
+    val skippedPaths: List<Path>
+) : CollectingTraversalDecision {
 
     companion object {
         fun createForConfiguration(docuMaidConfiguration: DocuMaidConfiguration): SkippingCollectingTraversalDecision {

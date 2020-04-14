@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.17</version>
+    <version>0.9.18-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -93,11 +93,11 @@
         <owasp-dependency-check-plugin-version>5.3.2</owasp-dependency-check-plugin-version>
         <tidy-maven-plugin-version>1.1.0</tidy-maven-plugin-version>
         <nexus-staging-maven-plugin-version>1.6.8</nexus-staging-maven-plugin-version>
-
         <junit-version>5.6.2</junit-version>
         <maven-plugin-dependency-version>3.6.3</maven-plugin-dependency-version>
         <maven-core-dependency-version>3.6.3</maven-core-dependency-version>
         <maven-annotations-dependency-version>3.6.0</maven-annotations-dependency-version>
+        <license-maven-plugin-version>3.0</license-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jvm-target-version>1.8</jvm-target-version>
@@ -424,6 +424,30 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin-version}</version>
+                    <configuration>
+                        <header>copyright/Copyright-Header.txt</header>
+                        <properties>
+                            <owner>Mycila</owner>
+                            <email>mathieu.carbou@gmail.com</email>
+                        </properties>
+                        <excludes>
+                            <exclude>**/README</exclude>
+                            <exclude>src/test/resources/**</exclude>
+                            <exclude>src/main/resources/**</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -477,6 +501,10 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

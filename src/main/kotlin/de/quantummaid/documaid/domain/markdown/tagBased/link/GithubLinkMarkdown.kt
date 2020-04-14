@@ -23,6 +23,8 @@ package de.quantummaid.documaid.domain.markdown.tagBased.link
 
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 
 class GithubLinkMarkdown(val name: String, val target: String, val linkDirective: LinkDirective) {
 
@@ -30,19 +32,23 @@ class GithubLinkMarkdown(val name: String, val target: String, val linkDirective
         val LINK_PATTERN = """\n? *\[ *[^]]+ *] *\([^)]*\)""".toRegex()
 
         fun create(linkDirective: LinkDirective): GithubLinkMarkdown {
-            return GithubLinkMarkdown(linkDirective.options.name, linkDirective.options.originalPathString, linkDirective)
+            val name = linkDirective.options.name
+            val originalPathString = linkDirective.options.originalPathString
+            return GithubLinkMarkdown(name, originalPathString, linkDirective)
         }
 
-        fun startsWithLinkMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithLinkMarkdown(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownMatchResult {
             val remainingContent = remainingMarkupFileContent.content
             return if (!remainingContent.trimStart().startsWith("[")) {
-                TrailingMarkdownMatchResult.createForNoMatch()
+                noMatchForTrailingCodeSection()
             } else {
                 val find = LINK_PATTERN.find(remainingContent)
                 if (find != null) {
-                    TrailingMarkdownMatchResult.createForMatch(find.range.last - find.range.start, find.value)
+                    createMatchForTrailingMarkdown(find.range.last - find.range.start, find.value)
                 } else {
-                    TrailingMarkdownMatchResult.createForNoMatch()
+                    noMatchForTrailingCodeSection()
                 }
             }
         }

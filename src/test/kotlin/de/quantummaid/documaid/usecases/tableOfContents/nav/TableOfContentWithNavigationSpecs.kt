@@ -25,10 +25,10 @@ import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.Goal.GENERATE
 import de.quantummaid.documaid.domain.markdown.tagBased.navigation.NavigationDirective.Companion.NAV_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
@@ -63,18 +63,22 @@ interface TableOfContentWithNavigationSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found file indexed by table of contents but without [$NAV_TAG] tag " +
+            .then(expectAnExceptionWithMessage(
+                "Found file indexed by table of contents but without [$NAV_TAG] tag " +
                 "(in path ${absPath("fileWithoutNav/1_error.md")})"))
     }
 
     @Test
-    fun navigationFailsForFileWithNavigationButNotIncludedInTableOfContents(platformConfiguration: PlatformConfiguration) {
+    fun navigationFailsForFileWithNavigationButNotIncludedInTableOfContents(
+        platformConfiguration: PlatformConfiguration
+    ) {
         given(aDokuMaid()
             .configuredWith(aTocInReadmeWithFileWithNavigationButNotIndexedByToc(BASE_PATH))
             .configuredwith(platformConfiguration)
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag for file not indexed by table of contents " +
+            .then(expectAnExceptionWithMessage(
+                "Found [$NAV_TAG] tag for file not indexed by table of contents " +
                 "(in path ${absPath("fileOutsideOfToc/1_error.md")})"))
     }
 
@@ -86,6 +90,16 @@ interface TableOfContentWithNavigationSpecs {
             .configuredWithGoal(GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tags without a [$TOC_TAG]"))
+    }
+
+    @Test
+    fun navigationCanGenerateCorrectNavOverWrongNavigation(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
@@ -116,7 +130,9 @@ interface TableOfContentWithNavigationSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with wrong navigation (in path ${absPath("wrongNav/docs/003_ADifferentChapter.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [$NAV_TAG] tag with wrong navigation " +
+                    "(in path ${absPath("wrongNav/docs/003_ADifferentChapter.md")})"))
     }
 
     @Test

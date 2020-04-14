@@ -23,8 +23,10 @@ package de.quantummaid.documaid.domain.markdown.tagBased.codeSnippet
 
 import de.quantummaid.documaid.domain.markdown.MarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
-import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection
+import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection.Companion.extractTrailingCodeSection
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 
 class CodeSnippetMarkdown private constructor(val markdownCodeSection: MarkdownCodeSection) {
 
@@ -33,13 +35,16 @@ class CodeSnippetMarkdown private constructor(val markdownCodeSection: MarkdownC
             return CodeSnippetMarkdown(markdownCodeSection)
         }
 
-        fun startsWithCodeSnippetMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithCodeSnippetMarkdown(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownMatchResult {
+
             val content = remainingMarkupFileContent.content
             return if (content.trimStart().startsWith("```")) {
-                val trailingCodeSection = TrailingMarkdownCodeSection.extractTrailingCodeSection(remainingMarkupFileContent)
-                TrailingMarkdownMatchResult.createForMatch(trailingCodeSection.completeLength, trailingCodeSection.untrimmedContent)
+                val trailingCodeSection = extractTrailingCodeSection(remainingMarkupFileContent)
+                createMatchForTrailingMarkdown(trailingCodeSection.completeLength, trailingCodeSection.untrimmedContent)
             } else {
-                TrailingMarkdownMatchResult.createForNoMatch()
+                noMatchForTrailingCodeSection()
             }
         }
     }

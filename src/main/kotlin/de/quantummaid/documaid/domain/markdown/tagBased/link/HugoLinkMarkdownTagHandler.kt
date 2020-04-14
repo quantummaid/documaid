@@ -36,7 +36,11 @@ class HugoLinkMarkdownTagHandler : MarkdownTagHandler {
 
     override fun tag(): String = LINK_TAG.toString()
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
         val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
@@ -44,7 +48,11 @@ class HugoLinkMarkdownTagHandler : MarkdownTagHandler {
         return Pair(markdownReplacement, emptyList())
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
         return if (textToBeReplaced != markdown) {
@@ -81,11 +89,16 @@ class HugoLinkMarkdownTagHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String, textToBeReplaced: String): IntRange {
+    private fun rangeToReplaceIn(
+        markdownDirective: RawMarkdownDirective,
+        textToReplace: String,
+        textToBeReplaced: String
+    ): IntRange {
         val startIndex = markdownDirective.range.first
         val endIndexInitialTag = markdownDirective.range.last
         val lengthNewContent = textToReplace.length
-        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex + lengthNewContent, startIndex + textToBeReplaced.length))
+        val endIndexAfterNewContent = Math.max(startIndex + lengthNewContent, startIndex + textToBeReplaced.length)
+        val endIndex = Math.max(endIndexInitialTag, endIndexAfterNewContent)
         return IntRange(startIndex, endIndex)
     }
 }

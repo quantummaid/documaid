@@ -33,7 +33,7 @@ import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.MavenGoal
 import de.quantummaid.documaid.domain.maven.MavenPhase
 import de.quantummaid.documaid.domain.maven.Version
-import de.quantummaid.documaid.errors.DocuMaidException
+import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 
 class PluginDirective(val rawMarkdownDirective: RawMarkdownDirective, val options: DependencyDirectiveOptions) {
 
@@ -47,21 +47,40 @@ class PluginDirective(val rawMarkdownDirective: RawMarkdownDirective, val option
     }
 
     fun generateCompleteMarkdown(): String {
-        val pluginMarkdown = PluginMarkdown.create(options.groupId, options.artifactId, options.version, options.goal, options.phase)
+        val groupId = options.groupId
+        val artifactId = options.artifactId
+        val version = options.version
+        val goal = options.goal
+        val phase = options.phase
+        val pluginMarkdown = PluginMarkdown.create(groupId, artifactId, version, goal, phase)
         return "${rawMarkdownDirective.completeString}\n${pluginMarkdown.markdownString()}"
     }
 }
 
-class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactId, val version: Version, val goal: MavenGoal, val phase: MavenPhase) {
+class DependencyDirectiveOptions(
+    val groupId: GroupId,
+    val artifactId: ArtifactId,
+    val version: Version,
+    val goal: MavenGoal,
+    val phase: MavenPhase
+) {
 
     companion object {
-        private val PLUGIN_OPTIONS_REGEX = """\(? *(?<groupId>groupId(=[^ ]*)?) *(?<artifactId>artifactId(=[^ ]*)?) *(?<version>version(=[^ ]*)?) *(?<goal>goal=[^ ]*) *(?<phase>phase=[^ ]*) *\)?""".toRegex()
+        private val PLUGIN_OPTIONS_REGEX = "\\(? *(?<groupId>groupId(=[^ ]*)?) *" +
+            "(?<artifactId>artifactId(=[^ ]*)?) *" +
+            "(?<version>version(=[^ ]*)?) *" +
+            "(?<goal>goal=[^ ]*) *" +
+            "(?<phase>phase=[^ ]*) *\\)?"
         private val PROPERTY_VALUE_REGEX = """[\w]+=(?<value>.+)""".toRegex()
 
-        fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): DependencyDirectiveOptions {
+        fun create(
+            rawMarkdownDirective: RawMarkdownDirective,
+            file: MarkdownFile,
+            project: Project
+        ): DependencyDirectiveOptions {
             val mavenConfiguration = project.getInformation(DOCUMAID_CONFIGURATION_KEY).mavenConfiguration
             val optionsString = rawMarkdownDirective.optionsString
-            val matchEntire = PLUGIN_OPTIONS_REGEX.matchEntire(optionsString.value)
+            val matchEntire = PLUGIN_OPTIONS_REGEX.toRegex().matchEntire(optionsString.value)
             if (matchEntire != null) {
                 val groupId = extractGroupId(matchEntire, mavenConfiguration, file)
                 val artifactId = extractArtifactId(matchEntire, mavenConfiguration, file)
@@ -70,11 +89,17 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
                 val phase = extractPhase(matchEntire, file)
                 return DependencyDirectiveOptions(groupId, artifactId, version, goal, phase)
             } else {
-                throw DocuMaidException.aDocuMaidException("Cannot parse options for [${PLUGIN_TAG.value}]: ${optionsString.value}", file)
+                val message = "Cannot parse options for [${PLUGIN_TAG.value}]: ${optionsString.value}"
+                throw aDocuMaidException(message, file)
             }
         }
 
-        private fun extractGroupId(matchResult: MatchResult, mavenConfig: MavenConfiguration, file: MarkdownFile): GroupId {
+        private fun extractGroupId(
+            matchResult: MatchResult,
+            mavenConfig: MavenConfiguration,
+            file: MarkdownFile
+        ): GroupId {
+
             val groupIdString = extractMandatoryValue(matchResult, "groupId", file)
             return if (groupIdString != null) {
                 GroupId.create(groupIdString)
@@ -83,7 +108,12 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
             }
         }
 
-        private fun extractArtifactId(matchResult: MatchResult, mavenConfig: MavenConfiguration, file: MarkdownFile): ArtifactId {
+        private fun extractArtifactId(
+            matchResult: MatchResult,
+            mavenConfig: MavenConfiguration,
+            file: MarkdownFile
+        ): ArtifactId {
+
             val artifactIdString = extractMandatoryValue(matchResult, "artifactId", file)
             return if (artifactIdString != null) {
                 ArtifactId.create(artifactIdString)
@@ -92,7 +122,12 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
             }
         }
 
-        private fun extractVersion(matchResult: MatchResult, mavenConfig: MavenConfiguration, file: MarkdownFile): Version {
+        private fun extractVersion(
+            matchResult: MatchResult,
+            mavenConfig: MavenConfiguration,
+            file: MarkdownFile
+        ): Version {
+
             val versionString = extractMandatoryValue(matchResult, "version", file)
             return if (versionString != null) {
                 Version.create(versionString)
@@ -106,7 +141,8 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
             return if (goalString != null) {
                 MavenGoal.create(goalString)
             } else {
-                throw DocuMaidException.aDocuMaidException("[${PLUGIN_TAG.value}] requires 'goal' to be defined with a value in options.", file)
+                val message = "[${PLUGIN_TAG.value}] requires 'goal' to be defined with a value in options."
+                throw aDocuMaidException(message, file)
             }
         }
 
@@ -115,7 +151,8 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
             return if (phaseString != null) {
                 MavenPhase.create(phaseString)
             } else {
-                throw DocuMaidException.aDocuMaidException("[${PLUGIN_TAG.value}] requires 'phase' to be defined with a value in options.", file)
+                val message = "[${PLUGIN_TAG.value}] requires 'phase' to be defined with a value in options."
+                throw aDocuMaidException(message, file)
             }
         }
 
@@ -129,7 +166,7 @@ class DependencyDirectiveOptions(val groupId: GroupId, val artifactId: ArtifactI
                     null
                 }
             } else {
-                throw DocuMaidException.aDocuMaidException("[${PLUGIN_TAG.value}] requires '$valueName' to be set in options.", file)
+                throw aDocuMaidException("[${PLUGIN_TAG.value}] requires '$valueName' to be set in options.", file)
             }
         }
     }

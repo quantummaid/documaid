@@ -24,16 +24,27 @@ package de.quantummaid.documaid.processing
 import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
+import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.generating.GenerationFlavorType
+import de.quantummaid.documaid.generating.GenerationFlavorType.Companion.generationTypeForString
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.erroneousProcessingResult
 
 class ProcessingStep private constructor(private val visitors: List<ProcessingVisitor>) {
 
     companion object {
-        fun create(): ProcessingStep {
-            return ProcessingStep(emptyList())
+        fun create(docuMaidConfiguration: DocuMaidConfiguration): ProcessingStep {
+            val generationType = generationTypeForString(docuMaidConfiguration.generationFlavorType)
+            val visitors = when (generationType) {
+                GenerationFlavorType.QUANTUMMAID -> listOf(
+                    HugoProcessingGenerationVisitor()
+                )
+                else -> emptyList()
+            }
+
+            return ProcessingStep(visitors)
         }
     }
 
@@ -43,7 +54,13 @@ class ProcessingStep private constructor(private val visitors: List<ProcessingVi
         return processDirectory(directory, methodCaller, project, goal)
     }
 
-    private fun processDirectory(directory: Directory, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<ProcessingResult> {
+    private fun processDirectory(
+        directory: Directory,
+        methodCaller: FileObjectMethodCaller,
+        project: Project,
+        goal: Goal
+    ): List<ProcessingResult> {
+
         visitors.forEach { it.beforeDirectoryProcessing(directory, project, goal) }
         val processingResults = directory.children()
             .flatMap {
@@ -52,16 +69,23 @@ class ProcessingStep private constructor(private val visitors: List<ProcessingVi
                     is ProjectFile -> processFile(it, methodCaller, project, goal)
                     else -> emptyList()
                 }
-            }
-        visitors.forEach { it.afterDirectoryProcessing(directory, project, goal) }
+            }.toMutableList()
+        visitors.forEach { it.afterDirectoryProcessing(directory, project, goal, processingResults) }
         return processingResults
     }
 
-    private fun processFile(file: ProjectFile, methodCaller: FileObjectMethodCaller, project: Project, goal: Goal): List<ProcessingResult> {
+    private fun processFile(
+        file: ProjectFile,
+        methodCaller: FileObjectMethodCaller,
+        project: Project,
+        goal: Goal
+    ): List<ProcessingResult> {
+
         visitors.forEach { it.beforeFileProcessing(file, project, goal) }
         val processingResult = methodCaller.call(file, project)
-        visitors.forEach { it.afterFileProcessing(file, project, goal) }
-        return listOf(processingResult)
+        val processingResults = mutableListOf(processingResult)
+        visitors.forEach { it.afterFileProcessing(file, project, goal, processingResults) }
+        return processingResults
     }
 }
 

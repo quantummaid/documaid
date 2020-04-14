@@ -194,7 +194,7 @@ fun aTocTagInReadmeWithMissingIndex(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", ".", ""),
+                aMarkdownFileWithToc("README.md", ".", "null"),
                 aFile("1_Introduction.md"),
                 aFile("3_Three.md"))
     }
@@ -206,7 +206,7 @@ fun aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(basePath: Path): SetupUpd
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", ".", ""),
+                aMarkdownFileWithToc("README.md", ".", "null"),
                 aFile("1_Introduction.md"),
                 aDirectory("02_docs")
                     .with(
@@ -222,7 +222,7 @@ fun aTocTagInReadmeWithMissingIndexInSubDirectory(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", ".", ""),
+                aMarkdownFileWithToc("README.md", ".", "null"),
                 aFile("1_Introduction.md"),
                 aDirectory("02_docs")
                     .with(
@@ -250,7 +250,7 @@ fun aTocTagInReadmeWithMalFormedOptions(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", notACorrectOptionsString, ""))
+                aMarkdownFileWithToc("README.md", notACorrectOptionsString, "null"))
     }
 }
 
@@ -289,10 +289,16 @@ fun aTocInReadmeWithMissingToc(basePath: Path): SetupUpdate {
 
 fun aTocInReadmeWithIncorrectToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocInReadmeWithIncorrectToc")
+    val expectedToc = """
+                     1. [Introduction](1_Introduction.md)
+                     2. Docs
+                         1. [First docs](02_docs/1_FirstDocs.md)
+                         2. [Second docs](02_docs/2_SecondDocs.md)
+                """.trimIndent()
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithAWrongToc("README.md", ".", ""),
+                aMarkdownFileWithAWrongToc("README.md", ".", expectedToc),
                 aFile("0_Overview.md"),
                 aFile("1_Introduction.md"),
                 aDirectory("02_docs")

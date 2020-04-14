@@ -23,10 +23,10 @@ package de.quantummaid.documaid.usecases.maven.dependency
 
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.domain.markdown.tagBased.dependency.DependencyDirective
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
@@ -71,7 +71,9 @@ interface DependencySpecs {
             .configuredWithGoal(Goal.GENERATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Cannot parse options for [${DependencyDirective.DEPENDENCY_TAG.value}]: ${"(groupId=not correct artifactId version )"} " +
+            .then(expectAnExceptionWithMessage(
+                "Cannot parse options for [${DependencyDirective.DEPENDENCY_TAG.value}]: " +
+                    "${"(groupId=not correct artifactId version )"} " +
                 "(in path ${absPath("aFileWithUnparsableDependencyOptionsString/dependency.md")})"))
     }
 
@@ -92,8 +94,10 @@ interface DependencySpecs {
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with incorrect dependency code for " +
-                "'<!---[Dependency](groupId=local artifactId version=1.0.0 )-->' (in path ${absPath("aFileWithAWrongGeneratedDependency/dependency.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with incorrect dependency code for " +
+                "'<!---[Dependency](groupId=local artifactId version=1.0.0 )-->' " +
+                    "(in path ${absPath("aFileWithAWrongGeneratedDependency/dependency.md")})"))
     }
 
     @Test
@@ -103,8 +107,10 @@ interface DependencySpecs {
             .configuredWithGoal(Goal.VALIDATE)
             .configuredWithMavenCoordinates())
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with missing dependency code for " +
-                "'<!---[Dependency](groupId artifactId=test version=1 scope=compile )-->' (in path ${absPath("aFileWithDependencyWithMissingCode/dependency.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [${DependencyDirective.DEPENDENCY_TAG.value}] tag with missing dependency code for " +
+                "'<!---[Dependency](groupId artifactId=test version=1 scope=compile )-->' " +
+                    "(in path ${absPath("aFileWithDependencyWithMissingCode/dependency.md")})"))
     }
 
     @Test

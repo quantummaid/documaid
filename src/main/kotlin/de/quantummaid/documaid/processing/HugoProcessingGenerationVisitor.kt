@@ -23,51 +23,28 @@ package de.quantummaid.documaid.processing
 
 import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.config.Goal
+import de.quantummaid.documaid.domain.paths.IndexedPath
+import de.quantummaid.documaid.domain.paths.makeRelativeTo
+import de.quantummaid.documaid.domain.paths.pathUnderTopLevelDirectory
 
-interface ProcessingVisitor {
-
-    fun beforeDirectoryProcessing(directory: Directory, project: Project, goal: Goal)
-
-    fun afterDirectoryProcessing(
-        directory: Directory,
-        project: Project,
-        goal: Goal,
-        directoryProcessingResults: MutableList<ProcessingResult>
-    )
-
-    fun beforeFileProcessing(file: ProjectFile, project: Project, goal: Goal)
-
-    fun afterFileProcessing(
-        file: ProjectFile,
-        project: Project,
-        goal: Goal,
-        fileProcessingResults: MutableList<ProcessingResult>
-    )
-}
-
-open class ProcessingVisitorAdapter : ProcessingVisitor {
-
-    override fun beforeDirectoryProcessing(directory: Directory, project: Project, goal: Goal) {
-    }
-
+class HugoProcessingGenerationVisitor : ProcessingVisitorAdapter() {
     override fun afterDirectoryProcessing(
         directory: Directory,
         project: Project,
         goal: Goal,
         directoryProcessingResults: MutableList<ProcessingResult>
     ) {
-    }
-
-    override fun beforeFileProcessing(file: ProjectFile, project: Project, goal: Goal) {
-    }
-
-    override fun afterFileProcessing(
-        file: ProjectFile,
-        project: Project,
-        goal: Goal,
-        fileProcessingResults: MutableList<ProcessingResult>
-    ) {
+        val projectRelativePath = makeRelativeTo(directory, project)
+        if (pathUnderTopLevelDirectory(projectRelativePath, "documentation/")) {
+            if (IndexedPath.isIndexedPath(projectRelativePath)) {
+                val indexedPath = IndexedPath.anIndexedPath(projectRelativePath)
+                val fileName = directory.absolutePath().resolve("_index.md")
+                val markdownFile = HugoIndexedDirectoryMarkdownFile.create(fileName, indexedPath)
+                directory.addChild(markdownFile)
+                val processingResult = ProcessingResult.successfulProcessingResult(markdownFile, markdownFile.content())
+                directoryProcessingResults.add(processingResult)
+            }
+        }
     }
 }

@@ -30,7 +30,8 @@ class CodeSnippetsLookupTable {
     private val map = HashMap<SnippetId, MutableList<Path>>()
 
     companion object {
-        val SNIPPETS_LOOKUP_TABLE_KEY = CollectedInformationKey<CodeSnippetsLookupTable>("SNIPPETS_LOOKUP_TABLE_KEY")
+        private val keyName = "SNIPPETS_LOOKUP_TABLE_KEY"
+        val SNIPPETS_LOOKUP_TABLE_KEY = CollectedInformationKey<CodeSnippetsLookupTable>(keyName)
     }
 
     fun registerSnippet(snippetId: SnippetId, path: Path) {

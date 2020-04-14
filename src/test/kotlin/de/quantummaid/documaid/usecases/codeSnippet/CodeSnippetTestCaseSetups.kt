@@ -23,7 +23,7 @@ package de.quantummaid.documaid.usecases.codeSnippet
 
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory
-import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithACommentsInSnippet.Companion.aJavaFileWithACommentsInSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithADifferentSnippet.Companion.aJavaFileWithADifferentSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithFullClassSnippet.Companion.aJavaFileWithOneFullSnippet
@@ -33,7 +33,7 @@ import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.C
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithFullClassSnippetDirective
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithSnippetDirective
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithSnippetDirectiveAtTheEnd
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoSnippets
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoWrongSnippets
@@ -41,20 +41,20 @@ import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongGenerat
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongSnippet
 
 fun aFileWithASingleCodeSnippet(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleCodeSnippet")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleCodeSnippet")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFileWithSnippet,
-                aMarkdownFileWithSnippetDirective("md1.md", "testSnippet", javaFileWithSnippet.snippet)
+                aMarkdownFileWithSnippet("md1.md", "testSnippet", javaFileWithSnippet.snippet)
             )
     }
 }
 
 fun aFileWithATwoCodeSnippets(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithATwoCodeSnippets")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithATwoCodeSnippets")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("sourceA.java", "snippet1")
     val javaFileWithADifferentSnippet = aJavaFileWithADifferentSnippet("sourceB.java", "snippet2")
@@ -71,7 +71,7 @@ fun aFileWithATwoCodeSnippets(basePath: String): SetupUpdate {
 }
 
 fun aFileWithTheSameCodeSnippetTwice(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTheSameCodeSnippetTwice")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTheSameCodeSnippetTwice")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("sourceA.java", "snippet")
     return { (_, sutFileStructure) ->
@@ -86,61 +86,61 @@ fun aFileWithTheSameCodeSnippetTwice(basePath: String): SetupUpdate {
 }
 
 fun filesWithTheSameCodeSnippet(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTheSameCodeSnippetTwice")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTheSameCodeSnippetTwice")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("sourceA.java", "snippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFileWithSnippet,
-                aMarkdownFileWithSnippetDirective("md1.md", "snippet", javaFileWithSnippet.snippet),
-                aMarkdownFileWithSnippetDirective("md2.md", "snippet", javaFileWithSnippet.snippet)
+                aMarkdownFileWithSnippet("md1.md", "snippet", javaFileWithSnippet.snippet),
+                aMarkdownFileWithSnippet("md2.md", "snippet", javaFileWithSnippet.snippet)
             )
     }
 }
 
 fun aFileWithTheSameCodeSnippetTwiceInDifferentFiles(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTheSameCodeSnippetTwiceInDifferentFiles")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTheSameCodeSnippetTwiceInDifferentFiles")
 
     val javaFileWithSnippet = aJavaFileWithADifferentSnippet("source.java", "snippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFileWithSnippet,
-                aMarkdownFileWithSnippetDirective("md1.md", "snippet", javaFileWithSnippet.snippet),
-                aMarkdownFileWithSnippetDirective("md2.md", "snippet", javaFileWithSnippet.snippet)
+                aMarkdownFileWithSnippet("md1.md", "snippet", javaFileWithSnippet.snippet),
+                aMarkdownFileWithSnippet("md2.md", "snippet", javaFileWithSnippet.snippet)
             )
     }
 }
 
 fun aFileWithACodeSnippetFromANonJavaFile(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithACodeSnippetFromANonJavaFile")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithACodeSnippetFromANonJavaFile")
 
     val xmlFileWithSnippet = aXmlFileWithOneSnippet("source.xml", "snippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 xmlFileWithSnippet,
-                aMarkdownFileWithSnippetDirective("md1.md", "snippet", xmlFileWithSnippet.snippet, "xml")
+                aMarkdownFileWithSnippet("md1.md", "snippet", xmlFileWithSnippet.snippet, "xml")
             )
     }
 }
 
 fun aFileWithCommentsInCodeSnippet(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithCommentsInCodeSnippet")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithCommentsInCodeSnippet")
 
     val javaFileWithSnippet = aJavaFileWithACommentsInSnippet("source.java", "snippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFileWithSnippet,
-                aMarkdownFileWithSnippetDirective("md1.md", "snippet", javaFileWithSnippet.snippet)
+                aMarkdownFileWithSnippet("md1.md", "snippet", javaFileWithSnippet.snippet)
             )
     }
 }
 
 fun aFileWithAFullClassSnippet(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithAFullClassSnippet")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithAFullClassSnippet")
 
     val javaFile = aJavaFileWithOneFullSnippet("FullClass.java")
     return { (_, sutFileStructure) ->
@@ -153,7 +153,7 @@ fun aFileWithAFullClassSnippet(basePath: String): SetupUpdate {
 }
 
 fun aFileWithWrongCodeSnippetPresent(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithWrongCodeSnippetPresent")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithWrongCodeSnippetPresent")
 
     val javaFileWithSnippet = aJavaFileWithADifferentSnippet("source.java", "snippet")
     return { (_, sutFileStructure) ->
@@ -166,7 +166,7 @@ fun aFileWithWrongCodeSnippetPresent(basePath: String): SetupUpdate {
 }
 
 fun aFileWithTwoOutdatedCodeSnippets(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTwoOutdatedCodeSnippets")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTwoOutdatedCodeSnippets")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("sourceA.java", "snippet1")
     val javaFileWithADifferentSnippet = aJavaFileWithADifferentSnippet("sourceB.java", "snippet2")
@@ -183,7 +183,7 @@ fun aFileWithTwoOutdatedCodeSnippets(basePath: String): SetupUpdate {
 }
 
 fun filesWithDuplicateCodeSnippets(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "duplicateSnippetsDirectory")
+    val testDir = aTemporyTestDirectory(basePath, "duplicateSnippetsDirectory")
 
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
@@ -201,7 +201,7 @@ fun filesWithDuplicateCodeSnippets(basePath: String): SetupUpdate {
 }
 
 fun aCorrectlyGeneratedFileWithOneCodeSnippet(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aCorrectlyGeneratedCodeSnippet")
+    val testDir = aTemporyTestDirectory(basePath, "aCorrectlyGeneratedCodeSnippet")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -217,7 +217,7 @@ fun aFileWithAMissingCodeSnippet(basePath: String): SetupUpdate {
 }
 
 fun aFileWithMultipleCodeSnippetErrors(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithMultipleCodeSnippetErrors")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithMultipleCodeSnippetErrors")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("sourceA.java", "snippet1")
     val javaFileWithADifferentSnippet = aJavaFileWithADifferentSnippet("sourceB.java", "snippet2")
@@ -233,7 +233,7 @@ fun aFileWithMultipleCodeSnippetErrors(basePath: String): SetupUpdate {
 }
 
 fun aFileWithASingleCodeSnippetAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "SnippetAtTheEndOfFileWithoutNewLine")
+    val testDir = aTemporyTestDirectory(basePath, "SnippetAtTheEndOfFileWithoutNewLine")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -246,7 +246,7 @@ fun aFileWithASingleCodeSnippetAtTheEndOfFileWithoutNewLine(basePath: String): S
 }
 
 fun aFileWithAlreadyExistingCodeSnippetAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "ExistingSnippetAtTheEndOfFileWithoutNewLine")
+    val testDir = aTemporyTestDirectory(basePath, "ExistingSnippetAtTheEndOfFileWithoutNewLine")
 
     val javaFileWithSnippet = aJavaFileWithOneSnippet("source.java", "testSnippet")
     return { (_, sutFileStructure) ->
@@ -259,7 +259,7 @@ fun aFileWithAlreadyExistingCodeSnippetAtTheEndOfFileWithoutNewLine(basePath: St
 }
 
 fun aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(basePath: String): SetupUpdate {
-    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond")
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond")
 
     val javaFile = aJavaFileWithTwoSnippets("source1.java", "testSnippet", "testSnippet1")
     return { (_, sutFileStructure) ->

@@ -19,21 +19,21 @@
  * under the License.
  */
 
-package de.quantummaid.documaid.domain.markdown.tagBased
+package de.quantummaid.documaid.processing
 
-import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.errors.VerificationError
+import de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading.HugoHeadingMarkdown
+import de.quantummaid.documaid.domain.paths.IndexedPath
+import java.nio.file.Path
 
-interface MarkdownTagHandler {
+class HugoIndexedDirectoryMarkdownFile {
 
-    fun tag(): String
-
-    fun generate(
-        directive: RawMarkdownDirective,
-        file: MarkdownFile,
-        project: Project
-    ): Pair<MarkdownReplacement?, List<VerificationError>>
-
-    fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError>
+    companion object {
+        fun create(path: Path, indexedPath: IndexedPath): MarkdownFile {
+            val hugoHeadingMarkdown = HugoHeadingMarkdown.create(indexedPath.name, indexedPath.index)
+            val markdown = hugoHeadingMarkdown.generateMarkdown()
+            path.toFile().writeText(markdown)
+            return MarkdownFile.createFromGeneratedFile(path)
+        }
+    }
 }

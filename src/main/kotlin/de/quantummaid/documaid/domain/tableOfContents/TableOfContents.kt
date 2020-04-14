@@ -164,4 +164,8 @@ private class LinkedFilesList(val lookUpMap: HashMap<Path, TocLinkedFile>) {
     }
 }
 
-private class TocLinkedFile(val fileObject: TocDataFile, val predecessor: TocLinkedFile?, var successor: TocLinkedFile?)
+private class TocLinkedFile(
+    val fileObject: TocDataFile,
+    val predecessor: TocLinkedFile?,
+    var successor: TocLinkedFile?
+)

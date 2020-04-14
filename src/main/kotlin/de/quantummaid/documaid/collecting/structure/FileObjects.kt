@@ -23,7 +23,7 @@ package de.quantummaid.documaid.collecting.structure
 
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.domain.snippet.SnippetId
-import de.quantummaid.documaid.errors.DocuMaidException
+import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Path
@@ -62,8 +62,8 @@ interface ProjectFile : FileObject {
             .toList()
         when {
             matchingSnippets.size == 1 -> return matchingSnippets[0]
-            matchingSnippets.isEmpty() -> throw DocuMaidException.aDocuMaidException("Snippet $snippetId not found", this)
-            else -> throw DocuMaidException.aDocuMaidException("Not unique snippet $snippetId found", this)
+            matchingSnippets.isEmpty() -> throw aDocuMaidException("Snippet $snippetId not found", this)
+            else -> throw aDocuMaidException("Not unique snippet $snippetId found", this)
         }
     }
 }

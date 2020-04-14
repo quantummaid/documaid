@@ -18,22 +18,3 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package de.quantummaid.documaid.domain.markdown.tagBased
-
-import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.errors.VerificationError
-
-interface MarkdownTagHandler {
-
-    fun tag(): String
-
-    fun generate(
-        directive: RawMarkdownDirective,
-        file: MarkdownFile,
-        project: Project
-    ): Pair<MarkdownReplacement?, List<VerificationError>>
-
-    fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError>
-}

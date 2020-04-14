@@ -27,7 +27,7 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.link.LinkDirective.Companion.LINK_TAG
-import de.quantummaid.documaid.errors.DocuMaidException
+import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -41,7 +41,7 @@ class LinkDirective private constructor(val directive: RawMarkdownDirective, val
             val rootRelativeTargetPath = options.rootDirRelativePath
             val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
             if (!lookUpTable.fileExists(rootRelativeTargetPath)) {
-                throw DocuMaidException.aDocuMaidException("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
+                throw aDocuMaidException("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
             }
             return LinkDirective(directive, options)
         }
@@ -69,7 +69,8 @@ data class LinkDirectiveOptions(val rootDirRelativePath: Path, val originalPathS
                 }
                 return LinkDirectiveOptions(absolutePath, pathString, name)
             } else {
-                throw DocuMaidException.aDocuMaidException("Found [$LINK_TAG] directive with not parsable options '${directive.completeString}'", file)
+                val message = "Found [$LINK_TAG] directive with not parsable options '${directive.completeString}'"
+                throw aDocuMaidException(message, file)
             }
         }
     }

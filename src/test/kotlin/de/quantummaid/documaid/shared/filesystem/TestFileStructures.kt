@@ -103,7 +103,10 @@ class PhysicalDirectoryBuilder private constructor(private val name: String) : P
     }
 }
 
-class PhysicalDirectory internal constructor(path: Path, val children: MutableList<PhysicalFileObject>) : PhysicalFileObject(path) {
+class PhysicalDirectory internal constructor(
+    path: Path,
+    val children: MutableList<PhysicalFileObject>
+) : PhysicalFileObject(path) {
 
     fun add(children: List<PhysicalFileObject>) {
         this.children.addAll(children)

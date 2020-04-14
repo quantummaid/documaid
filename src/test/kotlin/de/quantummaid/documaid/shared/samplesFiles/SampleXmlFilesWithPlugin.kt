@@ -23,8 +23,18 @@ package de.quantummaid.documaid.shared.samplesFiles
 
 import de.quantummaid.documaid.shared.filesystem.ProcessedFile
 import de.quantummaid.documaid.shared.filesystem.ProcessedFileBuilder
+import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties.Companion.SAMPLE_ARTIFACT_ID
+import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties.Companion.SAMPLE_GROUP_ID
+import de.quantummaid.documaid.shared.samplesFiles.SampleMavenProjectProperties.Companion.SAMPLE_VERSION_ID
 
-fun aMarkdownFileWithAPluginDirective(fileName: String, groupId: String? = null, artifactId: String? = null, version: String? = null, goal: String, phase: String): ProcessedFile {
+fun aMarkdownFileWithAPluginDirective(
+    fileName: String,
+    groupId: String? = null,
+    artifactId: String? = null,
+    version: String? = null,
+    goal: String,
+    phase: String
+): ProcessedFile {
     val pluginDirective = pluginDirective(groupId, artifactId, version, goal, phase)
     val contentInput = "Something\n" +
         pluginDirective +
@@ -43,12 +53,24 @@ fun aMarkdownFileWithAPluginDirective(fileName: String, groupId: String? = null,
         .build()
 }
 
-internal fun pluginDirective(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
+internal fun pluginDirective(
+    groupId: String?,
+    artifactId: String?,
+    version: String?,
+    goal: String,
+    phase: String
+): String {
     val optionsString = createOptionsString(groupId, artifactId, version, goal, phase)
     return "<!---[Plugin]$optionsString-->\n"
 }
 
-private fun createOptionsString(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
+private fun createOptionsString(
+    groupId: String?,
+    artifactId: String?,
+    version: String?,
+    goal: String,
+    phase: String
+): String {
     val groupIdString = if (groupId != null) "groupId=$groupId " else "groupId "
     val artifactIdString = if (artifactId != null) "artifactId=$artifactId " else "artifactId "
     val versionString = if (version != null) "version=$version " else "version "
@@ -57,10 +79,16 @@ private fun createOptionsString(groupId: String?, artifactId: String?, version: 
     return "($groupIdString$artifactIdString$versionString$goalString$phaseString)"
 }
 
-internal fun createMarkdownPlugin(groupId: String?, artifactId: String?, version: String?, goal: String, phase: String): String {
-    val groupIdString = "    <groupId>${groupId ?: SampleMavenProjectProperties.SAMPLE_GROUP_ID}</groupId>\n"
-    val artifactIdString = "    <artifactId>${artifactId ?: SampleMavenProjectProperties.SAMPLE_ARTIFACT_ID}</artifactId>\n"
-    val versionString = "    <version>${version ?: SampleMavenProjectProperties.SAMPLE_VERSION_ID}</version>\n"
+internal fun createMarkdownPlugin(
+    groupId: String?,
+    artifactId: String?,
+    version: String?,
+    goal: String,
+    phase: String
+): String {
+    val groupIdString = "    <groupId>${groupId ?: SAMPLE_GROUP_ID}</groupId>\n"
+    val artifactIdString = "    <artifactId>${artifactId ?: SAMPLE_ARTIFACT_ID}</artifactId>\n"
+    val versionString = "    <version>${version ?: SAMPLE_VERSION_ID}</version>\n"
 
     return "```xml\n" +
         "<plugin>\n" +

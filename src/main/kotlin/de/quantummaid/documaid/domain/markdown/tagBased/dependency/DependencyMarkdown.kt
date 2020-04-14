@@ -22,31 +22,42 @@
 package de.quantummaid.documaid.domain.markdown.tagBased.dependency
 
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
-import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection
+import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection.Companion.extractTrailingCodeSection
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Scope
 import de.quantummaid.documaid.domain.maven.Version
 
-class DependencyMarkdown private constructor(private val groupId: GroupId, private val artifactId: ArtifactId, private val version: Version, private val scope: Scope?) {
+class DependencyMarkdown private constructor(
+    private val groupId: GroupId,
+    private val artifactId: ArtifactId,
+    private val version: Version,
+    private val scope: Scope?
+) {
 
     companion object {
         fun create(groupId: GroupId, artifactId: ArtifactId, version: Version, scope: Scope?): DependencyMarkdown {
             return DependencyMarkdown(groupId, artifactId, version, scope)
         }
 
-        fun startsWithDependencyMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithDependencyMarkdown(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownMatchResult {
             val content = remainingMarkupFileContent.content
             return if (content.trimStart().startsWith("```")) {
-                val trailingCodeSection = TrailingMarkdownCodeSection.extractTrailingCodeSection(remainingMarkupFileContent)
+                val trailingCodeSection = extractTrailingCodeSection(remainingMarkupFileContent)
                 return if (trailingCodeSection.codeContent.contains("<dependency>")) {
-                    TrailingMarkdownMatchResult.createForMatch(trailingCodeSection.completeLength, trailingCodeSection.untrimmedContent)
+                    val completeLength = trailingCodeSection.completeLength
+                    val untrimmedContent = trailingCodeSection.untrimmedContent
+                    createMatchForTrailingMarkdown(completeLength, untrimmedContent)
                 } else {
-                    TrailingMarkdownMatchResult.createForNoMatch()
+                    noMatchForTrailingCodeSection()
                 }
             } else {
-                TrailingMarkdownMatchResult.createForNoMatch()
+                noMatchForTrailingCodeSection()
             }
         }
     }

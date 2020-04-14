@@ -54,7 +54,9 @@ fun severalFilesWithLinksAndSnippets(basePath: String): SetupUpdate {
                         aMarkdownFileWithNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithNav("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithNav("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }
@@ -83,7 +85,9 @@ fun aCorrectlyGeneratedFileWithLinksAndSnippets(basePath: String): SetupUpdate {
                         aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithAlreadyGeneratedNav("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithAlreadyGeneratedNav("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }

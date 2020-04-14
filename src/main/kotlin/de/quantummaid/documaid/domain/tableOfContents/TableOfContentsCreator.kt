@@ -25,17 +25,21 @@ import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.FileObject
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
 
 class TableOfContentsCreator(private val traversalDecision: TocTraversalDecision) {
 
-    fun createFrom(tableOfContentsDirective: TableOfContentsDirective, fileWithToc: MarkdownFile): Pair<TableOfContents?, List<VerificationError>> {
+    fun createFrom(
+        tableOfContentsDirective: TableOfContentsDirective,
+        fileWithToc: MarkdownFile
+    ): Pair<TableOfContents?, List<VerificationError>> {
         val tocDataOnlyDirectory = collectTocData(tableOfContentsDirective.scanBaseDirectory)
         val rootDirectoryToRelateLinksTo = tableOfContentsDirective.file.absolutePath().parent
-        val (tocRootDirectory, verificationErrors) = mapToTocDataStructure(tocDataOnlyDirectory, rootDirectoryToRelateLinksTo)
+        val (tocRootDirectory, verificationErrors) =
+            mapToTocDataStructure(tocDataOnlyDirectory, rootDirectoryToRelateLinksTo)
         return if (verificationErrors.isNotEmpty() || tocRootDirectory == null) {
             Pair(null, verificationErrors)
         } else {
@@ -50,28 +54,32 @@ class TableOfContentsCreator(private val traversalDecision: TocTraversalDecision
 
     private fun collectTocDirectory(directory: Directory): Directory {
         val tocRelevantChildren = directory.children()
-                .filter {
-                    when (it) {
-                        is Directory -> traversalDecision.directoryShouldBeTraversed(it)
-                        is ProjectFile -> isIndexedMarkdown(it)
-                        else -> false
-                    }
+            .filter {
+                when (it) {
+                    is Directory -> traversalDecision.directoryShouldBeTraversed(it)
+                    is ProjectFile -> isIndexedMarkdown(it)
+                    else -> false
                 }
-                .map {
-                    when (it) {
-                        is Directory -> collectTocDirectory(it)
-                        is MarkdownFile -> it
-                        else -> null
-                    }
-                }.map { it!! }
+            }
+            .map {
+                when (it) {
+                    is Directory -> collectTocDirectory(it)
+                    is MarkdownFile -> it
+                    else -> null
+                }
+            }.map { it!! }
         return Directory(directory.absolutePath(), tocRelevantChildren)
     }
 
     private fun isIndexedMarkdown(it: FileObject): Boolean {
-        return it is MarkdownFile && GithubTableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matches(it.name())
+        val matchesPattern = GithubTableOfContentsMarkdownTagHandler.INDEX_MARKDOWN_FILE_NAME_PATTERN.matches(it.name())
+        return it is MarkdownFile && matchesPattern
     }
 
-    private fun mapToTocDataStructure(tocDataOnlyDirectory: Directory, rootDirectoryToRelateLinksTo: Path): Pair<TocRootDirectory?, List<VerificationError>> {
+    private fun mapToTocDataStructure(
+        tocDataOnlyDirectory: Directory,
+        rootDirectoryToRelateLinksTo: Path
+    ): Pair<TocRootDirectory?, List<VerificationError>> {
         val children = tocDataOnlyDirectory.children()
         val (tocDataChildren, errors) = mapTocChildren(children, rootDirectoryToRelateLinksTo)
         return if (errors.isNotEmpty()) {
@@ -81,25 +89,31 @@ class TableOfContentsCreator(private val traversalDecision: TocTraversalDecision
         }
     }
 
-    private fun mapTocChildren(children: List<FileObject>, rootDirectoryToRelateLinksTo: Path): Pair<MutableList<TocDataFileObject>, MutableList<VerificationError>> {
+    private fun mapTocChildren(
+        children: List<FileObject>,
+        rootDirectoryToRelateLinksTo: Path
+    ): Pair<MutableList<TocDataFileObject>, MutableList<VerificationError>> {
         return children
-                .map {
-                    if (it is Directory) {
-                        mapToTocDataDirectory(it, rootDirectoryToRelateLinksTo)
-                    } else {
-                        mapToTocDataFile(it as ProjectFile, rootDirectoryToRelateLinksTo)
-                    }
+            .map {
+                if (it is Directory) {
+                    mapToTocDataDirectory(it, rootDirectoryToRelateLinksTo)
+                } else {
+                    mapToTocDataFile(it as ProjectFile, rootDirectoryToRelateLinksTo)
                 }
-                .fold(Pair(mutableListOf(), mutableListOf())) { acc, pair ->
-                    if (pair.first != null) {
-                        acc.first.add(pair.first!!)
-                    }
-                    acc.second.addAll(pair.second)
-                    acc
+            }
+            .fold(Pair(mutableListOf(), mutableListOf())) { acc, pair ->
+                if (pair.first != null) {
+                    acc.first.add(pair.first!!)
                 }
+                acc.second.addAll(pair.second)
+                acc
+            }
     }
 
-    private fun mapToTocDataDirectory(directory: Directory, rootDirectoryToRelateLinksTo: Path): Pair<TocDataDirectory?, List<VerificationError>> {
+    private fun mapToTocDataDirectory(
+        directory: Directory,
+        rootDirectoryToRelateLinksTo: Path
+    ): Pair<TocDataDirectory?, List<VerificationError>> {
         val children = directory.children()
         val (tocDataChildren, errors) = mapTocChildren(children, rootDirectoryToRelateLinksTo)
         if (errors.isNotEmpty()) {
@@ -108,7 +122,10 @@ class TableOfContentsCreator(private val traversalDecision: TocTraversalDecision
         return TocDataDirectory.create(directory, rootDirectoryToRelateLinksTo, tocDataChildren)
     }
 
-    private fun mapToTocDataFile(file: ProjectFile, rootDirectoryToRelateLinksTo: Path): Pair<TocDataFile?, List<VerificationError>> {
+    private fun mapToTocDataFile(
+        file: ProjectFile,
+        rootDirectoryToRelateLinksTo: Path
+    ): Pair<TocDataFile?, List<VerificationError>> {
         return TocDataFile.create(file, rootDirectoryToRelateLinksTo)
     }
 }

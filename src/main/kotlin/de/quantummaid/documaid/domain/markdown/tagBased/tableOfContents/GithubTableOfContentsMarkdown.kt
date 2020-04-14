@@ -25,19 +25,28 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 
-class GithubTableOfContentsMarkdown(private val rawMarkdownDirective: RawMarkdownDirective, private val tableOfContents: TableOfContents, private val file: MarkdownFile) {
+class GithubTableOfContentsMarkdown(
+    private val rawMarkdownDirective: RawMarkdownDirective,
+    private val tableOfContents: TableOfContents,
+    private val file: MarkdownFile
+) {
 
     companion object {
         val TOC_REGEX = """^\n1\. \[ *.*(?=<!---EndOfToc-->)<!---EndOfToc-->""".toRegex(RegexOption.DOT_MATCHES_ALL)
 
-        fun startsWithTrailingTableOfContentsMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithTrailingTableOfContentsMarkdown(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownMatchResult {
             val matchResult = TOC_REGEX.find(remainingMarkupFileContent.content)
             return if (matchResult != null) {
-                TrailingMarkdownMatchResult.createForMatch(matchResult.range.last - matchResult.range.start, matchResult.value)
+                val length = matchResult.range.last - matchResult.range.start
+                createMatchForTrailingMarkdown(length, matchResult.value)
             } else {
-                TrailingMarkdownMatchResult.createForNoMatch()
+                noMatchForTrailingCodeSection()
             }
         }
     }

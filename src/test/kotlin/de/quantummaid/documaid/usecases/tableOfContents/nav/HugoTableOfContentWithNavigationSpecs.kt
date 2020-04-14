@@ -25,8 +25,8 @@ import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.domain.markdown.tagBased.navigation.NavigationDirective
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.HugoPlatformProvider
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
@@ -45,7 +45,8 @@ class HugoTableOfContentWithNavigationSpecs : TableOfContentWithNavigationSpecs 
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(DokuMaidActionTestBuilder.theDokuIsPimped())
             .then(expectAnExceptionWithMessage(
-                "Found [${NavigationDirective.NAV_TAG}] tag with wrong navigation (in path ${absPath("correctNav/docs/1_Introduction.md")})"
+                "Found [${NavigationDirective.NAV_TAG}] tag with wrong navigation " +
+                    "(in path ${absPath("correctNav/docs/1_Introduction.md")})"
             ))
     }
 
@@ -56,7 +57,9 @@ class HugoTableOfContentWithNavigationSpecs : TableOfContentWithNavigationSpecs 
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(DokuMaidActionTestBuilder.theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [${NavigationDirective.NAV_TAG}] tag with wrong navigation (in path ${absPath("wrongNav/docs/1_Introduction.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [${NavigationDirective.NAV_TAG}] tag with wrong navigation " +
+                    "(in path ${absPath("wrongNav/docs/1_Introduction.md")})"))
     }
 
     @Test

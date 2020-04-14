@@ -43,7 +43,11 @@ fun aMarkdownFileWithALinkDirective(fileName: String, linkPath: String, linkName
         .build()
 }
 
-fun aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine(fileName: String, linkPath: String, linkName: String): ProcessedFile {
+fun aMarkdownFileWithALinkAtTheEndOfFileWithoutNewLine(
+    fileName: String,
+    linkPath: String,
+    linkName: String
+): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!--- [Link]($linkPath  $linkName ) -->"
 
@@ -61,7 +65,13 @@ fun aMarkdownFileWithALinkDirectiveAtTheEndOfFileWithoutNewLine(fileName: String
         .build()
 }
 
-fun aMarkdownFileWithTwoLinkDirectives(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
+fun aMarkdownFileWithTwoLinkDirectives(
+    fileName: String,
+    linkPath1: String,
+    linkName1: String,
+    linkPath2: String,
+    linkName2: String
+): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "text with the link <!---[Link] ($linkPath2 \"$linkName2\")-->\n"
@@ -102,7 +112,11 @@ fun aMarkdownFileWithWrongLinkInserted(fileName: String, linkPath: String, linkN
         .build()
 }
 
-fun aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline(fileName: String, linkPath: String, linkName: String): ProcessedFile {
+fun aMarkdownFileWithWrongLinkAtEndOfFileWithoutNewline(
+    fileName: String,
+    linkPath: String,
+    linkName: String
+): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!---[Link] ( $linkPath $linkName)-->\n" +
         "[somethingDifferent](./someDifferentFile)"
@@ -119,7 +133,13 @@ fun aMarkdownFileWithWrongLinkInsertedAtEndOfFileWithoutNewline(fileName: String
         .build()
 }
 
-fun aMarkdownFileWithTwoAlreadyGeneratedLinks(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
+fun aMarkdownFileWithTwoAlreadyGeneratedLinks(
+    fileName: String,
+    linkPath1: String,
+    linkName1: String,
+    linkPath2: String,
+    linkName2: String
+): ProcessedFile {
     val expectedContentOutput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "[$linkName1]($linkPath1)\n" +
@@ -132,7 +152,13 @@ fun aMarkdownFileWithTwoAlreadyGeneratedLinks(fileName: String, linkPath1: Strin
         .build()
 }
 
-fun aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
+fun aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(
+    fileName: String,
+    linkPath1: String,
+    linkName1: String,
+    linkPath2: String,
+    linkName2: String
+): ProcessedFile {
     val expectedContentOutput = "Test File\n" +
         "<!--- [Link]($linkPath1  $linkName1 ) -->\n" +
         "[$linkName1](${SampleGithubRepositoryProperties.EXPECTED_URL_PREFIX}/$linkPath1)\n" +
@@ -145,7 +171,13 @@ fun aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(fileName: String, linkPath1
         .build()
 }
 
-fun aMarkdownFileWithWrongLinkInsertedAndAMissingLink(fileName: String, linkPath1: String, linkName1: String, linkPath2: String, linkName2: String): ProcessedFile {
+fun aMarkdownFileWithWrongLinkInsertedAndAMissingLink(
+    fileName: String,
+    linkPath1: String,
+    linkName1: String,
+    linkPath2: String,
+    linkName2: String
+): ProcessedFile {
     val contentInput = "Test File\n" +
         "<!---[Link] ( $linkPath1 $linkName1)-->" +
         "[somethingDifferent](./someDifferentFile)" +

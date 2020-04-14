@@ -93,10 +93,17 @@ fun aMarkdownFileWithAWrongToc(fileName: String, tocPath: String, expectedToc: S
         "\n<!---EndOfToc-->\n" +
         "\n" +
         "and a little bit more text\n"
+    val expectedContentOutputHugo = " Some Heading" +
+        "with some Text" +
+        "underneath for very very good explanation" +
+        "\n" +
+        "<!---[TOC]($tocPath)-->\n" +
+        "\n" +
+        "and a little bit more text\n"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
-        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutputHugo)
         .build()
 }
 
@@ -123,8 +130,7 @@ fun aMarkdownFileWithTocAtTheEndOfFileWithoutNewLine(fileName: String, tocPath: 
 fun aMarkdownFileWithAWrongTocAtEndOfFile(fileName: String, tocPath: String, expectedToc: String): ProcessedFile {
     val contentInput = " Some Heading" +
         "with some Text" +
-        "underneath for very very good explanation" +
-        "\n" +
+        "underneath for very very good explanation\n" +
         "<!---[TOC]($tocPath)-->\n" +
         "1. [Different](1_Different.md)" +
         "2. [EvenMoreDifferent](2_EventMoreDifferent.md)" +
@@ -132,15 +138,13 @@ fun aMarkdownFileWithAWrongTocAtEndOfFile(fileName: String, tocPath: String, exp
         "\n<!---EndOfToc-->"
     val expectedContentOutput = " Some Heading" +
         "with some Text" +
-        "underneath for very very good explanation" +
-        "\n" +
+        "underneath for very very good explanation\n" +
         "<!---[TOC]($tocPath)-->\n" +
         expectedToc +
         "\n<!---EndOfToc-->"
     val expectedContentOutputHugo = " Some Heading" +
         "with some Text" +
-        "underneath for very very good explanation" +
-        "\n" +
+        "underneath for very very good explanation\n" +
         "<!---[TOC]($tocPath)-->"
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)

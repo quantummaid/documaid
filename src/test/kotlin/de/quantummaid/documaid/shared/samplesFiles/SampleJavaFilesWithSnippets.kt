@@ -24,7 +24,11 @@ package de.quantummaid.documaid.shared.samplesFiles
 import de.quantummaid.documaid.shared.filesystem.NotProcessedSourceFile
 import de.quantummaid.documaid.shared.filesystem.PhysicalFileBuilder
 
-class SampleJavaFileWithOneSnippet private constructor(val fileName: String, val snippet: String, javaFileBuilder: PhysicalFileBuilder) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithOneSnippet private constructor(
+    val fileName: String,
+    val snippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
 
     companion object {
         fun aJavaFileWithOneSnippet(fileName: String, snippetId: String): SampleJavaFileWithOneSnippet {
@@ -39,7 +43,11 @@ class SampleJavaFileWithOneSnippet private constructor(val fileName: String, val
     }
 }
 
-class SampleJavaFileWithADifferentSnippet private constructor(val fileName: String, val snippet: String, javaFileBuilder: PhysicalFileBuilder) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithADifferentSnippet private constructor(
+    val fileName: String,
+    val snippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
 
     companion object {
         fun aJavaFileWithADifferentSnippet(fileName: String, snippetId: String): SampleJavaFileWithADifferentSnippet {
@@ -62,7 +70,11 @@ class SampleJavaFileWithADifferentSnippet private constructor(val fileName: Stri
     }
 }
 
-class SampleJavaFileWithACommentsInSnippet private constructor(val fileName: String, val snippet: String, javaFileBuilder: PhysicalFileBuilder) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithACommentsInSnippet private constructor(
+    val fileName: String,
+    val snippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
 
     companion object {
         fun aJavaFileWithACommentsInSnippet(fileName: String, snippetId: String): SampleJavaFileWithACommentsInSnippet {
@@ -84,7 +96,11 @@ class SampleJavaFileWithACommentsInSnippet private constructor(val fileName: Str
     }
 }
 
-class SampleJavaFileWithFullClassSnippet private constructor(val fileName: String, val snippet: String, javaFileBuilder: PhysicalFileBuilder) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithFullClassSnippet private constructor(
+    val fileName: String,
+    val snippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
 
     companion object {
         fun aJavaFileWithOneFullSnippet(fileName: String): SampleJavaFileWithFullClassSnippet {
@@ -110,10 +126,19 @@ class SampleJavaFileWithFullClassSnippet private constructor(val fileName: Strin
     }
 }
 
-class SampleJavaFileWithTwoSnippets private constructor(val fileName: String, val snippet1: String, val snippet2: String, javaFileBuilder: PhysicalFileBuilder) : NotProcessedSourceFile(javaFileBuilder) {
+class SampleJavaFileWithTwoSnippets private constructor(
+    val fileName: String,
+    val snippet1: String,
+    val snippet2: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
 
     companion object {
-        fun aJavaFileWithTwoSnippets(fileName: String, snippetId1: String, snippetId2: String): SampleJavaFileWithTwoSnippets {
+        fun aJavaFileWithTwoSnippets(
+            fileName: String,
+            snippetId1: String,
+            snippetId2: String
+        ): SampleJavaFileWithTwoSnippets {
             val snippet = "public class SampleCodeSnippets {}"
             val content = "//Showcase start $snippetId1\n" +
                 snippet +

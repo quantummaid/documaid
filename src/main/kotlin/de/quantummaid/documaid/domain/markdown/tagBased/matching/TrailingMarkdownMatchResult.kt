@@ -24,11 +24,11 @@ package de.quantummaid.documaid.domain.markdown.tagBased.matching
 data class TrailingMarkdownMatchResult(val matches: Boolean, val length: Int, val content: String?) {
 
     companion object {
-        fun createForMatch(length: Int, content: String): TrailingMarkdownMatchResult {
+        fun createMatchForTrailingMarkdown(length: Int, content: String): TrailingMarkdownMatchResult {
             return TrailingMarkdownMatchResult(true, length, content)
         }
 
-        fun createForNoMatch(): TrailingMarkdownMatchResult {
+        fun noMatchForTrailingCodeSection(): TrailingMarkdownMatchResult {
             return TrailingMarkdownMatchResult(false, -1, null)
         }
     }

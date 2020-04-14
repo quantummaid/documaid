@@ -29,7 +29,8 @@ class FileObjectsFastLookUpTable {
     private val map: MutableMap<Path, FileObject> = HashMap()
 
     companion object {
-        val FILES_LOOKUP_TABLE_KEY = CollectedInformationKey<FileObjectsFastLookUpTable>("FILES_LOOKUP_TABLE_KEY")
+        private val keyName = "FILES_LOOKUP_TABLE_KEY"
+        val FILES_LOOKUP_TABLE_KEY = CollectedInformationKey<FileObjectsFastLookUpTable>(keyName)
     }
 
     fun addFileObject(path: Path, fileObject: FileObject) {

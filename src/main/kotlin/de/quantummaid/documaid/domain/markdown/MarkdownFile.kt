@@ -41,7 +41,12 @@ import de.quantummaid.documaid.processing.ProcessingResult.Companion.erroneousPr
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class MarkdownFile private constructor(val path: Path, val directives: List<RawMarkdownDirective>, val tagHandlers: List<MarkdownTagHandler>, val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>) : ProjectFile {
+class MarkdownFile private constructor(
+    val path: Path,
+    val directives: List<RawMarkdownDirective>,
+    val tagHandlers: List<MarkdownTagHandler>,
+    val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>
+) : ProjectFile {
 
     companion object {
 
@@ -54,7 +59,16 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
             return MarkdownFile(path, tagMatches, tagHandlers, syntaxBasedHandlers)
         }
 
-        private fun loadTags(content: String, tagHandlers: List<MarkdownTagHandler>, path: Path): List<RawMarkdownDirective> {
+        fun createFromGeneratedFile(path: Path): MarkdownFile {
+            return MarkdownFile(path, emptyList(), emptyList(), emptyList())
+        }
+
+        private fun loadTags(
+            content: String,
+            tagHandlers: List<MarkdownTagHandler>,
+            path: Path
+        ): List<RawMarkdownDirective> {
+
             val tagsGroup = tagHandlers.map { it.tag() }
                 .joinToString(separator = "|", prefix = "(", postfix = ")") { it }
             val regex = "<!--- *\\[(?<tag>$tagsGroup)](?<options>.*?) *-->".toRegex()
@@ -69,7 +83,13 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
             return matches
         }
 
-        private fun findNextTagInComment(content: String, startIndex: Int, regex: Regex, path: Path): RawMarkdownDirective? {
+        private fun findNextTagInComment(
+            content: String,
+            startIndex: Int,
+            regex: Regex,
+            path: Path
+        ): RawMarkdownDirective? {
+
             val tagFound: MatchResult? = regex.find(content, startIndex)
             return tagFound?.let { matchResult ->
                 val range = matchResult.range
@@ -78,7 +98,9 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
                     ?: throw DocuMaidException.aDocuMaidException("Could not identify tag of markdown directive", path)
                 val completeString = matchResult.value
                 val remainingMarkupFileContent = RemainingMarkupFileContent(content.substring(range.last + 1))
-                RawMarkdownDirective(DirectiveTag(tag), OptionsString(optionsString), completeString, range, remainingMarkupFileContent)
+                val directiveTag = DirectiveTag(tag)
+                val options = OptionsString(optionsString)
+                RawMarkdownDirective(directiveTag, options, completeString, range, remainingMarkupFileContent)
             }
         }
     }
@@ -97,20 +119,26 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
 
     override fun process(project: Project): ProcessingResult {
         val content = content()
-        val (syntaxProcessContent, syntaxBasedHandlerErrors) = processSyntaxChanges(content, project)
-        if (syntaxBasedHandlerErrors.isNotEmpty()) {
-            return erroneousProcessingResult(this, syntaxBasedHandlerErrors)
-        }
 
-        val (completelyProcessedContent, tagProcessErrors) = processMarkdownTags(syntaxProcessContent!!, project)
+        // Must happen before syntax changes as snippets already have their position determined
+        val (processedContentStep1, tagProcessErrors) = processMarkdownTags(content, project)
         if (tagProcessErrors.isNotEmpty()) {
             return ProcessingResult.erroneousProcessingResult(this, tagProcessErrors)
         }
 
-        return ProcessingResult.successfulProcessingResult(this, completelyProcessedContent!!)
+        val (processedContentStep2, syntaxBasedHandlerErrors) = processSyntaxChanges(processedContentStep1!!, project)
+        if (syntaxBasedHandlerErrors.isNotEmpty()) {
+            return erroneousProcessingResult(this, syntaxBasedHandlerErrors)
+        }
+
+        return ProcessingResult.successfulProcessingResult(this, processedContentStep2!!)
     }
 
-    private fun processSyntaxChanges(initialContent: String, project: Project): Pair<String?, List<VerificationError>> {
+    private fun processSyntaxChanges(
+        initialContent: String,
+        project: Project
+    ): Pair<String?, List<VerificationError>> {
+
         var content = initialContent
         var indexOffsets = 0
         syntaxBasedHandlers
@@ -176,7 +204,12 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
         return Pair(processedSnippets, emptyList())
     }
 
-    private fun invokeGenerateOnHandler(pair: Pair<RawMarkdownDirective, MarkdownTagHandler>, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    private fun invokeGenerateOnHandler(
+        pair: Pair<RawMarkdownDirective, MarkdownTagHandler>,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
+
         val (directive, handler) = pair
         return try {
             handler.generate(directive, file, project)
@@ -190,7 +223,12 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
         return tagHandlerPairs.flatMap { invokeValidateOnHandler(it, this, project) }
     }
 
-    private fun invokeValidateOnHandler(pair: Pair<RawMarkdownDirective, MarkdownTagHandler>, file: MarkdownFile, project: Project): List<VerificationError> {
+    private fun invokeValidateOnHandler(
+        pair: Pair<RawMarkdownDirective, MarkdownTagHandler>,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
+
         val (directive, handler) = pair
         return try {
             handler.validate(directive, file, project)
@@ -215,6 +253,7 @@ class MarkdownFile private constructor(val path: Path, val directives: List<RawM
     fun createCopyForPath(path: String): MarkdownFile {
         return createCopyForPath(Paths.get(path))
     }
+
     fun createCopyForPath(path: Path): MarkdownFile {
         return MarkdownFile(path, directives, tagHandlers, syntaxBasedHandlers)
     }

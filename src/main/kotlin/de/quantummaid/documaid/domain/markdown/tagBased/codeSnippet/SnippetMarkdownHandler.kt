@@ -37,7 +37,12 @@ class SnippetMarkdownHandler : MarkdownTagHandler {
         return CODE_SNIPPET_TAG.toString()
     }
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
+
         val codeSnippetDirective = CodeSnippetDirective.create(directive, file, project)
         val markdown = codeSnippetDirective.generateMarkdown()
         val (textToBeReplaced) = textToBeReplaced(directive)
@@ -63,16 +68,23 @@ class SnippetMarkdownHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
+
         val codeSnippetDirective = CodeSnippetDirective.create(directive, file, project)
         val textToReplace = codeSnippetDirective.generateMarkdown()
         val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
         return if (textToBeReplaced != textToReplace) {
             val trailingCodeFound = trailingMarkdownMatchResult.matches
             if (trailingCodeFound) {
-                listOf(VerificationError.create("Found [${tag()}] tag with incorrect code for '${directive.completeString}'", file))
+                val message = "Found [${tag()}] tag with incorrect code for '${directive.completeString}'"
+                listOf(VerificationError.create(message, file))
             } else {
-                listOf(VerificationError.create("Found [${tag()}] tag with missing snippet for '${directive.completeString}'", file))
+                val message = "Found [${tag()}] tag with missing snippet for '${directive.completeString}'"
+                listOf(VerificationError.create(message, file))
             }
         } else {
             return emptyList()

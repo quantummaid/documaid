@@ -21,7 +21,10 @@
 
 package de.quantummaid.documaid.collecting.structure
 
-class Project private constructor(val rootDirectory: Directory, private val collectedInformationMap: CollectedInformationMap) {
+class Project private constructor(
+    val rootDirectory: Directory,
+    private val collectedInformationMap: CollectedInformationMap
+) {
 
     companion object {
         fun create(rootDirectory: Directory): Project {

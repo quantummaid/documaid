@@ -34,7 +34,11 @@ class DependencyMarkdownHandler : MarkdownTagHandler {
 
     override fun tag(): String = DEPENDENCY_TAG.value
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
         val dependencyDirective = DependencyDirective.create(directive, file, project)
         val textToReplace = dependencyDirective.generateCompleteMarkdown()
         val (textToBeReplaced) = textToBeReplaced(directive)
@@ -43,16 +47,22 @@ class DependencyMarkdownHandler : MarkdownTagHandler {
         return Pair(MarkdownReplacement(IntRange(rangeStart, rangeEnd), textToBeReplaced, textToReplace), emptyList())
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         val dependencyDirective = DependencyDirective.create(directive, file, project)
         val textToReplace = dependencyDirective.generateCompleteMarkdown()
         val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
         return if (textToBeReplaced != textToReplace) {
             val trailingCodeFound = trailingMarkdownMatchResult.matches
             if (trailingCodeFound) {
-                listOf(VerificationError.create("Found [${tag()}] tag with incorrect dependency code for '${directive.completeString}'", file))
+                val message = "Found [${tag()}] tag with incorrect dependency code for '${directive.completeString}'"
+                listOf(VerificationError.create(message, file))
             } else {
-                listOf(VerificationError.create("Found [${tag()}] tag with missing dependency code for '${directive.completeString}'", file))
+                val message = "Found [${tag()}] tag with missing dependency code for '${directive.completeString}'"
+                listOf(VerificationError.create(message, file))
             }
         } else {
             emptyList()

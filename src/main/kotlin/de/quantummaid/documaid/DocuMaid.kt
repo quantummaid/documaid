@@ -58,7 +58,7 @@ class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidCo
 
     private fun process(project: Project): List<ProcessingResult> {
         val goal = docuMaidConfiguration.goal
-        val processingResults = ProcessingStep.create()
+        val processingResults = ProcessingStep.create(docuMaidConfiguration)
             .process(project, goal)
         val processingResultsWithErrors = processingResults.filter { it.errors.isNotEmpty() }
         if (processingResultsWithErrors.isNotEmpty()) {

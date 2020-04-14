@@ -49,16 +49,24 @@ class TableOfContentsPreparer : PreparingVisitor {
             when {
                 tocDirectives.isEmpty() -> emptyList()
                 tocDirectives.size == 1 -> prepareToc(tocDirectives[0], file, project)
-                else -> listOf(VerificationError.create("[$TOC_TAG] Found multiple Table of contents in a single file ${file.absolutePath()}", file))
+                else -> {
+                    val message = "[$TOC_TAG] Found multiple Table of contents in a single file ${file.absolutePath()}"
+                    listOf(VerificationError.create(message, file))
+                }
             }
         } else {
             emptyList()
         }
     }
 
-    private fun prepareToc(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    private fun prepareToc(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         if (tableOfContentsLookupData.tableOfContentsAvailable()) {
-            val message = "[$TOC_TAG] cannot generate Table of Contents for file '${file.absolutePath()}, because one has already been created"
+            val message = "[$TOC_TAG] cannot generate Table of Contents for file '${file.absolutePath()}, " +
+                "because one has already been created"
             val verificationError = VerificationError.create(message, file)
             return listOf(verificationError)
         }
@@ -70,7 +78,11 @@ class TableOfContentsPreparer : PreparingVisitor {
         return emptyList()
     }
 
-    private fun generateToc(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<TableOfContents?, List<VerificationError>> {
+    private fun generateToc(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<TableOfContents?, List<VerificationError>> {
         try {
             val tableOfContentsDirective = TableOfContentsDirective.create(directive, file, project)
             val traversalDecision = object : TocTraversalDecision {

@@ -23,7 +23,12 @@ package de.quantummaid.documaid.domain.markdown.tagBased.link
 
 import de.quantummaid.documaid.config.Repository
 
-class HugoLinkMarkdown(val name: String, val target: String, val linkDirective: LinkDirective, val repository: Repository) {
+class HugoLinkMarkdown(
+    val name: String,
+    val target: String,
+    val linkDirective: LinkDirective,
+    val repository: Repository
+) {
 
     companion object {
 

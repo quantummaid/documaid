@@ -55,11 +55,17 @@ fun aMarkdownFileWithAlreadyGeneratedNav(fileName: String, navigationString: Str
         "\n" +
         "<!---[Nav]-->\n" +
         navigationString + "\n"
+    val expectedContentOutputHugo = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->\n"
 
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, expectedContentOutput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
-        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutputHugo)
         .build()
 }
 
@@ -78,11 +84,17 @@ fun aMarkdownFileWithAWrongNav(fileName: String, navigationString: String): Proc
         "\n" +
         "<!---[Nav]-->\n" +
         navigationString + "\n"
+    val expectedContentOutputHugo = " A file type A\n" +
+        "\n" +
+        "with some Text\n" +
+        "and a navigation at the bottom\n" +
+        "\n" +
+        "<!---[Nav]-->\n"
 
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
         .withProcessedNameAndContent(fileName, expectedContentOutput)
-        .withProcessedNameAndContentInHugoFormat(fileName, contentInput)
+        .withProcessedNameAndContentInHugoFormat(fileName, expectedContentOutputHugo)
         .build()
 }
 

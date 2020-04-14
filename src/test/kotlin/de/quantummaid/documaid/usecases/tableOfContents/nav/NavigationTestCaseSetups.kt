@@ -55,7 +55,9 @@ fun aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(basePath: Pa
                         aMarkdownFileWithNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithNav("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithNav("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }
@@ -195,7 +197,9 @@ fun aReadmeWithTocAndSeveralFilesWithCorrectNavigation(basePath: Path): SetupUpd
                         aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithAlreadyGeneratedNav("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithAlreadyGeneratedNav("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }
@@ -220,7 +224,9 @@ fun aReadmeWithTocAndAFileWithMissingNav(basePath: Path): SetupUpdate {
                         aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithNav("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithAlreadyGeneratedNav("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }
@@ -245,14 +251,17 @@ fun aReadmeWithTocAndAFileWithWrongNav(basePath: Path): SetupUpdate {
                         aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithAlreadyGeneratedNav("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithAWrongNav("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }
 }
 
 fun aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): SetupUpdate {
-    val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine")
+    val testDirectoryName = "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine"
+    val testDir = aTemporyTestDirectory(basePath, testDirectoryName)
 
     return { (_, sutFileStructure) ->
 
@@ -270,14 +279,17 @@ fun aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): Se
                         aMarkdownFileWithNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithNavAtEndOfLineWithoutNewLine("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }
 }
 
 fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): SetupUpdate {
-    val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine")
+    val testDirectoryName = "aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine"
+    val testDir = aTemporyTestDirectory(basePath, testDirectoryName)
 
     return { (_, sutFileStructure) ->
 
@@ -295,7 +307,9 @@ fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path
                         aMarkdownFileWithNav("1_Introduction.md",
                             "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
                         aMarkdownFileWithAWrongNavAtEndOfFile("02_SomeImportantStuff.md",
-                            "[&larr;](1_Introduction.md)$S[Overview](../README.md)$S[&rarr;](003_ADifferentChapter.md)"),
+                            "[&larr;](1_Introduction.md)" +
+                                "$S[Overview](../README.md)$S" +
+                                "[&rarr;](003_ADifferentChapter.md)"),
                         aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
                             "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
     }

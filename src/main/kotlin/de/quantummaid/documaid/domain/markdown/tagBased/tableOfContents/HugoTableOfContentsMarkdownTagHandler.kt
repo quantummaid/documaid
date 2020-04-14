@@ -35,7 +35,11 @@ class HugoTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
 
     override fun tag(): String = TOC_TAG.toString()
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
         val newMarkdown = newMarkdown(directive)
         val (oldMarkdown) = oldMarkdownToBeReplaced(directive)
         val range = calculateRangeToReplaceIn(directive, oldMarkdown, newMarkdown)
@@ -57,13 +61,21 @@ class HugoTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    private fun calculateRangeToReplaceIn(directive: RawMarkdownDirective, oldMarkdown: String, newMarkdown: String): IntRange {
+    private fun calculateRangeToReplaceIn(
+        directive: RawMarkdownDirective,
+        oldMarkdown: String,
+        newMarkdown: String
+    ): IntRange {
         val rangeStart = directive.range.first
         val rangeEnd = rangeStart + Math.max(oldMarkdown.length, newMarkdown.length)
         return IntRange(rangeStart, rangeEnd)
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         val newMarkdown = newMarkdown(directive)
         val (textToBeReplaced) = oldMarkdownToBeReplaced(directive)
         return if (textToBeReplaced != newMarkdown) {

@@ -22,9 +22,9 @@
 package de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
-import de.quantummaid.documaid.domain.IndexedPath
-import de.quantummaid.documaid.domain.IndexedPath.Companion.anIndexedPath
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.paths.IndexedPath
+import de.quantummaid.documaid.domain.paths.IndexedPath.Companion.anIndexedPath
 
 class HugoHeadingMarkdown private constructor(private val title: String, private val index: Int) {
 
@@ -32,7 +32,12 @@ class HugoHeadingMarkdown private constructor(private val title: String, private
         private val RAW_HEADING_PATTERN = Regex("# ?(?<title>[^\n]+)\n")
         private const val DEFAULT_INDEX = 1
 
-        fun create(rawHeadingString: String, file: MarkdownFile, docuMaidConfiguration: DocuMaidConfiguration): HugoHeadingMarkdown {
+        fun create(
+            rawHeadingString: String,
+            file: MarkdownFile,
+            docuMaidConfiguration: DocuMaidConfiguration
+        ): HugoHeadingMarkdown {
+
             val matchEntire = RAW_HEADING_PATTERN.matchEntire(rawHeadingString)
             val errorMessage = "Could not parse title of heading: '$rawHeadingString'"
             matchEntire ?: throw IllegalArgumentException(errorMessage)
@@ -40,6 +45,10 @@ class HugoHeadingMarkdown private constructor(private val title: String, private
 
             val indexedFile = extractIndex(file, docuMaidConfiguration)
             return HugoHeadingMarkdown(title, indexedFile)
+        }
+
+        fun create(title: String, index: Int): HugoHeadingMarkdown {
+            return HugoHeadingMarkdown(title, index)
         }
 
         private fun extractIndex(file: MarkdownFile, docuMaidConfiguration: DocuMaidConfiguration): Int {

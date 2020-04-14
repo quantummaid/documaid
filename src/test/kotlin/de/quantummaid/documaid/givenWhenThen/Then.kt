@@ -25,15 +25,20 @@ import de.quantummaid.documaid.DocuMaid
 import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
 import de.quantummaid.documaid.shared.filesystem.SutFileStructure
 
-class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBuilder, private val dokuMaidActionTestBuilder: DokuMaidActionTestBuilder) {
+class Then internal constructor(
+    private val dokuMaidTestBuilder: DokuMaidTestBuilder,
+    private val dokuMaidActionTestBuilder: DokuMaidActionTestBuilder
+) {
 
-    fun then(dokuMaidTestValidationBuilder: DokuMaidTestValidationBuilder) {
+    fun then(docuMaidTestValidationBuilder: DocuMaidTestValidationBuilder) {
         val testEnvironment = dokuMaidTestBuilder.build()
         try {
 
-            val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+            val sutFileStructure: SutFileStructure =
+                testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
             val fileStructureForDocuMaidToProcess = sutFileStructure.generateFileStructureForDocuMaidToProcess()
-            val configBuilder: DocuMaidConfigurationBuilder = testEnvironment.getPropertyAsType(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER)
+            val configBuilder: DocuMaidConfigurationBuilder =
+                testEnvironment.getPropertyAsType(TestEnvironmentProperty.DOCU_MAID_CONFIG_BUILDER)
             configBuilder.withBasePath(fileStructureForDocuMaidToProcess.baseDirectory.path)
             val docuMaidConfiguration = configBuilder.build()
             testEnvironment.setProperty(TestEnvironmentProperty.DOCU_MAID_CONFIG, docuMaidConfiguration)
@@ -45,7 +50,7 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
             testEnvironment.setProperty(TestEnvironmentProperty.EXCEPTION, e)
         } finally {
             try {
-                val testValidation = dokuMaidTestValidationBuilder.build()
+                val testValidation = docuMaidTestValidationBuilder.build()
                 testValidation.invoke(testEnvironment)
             } finally {
                 cleanUp(testEnvironment)
@@ -54,8 +59,8 @@ class Then internal constructor(private val dokuMaidTestBuilder: DokuMaidTestBui
     }
 
     private fun cleanUp(testEnvironment: TestEnvironment) {
-        @Suppress("UNCHECKED_CAST")
-        val sutFileStructure: SutFileStructure = testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
+        val sutFileStructure: SutFileStructure =
+            testEnvironment.getPropertyAsType(TestEnvironmentProperty.SUT_FILE_STRUCTURE)
         sutFileStructure.cleanUp()
     }
 }

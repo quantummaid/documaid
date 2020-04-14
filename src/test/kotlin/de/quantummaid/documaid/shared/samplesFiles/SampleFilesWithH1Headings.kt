@@ -44,7 +44,7 @@ fun aMarkdownFileWithADifferentH1Heading(fileName: String, weight: String): Proc
 
     val contentInput = "\n\n" +
         "#This is my Heading \n"
-    val expectedContentOutput = "\n\n---\n" +
+    val expectedContentOutput = "---\n" +
         "title: \"This is my Heading \"\n" +
         "weight: $weight\n" +
         "---\n"

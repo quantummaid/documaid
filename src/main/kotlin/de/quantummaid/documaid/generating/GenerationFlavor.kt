@@ -23,13 +23,27 @@ package de.quantummaid.documaid.generating
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
+import de.quantummaid.documaid.domain.paths.makeRelativeTo
+import de.quantummaid.documaid.domain.paths.pathMatchesFileNameExactly
+import de.quantummaid.documaid.domain.paths.pathMatchesFileRegex
+import de.quantummaid.documaid.domain.paths.pathUnderTopLevelDirectory
+import de.quantummaid.documaid.domain.paths.stripTopLevelDirectoryFromRelativePath
+import de.quantummaid.documaid.generating.GenerationFlavorType.Companion.generationTypeForString
 import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Path
-import java.nio.file.Paths
 
 enum class GenerationFlavorType {
     NO_FLAVOR,
-    QUANTUMMAID,
+    QUANTUMMAID;
+
+    companion object {
+        fun generationTypeForString(generationFlavorType: String?): GenerationFlavorType {
+            return when (generationFlavorType?.toLowerCase()) {
+                "quantummaid" -> GenerationFlavorType.QUANTUMMAID
+                else -> GenerationFlavorType.NO_FLAVOR
+            }
+        }
+    }
 }
 
 interface GenerationFlavor {
@@ -39,10 +53,7 @@ interface GenerationFlavor {
     companion object {
 
         fun createFor(docuMaidConfiguration: DocuMaidConfiguration): GenerationFlavor {
-            val type = when (docuMaidConfiguration.generationFlavorType?.toLowerCase()) {
-                "quantummaid" -> GenerationFlavorType.QUANTUMMAID
-                else -> GenerationFlavorType.NO_FLAVOR
-            }
+            val type = generationTypeForString(docuMaidConfiguration.generationFlavorType)
             return when (type) {
                 GenerationFlavorType.NO_FLAVOR -> NoopGenerationFlavor()
                 GenerationFlavorType.QUANTUMMAID -> QuantumMaidGenerationFlavor(docuMaidConfiguration.basePath)
@@ -59,23 +70,32 @@ private class NoopGenerationFlavor : GenerationFlavor {
 }
 
 private class QuantumMaidGenerationFlavor(val projectBasePath: Path) : GenerationFlavor {
+
+    private val DO_NOT_GENERATE_FILE = null
+
     override fun process(processingResult: ProcessingResult): ProcessingResult? {
-        if (processingResult.file is MarkdownFile) {
-            val path = processingResult.file.absolutePath()
-            val relativePath = projectBasePath.relativize(path)
-            if (relativePath.startsWith("documentation/")) {
-                val rootToRemove = Paths.get("documentation")
-                val newPath = rootToRemove.relativize(relativePath)
+        val file = processingResult.file
+        if (file is MarkdownFile) {
+            val relativePath = makeRelativeTo(file, projectBasePath)
+            if (pathUnderTopLevelDirectory(relativePath, "documentation/")) {
+                if (pathUnderTopLevelDirectory(relativePath, "documentation/legacy")) {
+                    return DO_NOT_GENERATE_FILE
+                }
+                val newPath = stripTopLevelDirectoryFromRelativePath(relativePath)
                 val newPathAbsolute = projectBasePath.resolve(newPath)
-                val movedFile = processingResult.file.createCopyForPath(newPathAbsolute)
+                val movedFile = file.createCopyForPath(newPathAbsolute)
                 return ProcessingResult.successfulProcessingResult(movedFile, processingResult.newContent)
             }
-            if (relativePath.toString() == "README.md") {
+            if (pathMatchesFileNameExactly(relativePath, "README.md")) {
                 val absoluteNewPath = projectBasePath.resolve("_index.md")
-                val movedFile = processingResult.file.createCopyForPath(absoluteNewPath)
+                val movedFile = file.createCopyForPath(absoluteNewPath)
                 return ProcessingResult.successfulProcessingResult(movedFile, processingResult.newContent)
             }
+            if (pathMatchesFileRegex(relativePath, "README.*?\\.md")) {
+                return processingResult
+            }
+            return DO_NOT_GENERATE_FILE
         }
-        return processingResult
+        return DO_NOT_GENERATE_FILE
     }
 }

@@ -23,12 +23,12 @@ package de.quantummaid.documaid.usecases.codeSnippet
 
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.domain.markdown.tagBased.codeSnippet.CodeSnippetDirective.Companion.CODE_SNIPPET_TAG
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectADocuMaidExceptionCollectingTheFollowingErrors
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectADokuMaidExceptionCollectingTheFollowingErrors
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestValidationBuilder.Companion.expectNoException
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
 import org.junit.jupiter.api.Test
@@ -143,11 +143,13 @@ interface CodeSnippetSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
-            .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
+            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +
-                    "${absPath("duplicateSnippetsDirectory/snippetDuplicate1.java")}, ${absPath("duplicateSnippetsDirectory/snippetDuplicate2.xml")}",
+                    "${absPath("duplicateSnippetsDirectory/snippetDuplicate1.java")}, " +
+                    absPath("duplicateSnippetsDirectory/snippetDuplicate2.xml"),
                 "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'tripleDuplicate': " +
-                    "${absPath("duplicateSnippetsDirectory/snippetTriplicate1.java")}, ${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate2.java")}, " +
+                    "${absPath("duplicateSnippetsDirectory/snippetTriplicate1.java")}, " +
+                    "${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate2.java")}, " +
                     absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml")
             ))
     }
@@ -169,8 +171,10 @@ interface CodeSnippetSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with incorrect code for '<!---[$CODE_SNIPPET_TAG] (snippet)-->' " +
-                "(in path ${absPath("aFileWithWrongCodeSnippetPresent/wrongCodeSnippet.md")})"))
+            .then(expectAnExceptionWithMessage(
+                "Found [$CODE_SNIPPET_TAG] tag with incorrect code for " +
+                    "'<!---[$CODE_SNIPPET_TAG] (snippet)-->' " +
+                    "(in path ${absPath("aFileWithWrongCodeSnippetPresent/wrongCodeSnippet.md")})"))
     }
 
     @Test
@@ -180,7 +184,9 @@ interface CodeSnippetSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$CODE_SNIPPET_TAG] tag with missing snippet for '<!---[$CODE_SNIPPET_TAG] (testSnippet)-->' " +
+            .then(expectAnExceptionWithMessage(
+                "Found [$CODE_SNIPPET_TAG] tag with missing snippet for " +
+                    "'<!---[$CODE_SNIPPET_TAG] (testSnippet)-->' " +
                 "(in path ${absPath("aFileWithASingleCodeSnippet/md1.md")})"))
     }
 
@@ -191,9 +197,11 @@ interface CodeSnippetSpecs {
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
-            .then(expectADokuMaidExceptionCollectingTheFollowingErrors(
-                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (snippet1)-->' (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})",
-                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (snippet2)-->' (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})"
+            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
+                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (snippet1)-->'" +
+                    " (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})",
+                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (snippet2)-->' " +
+                    "(in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})"
             ))
     }
 
@@ -218,7 +226,9 @@ interface CodeSnippetSpecs {
     }
 
     @Test
-    fun testThatASnippetDoesNotSwallowSubsequentSnippetsWithAnIdTheFirstIdIsAPrefix(platformConfiguration: PlatformConfiguration) {
+    fun testThatASnippetDoesNotSwallowSubsequentSnippetsWithAnIdTheFirstIdIsAPrefix(
+        platformConfiguration: PlatformConfiguration
+    ) {
         given(aDokuMaid()
             .configuredWith(aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(BASE_PATH))
             .configuredwith(platformConfiguration)

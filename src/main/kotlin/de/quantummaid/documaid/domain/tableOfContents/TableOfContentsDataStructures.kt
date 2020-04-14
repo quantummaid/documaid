@@ -33,7 +33,10 @@ import java.nio.file.Path
 class TocRootDirectory private constructor(val children: List<TocDataFileObject>) {
 
     companion object {
-        fun create(directory: Directory, children: List<TocDataFileObject>): Pair<TocRootDirectory?, List<VerificationError>> {
+        fun create(
+            directory: Directory,
+            children: List<TocDataFileObject>
+        ): Pair<TocRootDirectory?, List<VerificationError>> {
             return try {
                 val sortedChildren = children.sortedBy { it.index }
                 val dirAbsolutePath = directory.absolutePath()
@@ -48,7 +51,12 @@ class TocRootDirectory private constructor(val children: List<TocDataFileObject>
     }
 }
 
-open class TocDataFileObject(val index: Int, val title: String, val scanRootRelativeDirectory: Path, val fileObject: FileObject) {
+open class TocDataFileObject(
+    val index: Int,
+    val title: String,
+    val scanRootRelativeDirectory: Path,
+    val fileObject: FileObject
+) {
     val absolutePath = fileObject.absolutePath()
     val fileName = absolutePath.fileName.toString()
 }
@@ -62,7 +70,11 @@ class TocDataDirectory internal constructor(
 ) : TocDataFileObject(index, title, scanRootRelativeDirectory, directory) {
 
     companion object {
-        fun create(directory: Directory, scanBaseDir: Path, children: List<TocDataFileObject>): Pair<TocDataDirectory?, List<VerificationError>> {
+        fun create(
+            directory: Directory,
+            scanBaseDir: Path,
+            children: List<TocDataFileObject>
+        ): Pair<TocDataDirectory?, List<VerificationError>> {
             return try {
                 val dirAbsolutePath = directory.absolutePath()
                 val fileName = dirAbsolutePath.fileName.toString()
@@ -118,13 +130,14 @@ private fun parseName(name: String, path: Path): Pair<Int, String> {
 
 private fun convertToNormalCase(name: String): String {
     val nameWithOutFirstCharacter = name.substring(1)
-    val normalCaseRest = nameWithOutFirstCharacter.replace("""\p{Lu}""".toRegex()) { matchResult -> " " + matchResult.value.toLowerCase() }
+    val regex = """\p{Lu}""".toRegex()
+    val normalCaseRest = nameWithOutFirstCharacter.replace(regex) { " " + it.value.toLowerCase() }
     return name[0].toUpperCase() + normalCaseRest
 }
 
 private fun verifyIndicesCorrect(list: List<TocDataFileObject>, absolutePath: Path) {
     for (tocDataFileObject in list) {
-        val sameIndexTocDataFiles = list.filter { candidate -> candidate.index == tocDataFileObject.index }
+        val sameIndexTocDataFiles = list.filter { it.index == tocDataFileObject.index }
         if (sameIndexTocDataFiles.size > 1) {
             val conflictingIndexes = sameIndexTocDataFiles.map { it.index }.sorted().distinct()
             val conflictingIndexFiles = sameIndexTocDataFiles.sortedBy { it.absolutePath }

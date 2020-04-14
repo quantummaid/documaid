@@ -25,23 +25,33 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.tagBased.link.GithubLinkMarkdown
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 
-class GithubNavigationMarkdown(val fileWithDirective: MarkdownFile, val previousFile: MarkdownFile?, val overviewFile: MarkdownFile, val nextFile: MarkdownFile?) {
+class GithubNavigationMarkdown(
+    val fileWithDirective: MarkdownFile,
+    val previousFile: MarkdownFile?,
+    val overviewFile: MarkdownFile,
+    val nextFile: MarkdownFile?
+) {
 
     companion object {
-        val NAV_MARKDOWN_REGEX = """\n? *(\[&larr;]\([^)]+\)&nbsp;&nbsp;&nbsp;)?\[Overview]\([^)]+\)(&nbsp;&nbsp;&nbsp;\[&rarr;]\([^)]+\))?""".toRegex()
+        val SPACES = "&nbsp;&nbsp;&nbsp;"
+        val NAV_MARKDOWN_REGEX = """\n? *(\[&larr;]\([^)]+\)$SPACES)?\[Overview]\([^)]+\)($SPACES\[&rarr;]\([^)]+\))?"""
 
-        fun startsWithNavigationMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithNavigationMarkdown(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownMatchResult {
             val content = remainingMarkupFileContent.content
             if (!content.trimStart().startsWith("[")) {
-                return TrailingMarkdownMatchResult.createForNoMatch()
+                return noMatchForTrailingCodeSection()
             }
 
-            val matchResult = NAV_MARKDOWN_REGEX.find(content)
+            val matchResult = NAV_MARKDOWN_REGEX.toRegex().find(content)
             return if (matchResult != null) {
-                TrailingMarkdownMatchResult.createForMatch(matchResult.range.last - matchResult.range.start, matchResult.value)
+                createMatchForTrailingMarkdown(matchResult.range.last - matchResult.range.start, matchResult.value)
             } else {
-                TrailingMarkdownMatchResult.createForNoMatch()
+                noMatchForTrailingCodeSection()
             }
         }
     }

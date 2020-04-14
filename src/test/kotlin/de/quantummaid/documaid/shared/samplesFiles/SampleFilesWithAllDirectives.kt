@@ -24,7 +24,15 @@ package de.quantummaid.documaid.shared.samplesFiles
 import de.quantummaid.documaid.shared.filesystem.ProcessedFile
 import de.quantummaid.documaid.shared.filesystem.ProcessedFileBuilder
 
-fun aMarkdownFileWithAllDirectives(fileName: String, tocPath: String, toc: String, linkPath: String, linkName: String, snippetName: String, snippet: String): ProcessedFile {
+fun aMarkdownFileWithAllDirectives(
+    fileName: String,
+    tocPath: String,
+    toc: String,
+    linkPath: String,
+    linkName: String,
+    snippetName: String,
+    snippet: String
+): ProcessedFile {
     val groupId = "local"
     val artifactId = "art"
     val version = "1.0.0"
@@ -43,7 +51,15 @@ fun aMarkdownFileWithAllDirectives(fileName: String, tocPath: String, toc: Strin
         .build()
 }
 
-fun aMarkdownFileWithAllDirectivesAlreadyGenerated(fileName: String, tocPath: String, toc: String, linkPath: String, linkName: String, snippetName: String, snippet: String): ProcessedFile {
+fun aMarkdownFileWithAllDirectivesAlreadyGenerated(
+    fileName: String,
+    tocPath: String,
+    toc: String,
+    linkPath: String,
+    linkName: String,
+    snippetName: String,
+    snippet: String
+): ProcessedFile {
     val groupId = "local"
     val artifactId = "art"
     val version = "1.0.0"
@@ -60,7 +76,19 @@ fun aMarkdownFileWithAllDirectivesAlreadyGenerated(fileName: String, tocPath: St
         .build()
 }
 
-private fun contentInput(groupId: String, artifactId: String, version: String, goal: String, phase: String, scope: String, tocPath: String, linkPath: String, linkName: String, snippetName: String, snippet: String): String {
+private fun contentInput(
+    groupId: String,
+    artifactId: String,
+    version: String,
+    goal: String,
+    phase: String,
+    scope: String,
+    tocPath: String,
+    linkPath: String,
+    linkName: String,
+    snippetName: String,
+    snippet: String
+): String {
     val pluginDirective = pluginDirective(groupId, artifactId, version, goal, phase)
     val dependencyDirective = dependencyDirectiveMarkdown(groupId, artifactId, version, scope)
 
@@ -85,7 +113,20 @@ private fun contentInput(groupId: String, artifactId: String, version: String, g
     return contentInput
 }
 
-private fun expectedContent(groupId: String, artifactId: String, version: String, goal: String, phase: String, scope: String, tocPath: String, toc: String, linkPath: String, linkName: String, snippetName: String, snippet: String): String {
+private fun expectedContent(
+    groupId: String,
+    artifactId: String,
+    version: String,
+    goal: String,
+    phase: String,
+    scope: String,
+    tocPath: String,
+    toc: String,
+    linkPath: String,
+    linkName: String,
+    snippetName: String,
+    snippet: String
+): String {
     val pluginMarkdown = createMarkdownPlugin(groupId, artifactId, version, goal, phase)
     val dependencyMarkdown = createMarkdownDependency(groupId, artifactId, version, scope)
     val pluginDirective = pluginDirective(groupId, artifactId, version, goal, phase)

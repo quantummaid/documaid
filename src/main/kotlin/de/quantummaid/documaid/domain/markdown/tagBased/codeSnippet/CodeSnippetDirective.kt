@@ -40,31 +40,55 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class CodeSnippetDirective(val rawMarkdownDirective: RawMarkdownDirective, val options: CodeSnippetDirectiveOptions, private val codeSnippetMarkdown: CodeSnippetMarkdown) {
+class CodeSnippetDirective(
+    val rawMarkdownDirective: RawMarkdownDirective,
+    val options: CodeSnippetDirectiveOptions,
+    private val codeSnippetMarkdown: CodeSnippetMarkdown
+) {
 
     companion object {
         val CODE_SNIPPET_TAG = DirectiveTag("CodeSnippet")
 
-        fun create(rawMarkdownDirective: RawMarkdownDirective, file: MarkdownFile, project: Project): CodeSnippetDirective {
+        fun create(
+            rawMarkdownDirective: RawMarkdownDirective,
+            file: MarkdownFile,
+            project: Project
+        ): CodeSnippetDirective {
+
             val options = CodeSnippetDirectiveOptions.create(rawMarkdownDirective, file)
             val codeSnippetMarkdown = loadCode(options, file, project, rawMarkdownDirective)
             return CodeSnippetDirective(rawMarkdownDirective, options, codeSnippetMarkdown)
         }
 
-        private fun loadCode(options: CodeSnippetDirectiveOptions, file: MarkdownFile, project: Project, rawMarkdownDirective: RawMarkdownDirective): CodeSnippetMarkdown {
-            if (options.snippetId != null) {
-                return loadSnippetCode(options.snippetId, file, project, rawMarkdownDirective)
-            } else if (options.filePath != null) {
-                return loadCompleteFile(options.filePath, file, rawMarkdownDirective)
-            } else {
-                throw aDocuMaidException("[$CODE_SNIPPET_TAG] could not handle config without snippetId or path", file)
+        private fun loadCode(
+            options: CodeSnippetDirectiveOptions,
+            file: MarkdownFile,
+            project: Project,
+            rawMarkdownDirective: RawMarkdownDirective
+        ): CodeSnippetMarkdown {
+
+            return when {
+                options.snippetId != null -> loadSnippetCode(options.snippetId, file, project, rawMarkdownDirective)
+                options.filePath != null -> loadCompleteFile(options.filePath, file, rawMarkdownDirective)
+                else -> {
+                    val message = "[$CODE_SNIPPET_TAG] could not handle config without snippetId or path"
+                    throw aDocuMaidException(message, file)
+                }
             }
         }
 
-        private fun loadSnippetCode(snippetId: SnippetId, file: MarkdownFile, project: Project, rawMarkdownDirective: RawMarkdownDirective): CodeSnippetMarkdown {
+        private fun loadSnippetCode(
+            snippetId: SnippetId,
+            file: MarkdownFile,
+            project: Project,
+            rawMarkdownDirective: RawMarkdownDirective
+        ): CodeSnippetMarkdown {
+
             val snippetsLookupTable = project.getInformation(CodeSnippetsLookupTable.SNIPPETS_LOOKUP_TABLE_KEY)
             if (!snippetsLookupTable.uniqueSnippetExists(snippetId)) {
-                throw aDocuMaidException("[$CODE_SNIPPET_TAG]: A snippet with id $snippetId was not found for '${rawMarkdownDirective.completeString}'", file)
+                val message = "[$CODE_SNIPPET_TAG]: " +
+                    "A snippet with id $snippetId was not found for '${rawMarkdownDirective.completeString}'"
+                throw aDocuMaidException(message, file)
             }
             val path = snippetsLookupTable.getUniqueSnippet(snippetId)
 
@@ -75,17 +99,28 @@ class CodeSnippetDirective(val rawMarkdownDirective: RawMarkdownDirective, val o
                 is JavaFile -> fileObject.snippetForId(snippetId)
                 is XmlFile -> fileObject.snippetForId(snippetId)
                 is UnclassifiedFile -> fileObject.snippetForId(snippetId)
-                else -> throw aDocuMaidException("[$CODE_SNIPPET_TAG]: Could not load snippet $snippetId from file ${fileObject?.absolutePath()} for directive '${rawMarkdownDirective.completeString}'", file)
+                else -> {
+                    val message = "[$CODE_SNIPPET_TAG]: Could not load snippet $snippetId " +
+                        "from file ${fileObject?.absolutePath()} for directive '${rawMarkdownDirective.completeString}'"
+                    throw aDocuMaidException(message, file)
+                }
             }
             val codeSnippet = CodeSnippet(snippet.content.trimIndent(), fileObject as ProjectFile)
             val markdownCodeSection = MarkdownCodeSection.createForFile(codeSnippet.code, fileObject)
             return CodeSnippetMarkdown.create(markdownCodeSection)
         }
 
-        private fun loadCompleteFile(path: Path, file: MarkdownFile, rawMarkdownDirective: RawMarkdownDirective): CodeSnippetMarkdown {
+        private fun loadCompleteFile(
+            path: Path,
+            file: MarkdownFile,
+            rawMarkdownDirective: RawMarkdownDirective
+        ): CodeSnippetMarkdown {
+
             val targetPath = file.absolutePath().parent.resolve(path)
             if (!(Files.exists(targetPath) && Files.isRegularFile(targetPath))) {
-                throw aDocuMaidException("Found [$CODE_SNIPPET_TAG] referencing not existing file '$path' in '${rawMarkdownDirective.completeString}'", file)
+                val message = "Found [$CODE_SNIPPET_TAG] referencing not existing file '$path' " +
+                    "in '${rawMarkdownDirective.completeString}'"
+                throw aDocuMaidException(message, file)
             }
             val content = readFile(targetPath)
             val codeSnippet = CodeSnippet(content, UnclassifiedFile.create(targetPath))
@@ -118,7 +153,9 @@ class CodeSnippetDirectiveOptions(val snippetId: SnippetId?, val filePath: Path?
                     val filePath = Paths.get(filePathString)
                     return CodeSnippetDirectiveOptions(null, filePath)
                 } else {
-                    throw aDocuMaidException("Found [$CODE_SNIPPET_TAG] tag with not parsable options '${directive.completeString}'", file)
+                    val completeString = directive.completeString
+                    val message = "Found [$CODE_SNIPPET_TAG] tag with not parsable options '$completeString'"
+                    throw aDocuMaidException(message, file)
                 }
             }
         }

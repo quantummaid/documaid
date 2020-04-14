@@ -35,7 +35,11 @@ class GithubNavigationMarkdownHandler : MarkdownTagHandler {
 
     override fun tag(): String = NAV_TAG.toString()
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
         val newMarkdown = generateNewMarkdown(directive, file, project)
         val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeToReplaceIn = rangeToReplaceIn(directive, newMarkdown, textToBeReplaced)
@@ -53,11 +57,20 @@ class GithubNavigationMarkdownHandler : MarkdownTagHandler {
         return Pair(text, matchResult)
     }
 
-    private fun rangeToReplaceIn(directive: RawMarkdownDirective, markdown: String, textToBeReplaced: String): IntRange {
-        return IntRange(directive.startIndex(), directive.startIndex() + Math.max(markdown.length, textToBeReplaced.length))
+    private fun rangeToReplaceIn(
+        directive: RawMarkdownDirective,
+        markdown: String,
+        textToBeReplaced: String
+    ): IntRange {
+        val endInclusive = directive.startIndex() + Math.max(markdown.length, textToBeReplaced.length)
+        return IntRange(directive.startIndex(), endInclusive)
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         val markdown = generateNewMarkdown(directive, file, project)
         val (textToBeReplaced, matchResult) = textToBeReplaced(directive)
         return if (markdown != textToBeReplaced) {

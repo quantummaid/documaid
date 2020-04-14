@@ -35,7 +35,11 @@ class GithubLinkMarkdownTagHandler : MarkdownTagHandler {
 
     override fun tag(): String = LINK_TAG.toString()
 
-    override fun generate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): Pair<MarkdownReplacement?, List<VerificationError>> {
+    override fun generate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): Pair<MarkdownReplacement?, List<VerificationError>> {
         val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced) = textToBeReplaced(directive)
         val rangeToReplaceIn = rangeToReplaceIn(directive, markdown, textToBeReplaced)
@@ -43,15 +47,21 @@ class GithubLinkMarkdownTagHandler : MarkdownTagHandler {
         return Pair(markdownReplacement, emptyList())
     }
 
-    override fun validate(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): List<VerificationError> {
+    override fun validate(
+        directive: RawMarkdownDirective,
+        file: MarkdownFile,
+        project: Project
+    ): List<VerificationError> {
         val markdown = newMarkdown(directive, file, project)
         val (textToBeReplaced, trailingMarkdownMatchResult) = textToBeReplaced(directive)
         return if (textToBeReplaced != markdown) {
             val trailingCodeFound = trailingMarkdownMatchResult.matches
             if (trailingCodeFound) {
-                listOf(VerificationError.create("Found [${tag()}] tag with wrong link being set: '${directive.completeString}'", file))
+                val message = "Found [${tag()}] tag with wrong link being set: '${directive.completeString}'"
+                listOf(VerificationError.create(message, file))
             } else {
-                listOf(VerificationError.create("Found [${tag()}] tag without link being set for '${directive.completeString}'", file))
+                val message = "Found [${tag()}] tag without link being set for '${directive.completeString}'"
+                listOf(VerificationError.create(message, file))
             }
         } else {
             emptyList()
@@ -75,11 +85,16 @@ class GithubLinkMarkdownTagHandler : MarkdownTagHandler {
         return Pair(text, markdownMatchResult)
     }
 
-    private fun rangeToReplaceIn(markdownDirective: RawMarkdownDirective, textToReplace: String, textToBeReplaced: String): IntRange {
+    private fun rangeToReplaceIn(
+        markdownDirective: RawMarkdownDirective,
+        textToReplace: String,
+        textToBeReplaced: String
+    ): IntRange {
         val startIndex = markdownDirective.range.first
         val endIndexInitialTag = markdownDirective.range.last
         val lengthNewContent = textToReplace.length
-        val endIndex = Math.max(endIndexInitialTag, Math.max(startIndex + lengthNewContent, startIndex + textToBeReplaced.length))
+        val endIndexNewContent = Math.max(startIndex + lengthNewContent, startIndex + textToBeReplaced.length)
+        val endIndex = Math.max(endIndexInitialTag, endIndexNewContent)
         return IntRange(startIndex, endIndex)
     }
 }

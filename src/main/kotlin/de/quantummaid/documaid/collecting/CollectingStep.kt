@@ -40,7 +40,11 @@ class CollectingStep private constructor(private val collectors: List<FileObject
         }
     }
 
-    fun collect(docuMaidConfig: DocuMaidConfiguration, collectingTraversalDecision: CollectingTraversalDecision): Project {
+    fun collect(
+        docuMaidConfig: DocuMaidConfiguration,
+        collectingTraversalDecision: CollectingTraversalDecision
+    ): Project {
+
         val collector = FullCollector()
         return collector.collectData(docuMaidConfig, collectors, collectingTraversalDecision)
     }

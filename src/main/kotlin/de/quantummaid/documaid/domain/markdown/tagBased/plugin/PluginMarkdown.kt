@@ -22,8 +22,10 @@
 package de.quantummaid.documaid.domain.markdown.tagBased.plugin
 
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
-import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection
+import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection.Companion.extractTrailingCodeSection
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
+import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.MavenGoal
@@ -39,21 +41,33 @@ class PluginMarkdown private constructor(
 ) {
 
     companion object {
-        fun create(groupId: GroupId, artifactId: ArtifactId, version: Version, goal: MavenGoal, phase: MavenPhase): PluginMarkdown {
+        fun create(
+            groupId: GroupId,
+            artifactId: ArtifactId,
+            version: Version,
+            goal: MavenGoal,
+            phase: MavenPhase
+        ): PluginMarkdown {
+
             return PluginMarkdown(groupId, artifactId, version, goal, phase)
         }
 
-        fun startsWithPluginMarkdown(remainingMarkupFileContent: RemainingMarkupFileContent): TrailingMarkdownMatchResult {
+        fun startsWithPluginMarkdown(
+            remainingMarkupFileContent: RemainingMarkupFileContent
+        ): TrailingMarkdownMatchResult {
+
             val content = remainingMarkupFileContent.content
             return if (content.trimStart().startsWith("```")) {
-                val trailingCodeSection = TrailingMarkdownCodeSection.extractTrailingCodeSection(remainingMarkupFileContent)
+                val trailingCodeSection = extractTrailingCodeSection(remainingMarkupFileContent)
                 return if (trailingCodeSection.codeContent.contains("<plugin>")) {
-                    TrailingMarkdownMatchResult.createForMatch(trailingCodeSection.completeLength, trailingCodeSection.untrimmedContent)
+                    val completeLength = trailingCodeSection.completeLength
+                    val untrimmedContent = trailingCodeSection.untrimmedContent
+                    createMatchForTrailingMarkdown(completeLength, untrimmedContent)
                 } else {
-                    TrailingMarkdownMatchResult.createForNoMatch()
+                    noMatchForTrailingCodeSection()
                 }
             } else {
-                TrailingMarkdownMatchResult.createForNoMatch()
+                noMatchForTrailingCodeSection()
             }
         }
     }

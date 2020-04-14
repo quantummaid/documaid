@@ -65,8 +65,9 @@ class NavigationPreparer : PreparingVisitor {
 
         val filesWithoutNavigationDirective = filePathsIncludedInToc.minus(filesWithNavigationDirective.keys)
         if (filesWithoutNavigationDirective.isNotEmpty()) {
+            val message = "Found file indexed by table of contents but without [$NAV_TAG] tag"
             return filesWithoutNavigationDirective.map {
-                VerificationError.createForPath("Found file indexed by table of contents but without [$NAV_TAG] tag", it)
+                VerificationError.createForPath(message, it)
             }
         }
         return emptyList()
