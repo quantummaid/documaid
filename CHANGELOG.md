@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.18](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.18/jar) - 2020-04-13
 ### Added
 - Enable max_line_length check for klint.
-- Introduce ??? for copyright header check.
+- Introduce license-maven-plugin for copyright header check.
 ### CHANGED
 - Fix max line length warnings.
 - Add copyright header to missing files.
