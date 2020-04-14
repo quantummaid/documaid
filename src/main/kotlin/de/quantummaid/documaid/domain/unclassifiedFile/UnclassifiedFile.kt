@@ -33,15 +33,8 @@ import java.nio.file.Path
 class UnclassifiedFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile {
 
     companion object {
-        object UnclassifiedSnippetFormat {
-            private const val startTagRegex = "<!-- *Showcase *start *(?<id>\\w+) *--> *\\n"
-            private const val endTagRegex = " *<!-- *Showcase *end *\\k<id> *--> *"
-            val regex = Regex("(?s)$startTagRegex(?<snippet>.*(?=$endTagRegex))$endTagRegex\\n")
-        }
-
         fun create(path: Path): UnclassifiedFile {
-            val snippets = RawSnippetExtractor.extractSnippets(path, UnclassifiedSnippetFormat.regex)
-            return UnclassifiedFile(path, snippets)
+            return UnclassifiedFile(path, emptyList())
         }
     }
 

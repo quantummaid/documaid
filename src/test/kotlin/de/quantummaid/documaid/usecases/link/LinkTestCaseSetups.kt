@@ -153,7 +153,7 @@ fun aFileWithLinkANotExistingFile(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "/notExistingFile.java", "linkName"))
+                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "notExistingFile.java", "linkName"))
     }
 }
 

@@ -133,7 +133,7 @@ interface LinkSpecs {
             .configuredWithGoal(Goal.VALIDATE))
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file " +
-                "'$testBasePath/someWhere/notExistingFile.java' (in path $testBasePath/aLinkToANotExistingFile.md)"))
+                "'$testBasePath/notExistingFile.java' (in path $testBasePath/aLinkToANotExistingFile.md)"))
     }
 
     @Test
