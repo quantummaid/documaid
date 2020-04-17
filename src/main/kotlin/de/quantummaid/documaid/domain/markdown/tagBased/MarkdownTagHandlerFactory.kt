@@ -22,6 +22,7 @@ package de.quantummaid.documaid.domain.markdown.tagBased
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Platform
+import de.quantummaid.documaid.domain.markdown.tagBased.archetype.ArchetypeMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.codeSnippet.SnippetMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.dependency.DependencyMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.link.GithubLinkMarkdownTagHandler
@@ -43,7 +44,8 @@ class MarkdownTagHandlerFactory private constructor() {
                     GithubTableOfContentsMarkdownTagHandler(),
                     GithubNavigationMarkdownHandler(),
                     DependencyMarkdownHandler(),
-                    PluginMarkdownHandler()
+                    PluginMarkdownHandler(),
+                    ArchetypeMarkdownHandler()
                 )
                 Platform.HUGO -> listOf(
                     SnippetMarkdownHandler(),
@@ -51,7 +53,8 @@ class MarkdownTagHandlerFactory private constructor() {
                     HugoTableOfContentsMarkdownTagHandler(),
                     HugoNavigationMarkdownHandler(),
                     DependencyMarkdownHandler(),
-                    PluginMarkdownHandler()
+                    PluginMarkdownHandler(),
+                    ArchetypeMarkdownHandler()
                 )
             }
         }
