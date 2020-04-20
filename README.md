@@ -35,7 +35,7 @@ mvn de.quantummaid:documaid:0.9.20:validate
 <plugin>
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.20</version>
+    <version>0.9.21</version>
     <executions>
         <execution>
             <goals>
