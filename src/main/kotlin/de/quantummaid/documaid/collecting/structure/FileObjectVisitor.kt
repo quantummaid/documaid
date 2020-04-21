@@ -22,6 +22,8 @@ package de.quantummaid.documaid.collecting.structure
 
 interface FileObjectVisitor {
 
+    fun startTreeWalk()
+
     fun fileVisited(file: ProjectFile)
 
     fun directoryVisited(directory: Directory)
@@ -30,6 +32,9 @@ interface FileObjectVisitor {
 }
 
 open class FileObjectVisitorAdapter : FileObjectVisitor {
+
+    override fun startTreeWalk() {
+    }
 
     override fun fileVisited(file: ProjectFile) {
     }

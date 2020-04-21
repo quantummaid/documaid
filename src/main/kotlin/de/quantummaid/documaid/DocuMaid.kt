@@ -41,9 +41,9 @@ class DocuMaid private constructor(private val docuMaidConfiguration: DocuMaidCo
 
     private fun collect(): Project {
         val traversalDecision = SkippingCollectingTraversalDecision.createForConfiguration(docuMaidConfiguration)
-        val project = CollectingStep.create()
-            .collect(docuMaidConfiguration, traversalDecision)
-        project.addInformation(DocuMaidConfiguration.DOCUMAID_CONFIGURATION_KEY, docuMaidConfiguration)
+        val project = CollectingStep.create(docuMaidConfiguration)
+            .collect(traversalDecision)
+        project.setInformation(DocuMaidConfiguration.DOCUMAID_CONFIGURATION_KEY, docuMaidConfiguration)
         return project
     }
 

@@ -29,7 +29,7 @@ import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
 import java.nio.file.Path
 
-class UnclassifiedFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile {
+class UnclassifiedFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile() {
 
     companion object {
         fun create(path: Path): UnclassifiedFile {

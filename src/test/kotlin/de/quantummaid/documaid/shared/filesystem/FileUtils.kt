@@ -67,7 +67,7 @@ fun assertFileWithContent(filePath: Path, expectedContent: String) {
     try {
         val bytes = Files.readAllBytes(filePath)
         val content = String(bytes)
-        assertEquals(expectedContent, content)
+        assertEquals(expectedContent, content, "Wrong content in file $filePath")
     } catch (e: IOException) {
         throw RuntimeException(e)
     }

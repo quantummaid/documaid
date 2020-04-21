@@ -21,7 +21,6 @@
 package de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading
 
 import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.syntaxBased.SyntaxBasedMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
@@ -35,8 +34,7 @@ class HugoHeadingMarkdownHandler : SyntaxBasedMarkdownHandler {
         return if (lineWithH1Heading != null) {
             val endIndexOfHeading = headingStart + lineWithH1Heading.length
             val textToBeReplaced = content.substring(0, endIndexOfHeading)
-            val docuMaidConfiguration = project.getInformation(DocuMaidConfiguration.DOCUMAID_CONFIGURATION_KEY)
-            val headingMarkdown = HugoHeadingMarkdown.create(lineWithH1Heading, file, docuMaidConfiguration)
+            val headingMarkdown = HugoHeadingMarkdown.create(lineWithH1Heading, file)
             val newMarkdown = headingMarkdown.generateMarkdown()
             val range = IntRange(0, headingStart + newMarkdown.length)
             Pair(MarkdownReplacement(range, textToBeReplaced, newMarkdown), emptyList())

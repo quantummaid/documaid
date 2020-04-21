@@ -31,7 +31,7 @@ class Project private constructor(
         }
     }
 
-    fun <T> addInformation(key: CollectedInformationKey<T>, value: T) {
+    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
         collectedInformationMap.put(key, value as Any)
     }
 

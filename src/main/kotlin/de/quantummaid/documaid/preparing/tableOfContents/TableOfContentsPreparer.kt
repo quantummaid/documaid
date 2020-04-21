@@ -25,9 +25,9 @@ import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
-import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContentsCreator
 import de.quantummaid.documaid.domain.tableOfContents.TocTraversalDecision
@@ -39,7 +39,7 @@ class TableOfContentsPreparer : PreparingVisitor {
     private val tableOfContentsLookupData = TableOfContentsLookupData()
 
     override fun startPreparation(project: Project) {
-        project.addInformation(TOC_LOOKUP_KEY, tableOfContentsLookupData)
+        project.setInformation(TOC_LOOKUP_KEY, tableOfContentsLookupData)
     }
 
     override fun prepareFile(file: ProjectFile, project: Project): List<VerificationError> {

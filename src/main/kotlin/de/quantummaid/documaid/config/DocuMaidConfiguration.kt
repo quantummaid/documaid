@@ -43,4 +43,8 @@ class DocuMaidConfiguration(
             return DocuMaidConfigurationBuilder.builder()
         }
     }
+
+    fun absoluteHugoOutputPath(): Path {
+        return basePath.resolve(hugoOutputPath)
+    }
 }

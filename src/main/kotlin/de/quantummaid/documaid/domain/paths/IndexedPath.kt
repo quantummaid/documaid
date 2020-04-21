@@ -23,7 +23,7 @@ package de.quantummaid.documaid.domain.paths
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import java.nio.file.Path
 
-class IndexedPath private constructor(val name: String, val index: Int) {
+class IndexedPath constructor(val name: String, val index: Int) {
 
     companion object {
         private val INDEXED_FILE_PATTERN = Regex("(?<index>[\\d]+)_+(?<name>.*)")

@@ -21,12 +21,11 @@
 package de.quantummaid.documaid.generating
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.DOCUMENTATION_GEN_INFO_KEY
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.paths.makeRelativeTo
-import de.quantummaid.documaid.domain.paths.pathMatchesFileNameExactly
+import de.quantummaid.documaid.domain.paths.pathFileNameMatchesFileNameExactly
 import de.quantummaid.documaid.domain.paths.pathMatchesFileRegex
-import de.quantummaid.documaid.domain.paths.pathUnderTopLevelDirectory
-import de.quantummaid.documaid.domain.paths.stripTopLevelDirectoryFromRelativePath
 import de.quantummaid.documaid.generating.GenerationFlavorType.Companion.generationTypeForString
 import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Path
@@ -76,25 +75,18 @@ private class QuantumMaidGenerationFlavor(val projectBasePath: Path) : Generatio
         val file = processingResult.file
         if (file is MarkdownFile) {
             val relativePath = makeRelativeTo(file, projectBasePath)
-            if (pathUnderTopLevelDirectory(relativePath, "documentation/")) {
-                if (pathUnderTopLevelDirectory(relativePath, "documentation/legacy")) {
-                    return DO_NOT_GENERATE_FILE
-                }
-                val newPath = stripTopLevelDirectoryFromRelativePath(relativePath)
-                val newPathAbsolute = projectBasePath.resolve(newPath)
-                val movedFile = file.createCopyForPath(newPathAbsolute)
-                return ProcessingResult.successfulProcessingResult(movedFile, processingResult.newContent)
-            }
-            if (pathMatchesFileNameExactly(relativePath, "README.md")) {
-                val absoluteNewPath = projectBasePath.resolve("_index.md")
-                val movedFile = file.createCopyForPath(absoluteNewPath)
-                return ProcessingResult.successfulProcessingResult(movedFile, processingResult.newContent)
+            if (pathFileNameMatchesFileNameExactly(relativePath, "README.md")) {
+                DO_NOT_GENERATE_FILE
             }
             if (pathMatchesFileRegex(relativePath, "README.*?\\.md")) {
-                return processingResult
+                return DO_NOT_GENERATE_FILE
             }
+            if (!file.hasDataFor(DOCUMENTATION_GEN_INFO_KEY)) {
+                return DO_NOT_GENERATE_FILE
+            }
+            return processingResult
+        } else {
             return DO_NOT_GENERATE_FILE
         }
-        return DO_NOT_GENERATE_FILE
     }
 }

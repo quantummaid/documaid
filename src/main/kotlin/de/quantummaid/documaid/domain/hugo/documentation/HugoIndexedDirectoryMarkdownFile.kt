@@ -18,21 +18,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.processing
+package de.quantummaid.documaid.domain.hugo.documentation
 
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.DOCUMENTATION_GEN_INFO_KEY
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.hugoGenerationInformationForFile
+import de.quantummaid.documaid.domain.hugo.documentationWeights.HugoWeight
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading.HugoHeadingMarkdown
-import de.quantummaid.documaid.domain.paths.IndexedPath
 import java.nio.file.Path
 
 class HugoIndexedDirectoryMarkdownFile {
 
     companion object {
-        fun create(path: Path, indexedPath: IndexedPath): MarkdownFile {
-            val hugoHeadingMarkdown = HugoHeadingMarkdown.create(indexedPath.name, indexedPath.index)
+        fun create(path: Path, directoryName: String, hugoWeight: HugoWeight): Pair<MarkdownFile, String> {
+            val hugoHeadingMarkdown = HugoHeadingMarkdown.create(directoryName, hugoWeight)
             val markdown = hugoHeadingMarkdown.generateMarkdown()
-            path.toFile().writeText(markdown)
-            return MarkdownFile.createFromGeneratedFile(path)
+            val markdownFile = MarkdownFile.createFromGeneratedFile(path)
+            val generationInformation = hugoGenerationInformationForFile(markdownFile)
+            generationInformation.targetPath = path
+            markdownFile.setData(DOCUMENTATION_GEN_INFO_KEY, generationInformation)
+            return Pair(markdownFile, markdown)
         }
     }
 }

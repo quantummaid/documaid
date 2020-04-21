@@ -23,9 +23,9 @@ package de.quantummaid.documaid.usecases.hugo.flavor
 import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.generating.GenerationFlavorType
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
-import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
@@ -37,6 +37,19 @@ class QuantumMaidFlavorSpecs {
         val hugoOutputPath = "2_TestMaid"
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aTypicalQuantumMaidProjectStructure(BASE_PATH, hugoOutputPath))
+            .configuredWith(Platform.HUGO)
+            .configuredWithHugoOutputPath(hugoOutputPath)
+            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID.name)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun quantumMaidFlavorWorksForTypicalQuantumMaidDirectoryStructureWithAlreadyGeneratedIndexFile() {
+        val hugoOutputPath = "2_TestMaid"
+        given(DokuMaidTestBuilder.aDokuMaid()
+            .configuredWith(aTypicalQuantumMaidProjectStructureWithIndex(BASE_PATH, hugoOutputPath))
             .configuredWith(Platform.HUGO)
             .configuredWithHugoOutputPath(hugoOutputPath)
             .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID.name)

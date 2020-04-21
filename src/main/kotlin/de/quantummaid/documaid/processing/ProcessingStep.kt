@@ -25,6 +25,7 @@ import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Goal
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationProcessor
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.generating.GenerationFlavorType
 import de.quantummaid.documaid.generating.GenerationFlavorType.Companion.generationTypeForString
@@ -38,7 +39,7 @@ class ProcessingStep private constructor(private val visitors: List<ProcessingVi
             val generationType = generationTypeForString(docuMaidConfiguration.generationFlavorType)
             val visitors = when (generationType) {
                 GenerationFlavorType.QUANTUMMAID -> listOf(
-                    HugoProcessingGenerationVisitor()
+                    HugoDocumentationProcessor()
                 )
                 else -> emptyList()
             }

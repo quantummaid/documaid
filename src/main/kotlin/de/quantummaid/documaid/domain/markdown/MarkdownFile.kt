@@ -45,7 +45,7 @@ class MarkdownFile private constructor(
     val directives: List<RawMarkdownDirective>,
     val tagHandlers: List<MarkdownTagHandler>,
     val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>
-) : ProjectFile {
+) : ProjectFile() {
 
     companion object {
 

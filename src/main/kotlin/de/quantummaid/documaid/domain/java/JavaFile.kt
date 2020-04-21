@@ -30,7 +30,7 @@ import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
 import java.nio.file.Path
 
-class JavaFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile {
+class JavaFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile() {
 
     companion object {
         object JavaSnippetFormat {

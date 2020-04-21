@@ -23,6 +23,8 @@ package de.quantummaid.documaid.generating
 import de.quantummaid.documaid.collecting.structure.FileType
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Platform
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.DOCUMENTATION_GEN_INFO_KEY
+import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Files
@@ -80,20 +82,34 @@ internal class HugoFileGenerator(
     override fun generate(processingResults: List<ProcessingResult>): List<VerificationError> {
 
         return try {
-            processingResults.filter { it.file.fileType() == FileType.MARKDOWN }
+            processingResults.filter { it.file is MarkdownFile }
                 .mapNotNull { generationFlavor.process(it) }
-                .filter { it.contentChanged }
                 .forEach {
-                    val absoluteFilePath = it.file.absolutePath()
-                    val relativizedPath = basePath.relativize(absoluteFilePath)
-                    val targetPath = hugoBasePath.resolve(relativizedPath)
-                    createDirectoryAndParentsIfNotExisting(targetPath.parent)
-                    targetPath.toFile().writeText(it.newContent)
+                    if (it.file.hasDataFor(DOCUMENTATION_GEN_INFO_KEY)) {
+                        generateBasedOnDocumentationGenerationInformation(it)
+                    } else {
+                        generateInHugoOutputDirectory(it)
+                    }
                 }
             emptyList()
         } catch (e: Exception) {
             listOf(VerificationError.createFromException(e, null))
         }
+    }
+
+    private fun generateBasedOnDocumentationGenerationInformation(it: ProcessingResult) {
+        val generationInformation = it.file.getData(DOCUMENTATION_GEN_INFO_KEY)
+        val targetPath = generationInformation.targetPath!!
+        createDirectoryAndParentsIfNotExisting(targetPath.parent)
+        targetPath.toFile().writeText(it.newContent)
+    }
+
+    private fun generateInHugoOutputDirectory(it: ProcessingResult) {
+        val absoluteFilePath = it.file.absolutePath()
+        val relativizedPath = basePath.relativize(absoluteFilePath)
+        val targetPath = hugoBasePath.resolve(relativizedPath)
+        createDirectoryAndParentsIfNotExisting(targetPath.parent)
+        targetPath.toFile().writeText(it.newContent)
     }
 
     private fun createDirectoryAndParentsIfNotExisting(path: Path) {

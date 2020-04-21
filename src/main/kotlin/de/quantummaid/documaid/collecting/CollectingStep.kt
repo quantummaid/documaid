@@ -26,24 +26,28 @@ import de.quantummaid.documaid.collecting.structure.FileObjectVisitorAdapter
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.traversaldecision.CollectingTraversalDecision
 import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.config.Platform
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationCollector
 
-class CollectingStep private constructor(private val collectors: List<FileObjectVisitorAdapter>) {
+class CollectingStep private constructor(
+    private val collectors: List<FileObjectVisitorAdapter>,
+    private val docuMaidConfig: DocuMaidConfiguration) {
 
     companion object {
-        fun create(): CollectingStep {
-            val collectors = listOf(
+        fun create(docuMaidConfig: DocuMaidConfiguration): CollectingStep {
+            val alwaysOnCollectors = mutableListOf(
                 FastFileLookupTableCollector(),
                 SnippetsCollector()
             )
-            return CollectingStep(collectors)
+            if (docuMaidConfig.platform == Platform.HUGO) {
+                alwaysOnCollectors.add(HugoDocumentationCollector(docuMaidConfig))
+            }
+            val immutableList = alwaysOnCollectors.toList()
+            return CollectingStep(immutableList, docuMaidConfig)
         }
     }
 
-    fun collect(
-        docuMaidConfig: DocuMaidConfiguration,
-        collectingTraversalDecision: CollectingTraversalDecision
-    ): Project {
-
+    fun collect(collectingTraversalDecision: CollectingTraversalDecision): Project {
         val collector = FullCollector()
         return collector.collectData(docuMaidConfig, collectors, collectingTraversalDecision)
     }

@@ -38,6 +38,6 @@ class FastFileLookupTableCollector : FileObjectVisitorAdapter() {
     }
 
     override fun finishTreeWalk(project: Project) {
-        project.addInformation(FILES_LOOKUP_TABLE_KEY, lookUpTable)
+        project.setInformation(FILES_LOOKUP_TABLE_KEY, lookUpTable)
     }
 }

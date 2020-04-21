@@ -34,7 +34,7 @@ fun aFileWithH1Heading(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithH1Heading("1_Introduction.md", "10")
+                aMarkdownFileWithH1Heading("1_Introduction.md", "1")
             )
     }
 }
@@ -56,12 +56,12 @@ fun multipleFilesWithHeadings(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithH1Heading("5_Introduction.md", "50"),
-                aMarkdownFileWithADifferentH1Heading("1_Introduction.md", "10"),
-                aMarkdownFileWithH1Heading("0123_Introduction.md", "1230"),
-                aMarkdownFileWithH1Heading("1_TwiceA.md", "10"),
+                aMarkdownFileWithH1Heading("5_Introduction.md", "5"),
+                aMarkdownFileWithADifferentH1Heading("1_Introduction.md", "1"),
+                aMarkdownFileWithH1Heading("0123_Introduction.md", "123"),
+                aMarkdownFileWithH1Heading("1_TwiceA.md", "1"),
                 aMarkdownFileWithADifferentH1Heading("0_Introduction.md", "0"),
-                aMarkdownFileWithH1Heading("1_TwiceB.md", "10")
+                aMarkdownFileWithH1Heading("1_TwiceB.md", "1")
             )
     }
 }
@@ -72,7 +72,7 @@ fun aFileWithTextBeforeHeading(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithTextBeforeHeading("1_Introduction.md", "10")
+                aMarkdownFileWithTextBeforeHeading("1_Introduction.md", "1")
             )
     }
 }
@@ -83,7 +83,7 @@ fun aFileWithNoIndex(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithADifferentH1Heading("Introduction.md", "10")
+                aMarkdownFileWithADifferentH1Heading("Introduction.md", "0")
             )
     }
 }
