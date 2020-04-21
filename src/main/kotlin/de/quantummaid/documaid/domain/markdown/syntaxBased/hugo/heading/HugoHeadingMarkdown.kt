@@ -71,4 +71,14 @@ class HugoHeadingMarkdown private constructor(private val title: String, private
             ---
             """.trimIndent() + "\n"
     }
+
+    fun generateMarkdownWithSkipParam(): String {
+        return """
+            ---
+            title: "$title"
+            weight: ${weight.value}
+            skip: "true"
+            ---
+            """.trimIndent() + "\n"
+    }
 }

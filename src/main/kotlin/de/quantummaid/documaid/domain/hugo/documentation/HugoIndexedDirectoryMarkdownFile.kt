@@ -32,7 +32,7 @@ class HugoIndexedDirectoryMarkdownFile {
     companion object {
         fun create(path: Path, directoryName: String, hugoWeight: HugoWeight): Pair<MarkdownFile, String> {
             val hugoHeadingMarkdown = HugoHeadingMarkdown.create(directoryName, hugoWeight)
-            val markdown = hugoHeadingMarkdown.generateMarkdown()
+            val markdown = hugoHeadingMarkdown.generateMarkdownWithSkipParam()
             val markdownFile = MarkdownFile.createFromGeneratedFile(path)
             val generationInformation = hugoGenerationInformationForFile(markdownFile)
             generationInformation.targetPath = path

@@ -20,6 +20,7 @@
  */
 package de.quantummaid.documaid.domain.paths
 
+import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import java.nio.file.Path
 
@@ -51,6 +52,10 @@ class IndexedPath constructor(val name: String, val index: Int) {
 
         fun isIndexedPath(file: ProjectFile): Boolean {
             return isIndexedPath(file.name())
+        }
+
+        fun isIndexedPath(directory: Directory): Boolean {
+            return isIndexedPath(directory.name())
         }
 
         fun isIndexedPath(path: Path): Boolean {

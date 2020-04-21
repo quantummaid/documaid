@@ -17,15 +17,15 @@ DocuMaid keeps your documentation in sync with your codebase.
 To generate the the documentation:
 
 ```
-mvn de.quantummaid:documaid:0.9.19:generate
-mvn de.quantummaid:documaid:0.9.19:generate -DskipPaths=docs/Usage.md
+mvn de.quantummaid:documaid:0.9.22:generate
+mvn de.quantummaid:documaid:0.9.22:generate -DskipPaths=docs/Usage.md
 
 ```
 
 To validate, if the current documentation is correct and does not require any changes:
 
 ```
-mvn de.quantummaid:documaid:0.9.19:validate
+mvn de.quantummaid:documaid:0.9.22:validate
 ```
 
 
@@ -35,7 +35,7 @@ mvn de.quantummaid:documaid:0.9.19:validate
 <plugin>
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.19</version>
+    <version>0.9.22</version>
     <executions>
         <execution>
             <goals>

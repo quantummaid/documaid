@@ -27,6 +27,7 @@ import de.quantummaid.documaid.shared.filesystem.PhysicalFileSystemStructureBuil
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
+import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithH1Heading
 import de.quantummaid.documaid.shared.samplesFiles.aRawMarkdownFile
 
@@ -63,8 +64,12 @@ fun aTypicalQuantumMaidProjectStructure(basePath: String, hugoOutputPath: String
                             .with(
                                 legacy1MarkdownFile,
                                 legacy2MarkdownFile
-                            )
-                    ),
+                            ),
+                        aDirectory("src").with(
+                            aDirectory("de").with(
+                                aDirectory("documentation").with(
+                                    aJavaFileWithOneSnippet("source.java", "snippet")
+                                )))),
                 aDirectory("something")
                     .with(
                         aMarkdownFileWithH1Heading("README.md", "10"),
@@ -88,6 +93,7 @@ fun aTypicalQuantumMaidProjectStructure(basePath: String, hugoOutputPath: String
                                 "---\n" +
                                     "title: \"Usecases\"\n" +
                                     "weight: 10203001\n" +
+                                    "skip: \"true\"\n" +
                                     "---\n"
                             )
                         ),
@@ -97,6 +103,7 @@ fun aTypicalQuantumMaidProjectStructure(basePath: String, hugoOutputPath: String
                         "---\n" +
                             "title: \"TestMaid\"\n" +
                             "weight: 10200001\n" +
+                            "skip: \"true\"\n" +
                             "---\n"
                     )
                 )
@@ -165,6 +172,7 @@ fun aTypicalQuantumMaidProjectStructureWithIndex(basePath: String, hugoOutputPat
                                 "---\n" +
                                     "title: \"Usecases\"\n" +
                                     "weight: 1020300001\n" +
+                                    "skip: \"true\"\n" +
                                     "---\n"
                             ),
                             PhysicalDirectoryBuilder.aDirectory("12_FurtherBelow")
@@ -174,6 +182,7 @@ fun aTypicalQuantumMaidProjectStructureWithIndex(basePath: String, hugoOutputPat
                                         "---\n" +
                                             "title: \"FurtherBelow\"\n" +
                                             "weight: 1020312001\n" +
+                                            "skip: \"true\"\n" +
                                             "---\n"
                                     )
                                 )
