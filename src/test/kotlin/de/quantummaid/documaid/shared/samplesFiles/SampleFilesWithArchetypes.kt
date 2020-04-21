@@ -225,14 +225,15 @@ private fun archetypeDirectiveMarkdown(
     return "<!---[Archetype]$optionsString-->\n"
 }
 
-private fun createOptionsString(archetypeGroupId: String?,
-                                archetypeArtifactId: String?,
-                                archetypeVersion: String?,
-                                groupId: String,
-                                artifactId: String,
-                                version: String,
-                                packaging: String,
-                                os: String? = null
+private fun createOptionsString(
+    archetypeGroupId: String?,
+    archetypeArtifactId: String?,
+    archetypeVersion: String?,
+    groupId: String,
+    artifactId: String,
+    version: String,
+    packaging: String,
+    os: String? = null
 ): String {
     val archetypeGroupIdString = if (archetypeGroupId != null) {
         "archetypeGroupId=$archetypeGroupId "

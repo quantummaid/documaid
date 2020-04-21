@@ -31,7 +31,8 @@ import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationCollec
 
 class CollectingStep private constructor(
     private val collectors: List<FileObjectVisitorAdapter>,
-    private val docuMaidConfig: DocuMaidConfiguration) {
+    private val docuMaidConfig: DocuMaidConfiguration
+) {
 
     companion object {
         fun create(docuMaidConfig: DocuMaidConfiguration): CollectingStep {

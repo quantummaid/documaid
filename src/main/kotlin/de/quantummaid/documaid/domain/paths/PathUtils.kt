@@ -53,11 +53,9 @@ fun stripTopLevelDirectoryFromRelativePath(path: Path): Path {
     return rootDirectory.relativize(path)
 }
 
-
 fun pathMatchesFileNameExactly(path: Path, fileName: String): Boolean {
     return path.fileName.toString() == fileName
 }
-
 
 fun pathFileNameMatchesFileNameExactly(path: Path, fileName: String): Boolean {
     return path.toString() == fileName

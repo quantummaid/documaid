@@ -150,7 +150,6 @@ interface ArchetypeSpecs {
                     "(in path ${absPath("aFileWithAWrongArchetype/archetype.md")})"))
     }
 
-
     companion object {
         private const val BASE_PATH = "target/tempTestDirs/archetype/"
     }

@@ -105,7 +105,6 @@ fun aTypicalQuantumMaidProjectStructure(basePath: String, hugoOutputPath: String
     }
 }
 
-
 fun aTypicalQuantumMaidProjectStructureWithIndex(basePath: String, hugoOutputPath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aTypicalQuantumMaidProjectStructure")
 

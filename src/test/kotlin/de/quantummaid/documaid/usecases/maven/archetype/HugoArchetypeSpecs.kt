@@ -10,22 +10,17 @@ class HugoArchetypeSpecs : ArchetypeSpecs {
 
     @Test
     override fun canValidateCorrectArchetype(platformConfiguration: PlatformConfiguration) {
-
     }
 
     @Test
     override fun canValidateCorrectArchetypeAtEndOfFile(platformConfiguration: PlatformConfiguration) {
-
     }
 
     @Test
     override fun failsForMissingArchetype(platformConfiguration: PlatformConfiguration) {
-
     }
 
     @Test
     override fun failsForIncorrectArchetype(platformConfiguration: PlatformConfiguration) {
-
     }
-
 }

@@ -34,6 +34,5 @@ class HugoDocumentationGenerationInformation private constructor(
             return HugoDocumentationGenerationInformation(absolutePath,
                 directory, levelWithinDocumentation = levelWithinDocu)
         }
-
     }
 }

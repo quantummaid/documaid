@@ -96,7 +96,7 @@
         <owasp-dependency-check-plugin-version>5.3.2</owasp-dependency-check-plugin-version>
         <tidy-maven-plugin-version>1.1.0</tidy-maven-plugin-version>
         <nexus-staging-maven-plugin-version>1.6.8</nexus-staging-maven-plugin-version>
-        <junit-version>5.6.2</junit-version>
+        <junit-version>5.7.0-M1</junit-version>
         <maven-plugin-dependency-version>3.6.3</maven-plugin-dependency-version>
         <maven-core-dependency-version>3.6.3</maven-core-dependency-version>
         <maven-annotations-dependency-version>3.6.0</maven-annotations-dependency-version>

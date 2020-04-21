@@ -112,7 +112,7 @@ private class DocumentationRootDirectory constructor(
 ) : AbstractDocumentationDirectory(directory) {
 
     override fun calculateTargetPath(project: Project) {
-        //nothing to do here, because already set
+        // nothing to do here, because already set
     }
 
     override fun calculateWeight(project: Project) {
@@ -138,7 +138,6 @@ private class DocumentationRootDirectory constructor(
             "Can not resolve target path, because own target path has not been set in ${directory.absolutePath()}")
         return targetPath.resolve(name)
     }
-
 }
 
 private class NormalDocumentationDirectory constructor(
@@ -171,12 +170,10 @@ private class NormalDocumentationDirectory constructor(
             ?: throw IllegalArgumentException("Weight prefix for directory $absolutePath was not generated.")
     }
 
-
     override fun resolveInTargetPath(name: String): Path {
         val generationInformation = directory.getData(DOCUMENTATION_GEN_INFO_KEY)
         val targetPath = generationInformation.targetPath ?: throw IllegalStateException(
             "Can not resolve target path, because own target path has not been set in ${directory.absolutePath()}")
         return targetPath.resolve(name)
     }
-
 }
