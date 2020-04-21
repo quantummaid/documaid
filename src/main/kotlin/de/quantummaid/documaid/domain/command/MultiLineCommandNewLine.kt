@@ -18,25 +18,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.domain.command
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
+import de.quantummaid.documaid.domain.os.OsType
+
+class MultiLineCommandNewLine private constructor(val value: String) {
 
     companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
+        fun forOsType(osType: OsType): MultiLineCommandNewLine {
+            val value = when (osType) {
+                OsType.LINUX -> "\\\n"
+                OsType.WINDOWS -> "^\n"
+            }
+            return MultiLineCommandNewLine(value)
         }
-    }
-
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
     }
 }

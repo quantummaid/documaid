@@ -18,25 +18,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.shared.samplesFiles
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
+import de.quantummaid.documaid.shared.filesystem.ProcessedFile
+import de.quantummaid.documaid.shared.filesystem.ProcessedFileBuilder
 
-    companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
-        }
-    }
-
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
-    }
+fun aRawMarkdownFile(fileName: String, content: String): ProcessedFile {
+    return ProcessedFileBuilder.anExpectedFile()
+        .withOriginalNameAndContent(fileName, content)
+        .withProcessedNameAndContent(fileName, content)
+        .withProcessedNameAndContentInHugoFormat(fileName, content)
+        .build()
 }

@@ -18,25 +18,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.domain.hugo.documentationWeights
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
+class HugoWeight(val value: Int) {
 
     companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
+        fun createForMultiLevelWeight(value: String): HugoWeight {
+            val weightInSafeFormForHugo = Integer.parseInt("1${value}1")
+            return HugoWeight(weightInSafeFormForHugo)
         }
-    }
 
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
+        fun createForIndividualWeight(value: String): HugoWeight {
+            val weigh = Integer.parseInt(value)
+            return HugoWeight(weigh)
+        }
     }
 }

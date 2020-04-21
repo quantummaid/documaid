@@ -18,25 +18,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.usecases.maven.archetype
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
+import de.quantummaid.documaid.shared.testparams.HugoPlatformProvider
+import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
-    companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
-        }
+@ExtendWith(HugoPlatformProvider::class)
+class HugoArchetypeSpecs : ArchetypeSpecs {
+
+    @Test
+    override fun canValidateCorrectArchetype(platformConfiguration: PlatformConfiguration) {
     }
 
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
+    @Test
+    override fun canValidateCorrectArchetypeAtEndOfFile(platformConfiguration: PlatformConfiguration) {
     }
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
+    @Test
+    override fun failsForMissingArchetype(platformConfiguration: PlatformConfiguration) {
+    }
+
+    @Test
+    override fun failsForIncorrectArchetype(platformConfiguration: PlatformConfiguration) {
     }
 }

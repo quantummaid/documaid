@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.21</version>
+    <version>0.9.22</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -98,6 +98,8 @@
         <maven-core-dependency-version>3.6.3</maven-core-dependency-version>
         <maven-annotations-dependency-version>3.6.0</maven-annotations-dependency-version>
         <license-maven-plugin-version>3.0</license-maven-plugin-version>
+        <sonar-maven-plugin-version>3.7.0.1746</sonar-maven-plugin-version>
+        <jacobo-maven-plugin-version>0.8.5</jacobo-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jvm-target-version>1.8</jvm-target-version>
@@ -306,8 +308,7 @@
                                 <allowSnapshots>false</allowSnapshots>
                                 <outputFile>target/dependency-updates.txt</outputFile>
                                 <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml
-                                </rulesUri>
+                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml</rulesUri>
                             </configuration>
                         </execution>
                         <execution>
@@ -320,8 +321,7 @@
                                 <allowSnapshots>false</allowSnapshots>
                                 <outputFile>target/plugin-updates.txt</outputFile>
                                 <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml
-                                </rulesUri>
+                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml</rulesUri>
                             </configuration>
                         </execution>
                     </executions>
@@ -427,8 +427,7 @@
                             <configuration>
                                 <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                                 <suppressionFiles>
-                                    <suppressionFile>src/test/dependencies/ignoredVulnerableVersion.xml
-                                    </suppressionFile>
+                                    <suppressionFile>src/test/dependencies/ignoredVulnerableVersion.xml</suppressionFile>
                                 </suppressionFiles>
                             </configuration>
                         </execution>
@@ -460,7 +459,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.5</version>
+                    <version>${jacobo-maven-plugin-version}</version>
                     <executions>
                         <execution>
                             <id>prepare-agent</id>
@@ -541,7 +540,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>sonar</id>
             <activation>

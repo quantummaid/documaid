@@ -18,25 +18,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.domain.hugo.documentationWeights
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
-
+class HugoDirectoryWeightPadder {
     companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
+        fun padIndex(index: Int): String {
+            val indexString = index.toString()
+            return when {
+                indexString.length == 1 -> "0$indexString"
+                indexString.length == 2 -> indexString
+                indexString.length > 2 -> throw IllegalArgumentException("Only indices between 1 and 99 allowed")
+                else -> throw IllegalArgumentException("Illegal index $indexString")
+            }
         }
-    }
-
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
     }
 }

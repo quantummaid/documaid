@@ -18,21 +18,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.processing
+package de.quantummaid.documaid.domain.os
 
-import de.quantummaid.documaid.domain.markdown.MarkdownFile
-import de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading.HugoHeadingMarkdown
-import de.quantummaid.documaid.domain.paths.IndexedPath
-import java.nio.file.Path
-
-class HugoIndexedDirectoryMarkdownFile {
+enum class OsType {
+    LINUX,
+    WINDOWS;
 
     companion object {
-        fun create(path: Path, indexedPath: IndexedPath): MarkdownFile {
-            val hugoHeadingMarkdown = HugoHeadingMarkdown.create(indexedPath.name, indexedPath.index)
-            val markdown = hugoHeadingMarkdown.generateMarkdown()
-            path.toFile().writeText(markdown)
-            return MarkdownFile.createFromGeneratedFile(path)
+        fun forString(string: String): OsType {
+            return when (string.toLowerCase()) {
+                "linux" -> LINUX
+                "windows" -> WINDOWS
+                else -> throw IllegalArgumentException("Unknown os type '$string'")
+            }
         }
     }
 }

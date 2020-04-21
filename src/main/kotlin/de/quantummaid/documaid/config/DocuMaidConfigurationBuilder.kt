@@ -34,6 +34,7 @@ class DocuMaidConfigurationBuilder private constructor() {
     private var hugoOutputPath = "hugo"
     private var repository: Repository? = null
     private var generationFlavorType: String? = null
+    private var overriddenDocumentationDepth: String? = null
 
     fun withBasePath(basePath: String): DocuMaidConfigurationBuilder {
         this.basePath = Paths.get(basePath)
@@ -85,10 +86,20 @@ class DocuMaidConfigurationBuilder private constructor() {
         return this
     }
 
+    fun withOverriddenDocumentationDepth(overridenDocumentationDepth: String?): DocuMaidConfigurationBuilder {
+        this.overriddenDocumentationDepth = overridenDocumentationDepth
+        return this
+    }
+
     fun build(): DocuMaidConfiguration {
         val absolutePath = basePath!!.toAbsolutePath()
+        val documentationDepth = if (overriddenDocumentationDepth != null) {
+            Integer.parseInt(overriddenDocumentationDepth)
+        } else {
+            0
+        }
         return DocuMaidConfiguration(absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths,
-            platform, hugoOutputPath, repository, generationFlavorType)
+            platform, hugoOutputPath, repository, generationFlavorType, documentationDepth)
     }
 
     companion object {

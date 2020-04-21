@@ -31,9 +31,39 @@ interface FileObject {
     fun absolutePath(): Path
 
     fun name(): String = absolutePath().fileName.toString()
+
+    fun hasDataFor(key: FileObjectDataKey<Any>): Boolean
+
+    fun <T> getData(key: FileObjectDataKey<T>): T
+
+    fun <T> setData(key: FileObjectDataKey<T>, value: T)
 }
 
-class Directory(private val path: Path, childrenIn: List<FileObject>) : FileObject {
+abstract class FileObjectWithData : FileObject {
+    private val data: MutableMap<FileObjectDataKey<Any?>, Any> = HashMap()
+
+    override fun hasDataFor(key: FileObjectDataKey<Any>): Boolean {
+        return data[key] != null
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getData(key: FileObjectDataKey<T>): T {
+        val data = data[key]
+        if (data != null) {
+            return data as T
+        } else {
+            throw IllegalArgumentException("Not data set for key $key")
+        }
+    }
+
+    override fun <T> setData(key: FileObjectDataKey<T>, value: T) {
+        data[key] = value as Any
+    }
+}
+
+data class FileObjectDataKey<out T>(val name: String)
+
+class Directory(private val path: Path, childrenIn: List<FileObject>) : FileObjectWithData() {
     private val children = ArrayList(childrenIn)
 
     constructor(path: Path) : this(path, ArrayList())
@@ -47,14 +77,15 @@ class Directory(private val path: Path, childrenIn: List<FileObject>) : FileObje
     fun children(): List<FileObject> = children
 }
 
-interface ProjectFile : FileObject {
-    fun fileType(): FileType
+abstract class ProjectFile : FileObjectWithData() {
 
-    fun snippets(): List<RawSnippet>
+    abstract fun fileType(): FileType
 
-    fun process(project: Project): ProcessingResult
+    abstract fun snippets(): List<RawSnippet>
 
-    fun validate(project: Project): List<VerificationError>
+    abstract fun process(project: Project): ProcessingResult
+
+    abstract fun validate(project: Project): List<VerificationError>
 
     fun snippetForId(snippetId: SnippetId): RawSnippet {
         val matchingSnippets = snippets().filter { it.id == snippetId }

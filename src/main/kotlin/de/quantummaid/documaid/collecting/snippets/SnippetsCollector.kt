@@ -34,6 +34,6 @@ class SnippetsCollector : FileObjectVisitorAdapter() {
     }
 
     override fun finishTreeWalk(project: Project) {
-        project.addInformation(SNIPPETS_LOOKUP_TABLE_KEY, snippetsLookupTable)
+        project.setInformation(SNIPPETS_LOOKUP_TABLE_KEY, snippetsLookupTable)
     }
 }

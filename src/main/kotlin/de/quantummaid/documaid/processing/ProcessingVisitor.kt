@@ -27,6 +27,8 @@ import de.quantummaid.documaid.config.Goal
 
 interface ProcessingVisitor {
 
+    fun beforeProcessingStart(project: Project, goal: Goal)
+
     fun beforeDirectoryProcessing(directory: Directory, project: Project, goal: Goal)
 
     fun afterDirectoryProcessing(
@@ -44,9 +46,14 @@ interface ProcessingVisitor {
         goal: Goal,
         fileProcessingResults: MutableList<ProcessingResult>
     )
+
+    fun afterProcessingFinish(project: Project, goal: Goal)
 }
 
 open class ProcessingVisitorAdapter : ProcessingVisitor {
+
+    override fun beforeProcessingStart(project: Project, goal: Goal) {
+    }
 
     override fun beforeDirectoryProcessing(directory: Directory, project: Project, goal: Goal) {
     }
@@ -68,5 +75,8 @@ open class ProcessingVisitorAdapter : ProcessingVisitor {
         goal: Goal,
         fileProcessingResults: MutableList<ProcessingResult>
     ) {
+    }
+
+    override fun afterProcessingFinish(project: Project, goal: Goal) {
     }
 }

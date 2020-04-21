@@ -36,6 +36,10 @@ fun makeRelativeTo(projectFile: ProjectFile, rootDir: Path): Path {
     return rootDir.relativize(dirPath)
 }
 
+fun makeRelativeTo(absolutePath: Path, rootDir: Path): Path {
+    return rootDir.relativize(absolutePath)
+}
+
 fun pathUnderTopLevelDirectory(projectRelativePath: Path, directoryName: String): Boolean {
     return if (directoryName.endsWith("/")) {
         projectRelativePath.startsWith(directoryName)
@@ -50,6 +54,10 @@ fun stripTopLevelDirectoryFromRelativePath(path: Path): Path {
 }
 
 fun pathMatchesFileNameExactly(path: Path, fileName: String): Boolean {
+    return path.fileName.toString() == fileName
+}
+
+fun pathFileNameMatchesFileNameExactly(path: Path, fileName: String): Boolean {
     return path.toString() == fileName
 }
 

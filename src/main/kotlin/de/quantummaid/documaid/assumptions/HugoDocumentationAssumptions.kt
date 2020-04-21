@@ -18,25 +18,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.assumptions
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
+class HugoDocumentationAssumptions {
 
     companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
-        }
-    }
-
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
+        const val DOCUMENTATION_DIRECTORY = "documentation"
+        const val DOCUMENTATION_LEGACY_DIRECTORY = "documentation/legacy"
+        const val INDEX_MD_FILE_NAME = "_index.md"
     }
 }

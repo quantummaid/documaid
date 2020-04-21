@@ -34,7 +34,8 @@ class DocuMaidConfiguration(
     val platform: Platform = Platform.GITHUB,
     val hugoOutputPath: String = "hugo",
     val repository: Repository? = null,
-    val generationFlavorType: String? = null
+    val generationFlavorType: String? = null,
+    val documentationDepth: Int = 0
 ) {
     companion object {
         val DOCUMAID_CONFIGURATION_KEY = CollectedInformationKey<DocuMaidConfiguration>("DOCUMAID_CONFIGURATION_KEY")
@@ -42,5 +43,9 @@ class DocuMaidConfiguration(
         fun aDocuMaidConfiguration(): DocuMaidConfigurationBuilder {
             return DocuMaidConfigurationBuilder.builder()
         }
+    }
+
+    fun absoluteHugoOutputPath(): Path {
+        return basePath.resolve(hugoOutputPath)
     }
 }

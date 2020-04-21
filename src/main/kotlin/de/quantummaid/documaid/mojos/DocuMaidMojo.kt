@@ -53,6 +53,8 @@ abstract class DocuMaidMojo : AbstractMojo() {
     private val repositoryUrl: String? = null
     @Parameter(property = "generationFlavor")
     private val generationFlavor: String? = null
+    @Parameter(property = "overriddenDocumentationDepth")
+    private val overriddenDocumentationDepth: String? = null
 
     protected abstract val goal: Goal
 
@@ -131,5 +133,6 @@ abstract class DocuMaidMojo : AbstractMojo() {
                 configurationBuilder.withRepositoryUrl(repositoryUrl)
             }
         }
+        configurationBuilder.withOverriddenDocumentationDepth(overriddenDocumentationDepth)
     }
 }

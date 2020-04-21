@@ -18,25 +18,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.usecases.maven.archetype
 
-class Project private constructor(
-    val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
-) {
+import de.quantummaid.documaid.shared.testparams.GithubPlatformProvider
+import org.junit.jupiter.api.extension.ExtendWith
 
-    companion object {
-        fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
-        }
-    }
-
-    fun <T> setInformation(key: CollectedInformationKey<T>, value: T) {
-        collectedInformationMap.put(key, value as Any)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getInformation(key: CollectedInformationKey<T>): T {
-        return collectedInformationMap[key] as T
-    }
-}
+@ExtendWith(GithubPlatformProvider::class)
+class GithubArchetypeSpecs : ArchetypeSpecs
