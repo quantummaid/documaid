@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.22</version>
+    <version>0.9.23</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
