@@ -78,6 +78,8 @@ class GithubLinkMarkdownTagHandler : MarkdownTagHandler {
         val markdownMatchResult = startsWithLinkMarkdown(markdownDirective.remainingMarkupFileContent)
         val text = if (markdownMatchResult.matches) {
             "${markdownDirective.completeString}${markdownMatchResult.content}"
+        } else if (markdownDirective.remainingMarkupFileContent.startsWith("\n")) {
+            markdownDirective.completeString + "\n"
         } else {
             markdownDirective.completeString
         }

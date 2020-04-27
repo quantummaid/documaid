@@ -20,7 +20,9 @@
  */
 package de.quantummaid.documaid.shared.filesystem
 
+import de.quantummaid.documaid.assumptions.HugoDocumentationAssumptions
 import de.quantummaid.documaid.config.DocuMaidConfiguration
+import de.quantummaid.documaid.generating.GenerationFlavorType
 import java.nio.file.Path
 
 class SutFileStructure internal constructor() {
@@ -53,8 +55,18 @@ class SutFileStructure internal constructor() {
     }
 
     fun constructExpectedFileStructureForHugo(config: DocuMaidConfiguration): PhysicalFileSystemStructure {
-        val hugoOutputPath = basePath!!.resolve(config.hugoOutputPath)
-        return construct(hugoOutputPath, ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO)
+        val documentationDirectory = children.filterIsInstance(SutDirectory::class.java)
+            .find { it.name == HugoDocumentationAssumptions.DOCUMENTATION_DIRECTORY }
+        val generationFlavorType = config.generationFlavorType
+        return if (generationFlavorType == GenerationFlavorType.QUANTUMMAID.name && documentationDirectory != null) {
+            this.children.clear()
+            this.children.addAll(documentationDirectory.children)
+            val hugoOutputPath = basePath!!.resolve(config.hugoOutputPath)
+            construct(hugoOutputPath, ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO)
+        } else {
+            val hugoOutputPath = basePath!!.resolve(config.hugoOutputPath)
+            construct(hugoOutputPath, ConstructionForPlatformType.EXPECTED_OUTPUT_FOR_HUGO)
+        }
     }
 
     private fun generate(basePath: Path): PhysicalFileSystemStructure {
@@ -106,9 +118,9 @@ interface SutFileObject {
     fun construct(parentPath: Path, constructionForPlatformType: ConstructionForPlatformType): PhysicalFileObject?
 }
 
-class SutDirectory private constructor(private val name: String) : SutFileObject {
+class SutDirectory private constructor(val name: String) : SutFileObject {
 
-    private val children = ArrayList<SutFileObject>()
+    val children = ArrayList<SutFileObject>()
 
     companion object {
         fun aDirectory(name: String): SutDirectory {

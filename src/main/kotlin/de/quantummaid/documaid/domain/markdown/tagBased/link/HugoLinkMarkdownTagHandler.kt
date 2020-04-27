@@ -22,6 +22,7 @@ package de.quantummaid.documaid.domain.markdown.tagBased.link
 
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.config.DocuMaidConfiguration.Companion.DOCUMAID_CONFIGURATION_KEY
+import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.DOCUMENTATION_GEN_INFO_KEY
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandler
@@ -70,18 +71,26 @@ class HugoLinkMarkdownTagHandler : MarkdownTagHandler {
 
     private fun newMarkdown(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): String {
         val linkDirective = LinkDirective.create(directive, file, project)
-        val docuMaidConfiguration = project.getInformation(DOCUMAID_CONFIGURATION_KEY)
-        val message = "Creating links for hugo requires a repository to be configured"
-        val repository = docuMaidConfiguration.repository ?: throw IllegalArgumentException(message)
-        val githubLinkMarkdown = HugoLinkMarkdown.create(linkDirective, repository)
-        val markdown = githubLinkMarkdown.generateMarkdown()
-        return markdown
+        val targetFile = linkDirective.targetFile
+        return if (targetFile.hasDataFor(DOCUMENTATION_GEN_INFO_KEY)) {
+            val markdown = HugoLinkWithinDocuMarkdown.create(linkDirective)
+            markdown.generateMarkdown()
+        } else {
+            val docuMaidConfiguration = project.getInformation(DOCUMAID_CONFIGURATION_KEY)
+            val message = "Creating links for hugo requires a repository to be configured"
+            val repository = docuMaidConfiguration.repository ?: throw IllegalArgumentException(message)
+            val githubLinkMarkdown = HugoLinkToGithubMarkdown.create(linkDirective, repository)
+            val markdown = githubLinkMarkdown.generateMarkdown()
+            markdown
+        }
     }
 
     private fun textToBeReplaced(markdownDirective: RawMarkdownDirective): Pair<String, TrailingMarkdownMatchResult> {
         val markdownMatchResult = startsWithLinkMarkdown(markdownDirective.remainingMarkupFileContent)
         val text = if (markdownMatchResult.matches) {
             "${markdownDirective.completeString}${markdownMatchResult.content}"
+        } else if (markdownDirective.remainingMarkupFileContent.startsWith("\n")) {
+            markdownDirective.completeString + "\n"
         } else {
             markdownDirective.completeString
         }

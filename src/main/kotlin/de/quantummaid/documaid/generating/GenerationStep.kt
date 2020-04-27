@@ -99,7 +99,9 @@ internal class HugoFileGenerator(
 
     private fun generateBasedOnDocumentationGenerationInformation(it: ProcessingResult) {
         val generationInformation = it.file.getData(DOCUMENTATION_GEN_INFO_KEY)
-        val targetPath = generationInformation.targetPath!!
+        val targetPath = generationInformation.targetPath
+            ?: throw IllegalStateException("Expected target path for file '${it.file.absolutePath()}' " +
+                "within documentation, but it was not generated.")
         createDirectoryAndParentsIfNotExisting(targetPath.parent)
         targetPath.toFile().writeText(it.newContent)
     }

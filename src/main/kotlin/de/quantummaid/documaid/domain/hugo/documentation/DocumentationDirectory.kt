@@ -31,6 +31,7 @@ import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenera
 import de.quantummaid.documaid.domain.hugo.documentationWeights.HugoDirectoryWeightPadder
 import de.quantummaid.documaid.domain.hugo.documentationWeights.HugoWeight
 import de.quantummaid.documaid.domain.paths.IndexedPath
+import de.quantummaid.documaid.domain.paths.IndexedPath.Companion.isIndexedPath
 import de.quantummaid.documaid.domain.paths.pathMatchesFileNameExactly
 import de.quantummaid.documaid.processing.ProcessingResult
 import java.nio.file.Path
@@ -140,12 +141,24 @@ private class DocumentationRootDirectory constructor(
 
     override fun calculateWeight(project: Project) {
         val generationInformation = directory.getData(DOCUMENTATION_GEN_INFO_KEY)
-        val index = getFileIndex(generationInformation)
+        val index = getOptionalFileIndex(generationInformation)
         val paddedIndex = HugoDirectoryWeightPadder.padIndex(index)
         generationInformation.weightPrefix = paddedIndex
 
         val fillingZeros = fillRemainingLevelsWithZeros(generationInformation, project)
         generationInformation.weight = "$paddedIndex$fillingZeros"
+    }
+
+    private fun getOptionalFileIndex(generationInformation: HugoDocumentationGenerationInformation): Int {
+        val targetPath = generationInformation.targetPath
+            ?: throw IllegalArgumentException("Can not obtain index for ${generationInformation.originalPath}, " +
+                "because 'targetpath' not set in generation information.")
+        return if (isIndexedPath(targetPath)) {
+            val indexedPath = IndexedPath.anIndexedPath(targetPath)
+            indexedPath.index
+        } else {
+            0
+        }
     }
 
     override fun getWeighPrefix(): String {

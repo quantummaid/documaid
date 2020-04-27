@@ -18,29 +18,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.fastLookup
+package de.quantummaid.documaid.domain.markdown.tagBased.link
 
-import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
-import de.quantummaid.documaid.collecting.structure.FileObject
-import java.nio.file.Path
+import de.quantummaid.documaid.config.Repository
 
-class FileObjectsFastLookUpTable {
-    private val map: MutableMap<Path, FileObject> = HashMap()
+class HugoLinkToGithubMarkdown(
+    val name: String,
+    val target: String,
+    val linkDirective: LinkDirective,
+    val repository: Repository
+) {
 
     companion object {
-        private val keyName = "FILES_LOOKUP_TABLE_KEY"
-        val FILES_LOOKUP_TABLE_KEY = CollectedInformationKey<FileObjectsFastLookUpTable>(keyName)
+
+        fun create(linkDirective: LinkDirective, repository: Repository): HugoLinkToGithubMarkdown {
+            val name = linkDirective.options.name
+            val originalPathString = linkDirective.options.originalPathString
+            return HugoLinkToGithubMarkdown(name, originalPathString, linkDirective, repository)
+        }
     }
 
-    fun addFileObject(path: Path, fileObject: FileObject) {
-        map[path] = fileObject
-    }
-
-    fun getFileObject(path: Path): FileObject? {
-        return map[path]
-    }
-
-    fun fileObjectExists(path: Path): Boolean {
-        return map.containsKey(path)
+    fun generateMarkdown(): String {
+        val githubUrl = repository.urlToFile(target)
+        val markdownLink = "[$name]($githubUrl)"
+        return "${linkDirective.directive.completeString}\n$markdownLink"
     }
 }
