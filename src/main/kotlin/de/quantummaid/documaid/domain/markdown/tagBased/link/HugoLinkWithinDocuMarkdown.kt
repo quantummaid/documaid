@@ -20,27 +20,24 @@
  */
 package de.quantummaid.documaid.domain.markdown.tagBased.link
 
-import de.quantummaid.documaid.config.Repository
-
-class HugoLinkMarkdown(
+class HugoLinkWithinDocuMarkdown(
     val name: String,
-    val target: String,
-    val linkDirective: LinkDirective,
-    val repository: Repository
+    val relativeTargetPath: String,
+    val linkDirective: LinkDirective
 ) {
 
     companion object {
 
-        fun create(linkDirective: LinkDirective, repository: Repository): HugoLinkMarkdown {
+        fun create(linkDirective: LinkDirective): HugoLinkWithinDocuMarkdown {
             val name = linkDirective.options.name
             val originalPathString = linkDirective.options.originalPathString
-            return HugoLinkMarkdown(name, originalPathString, linkDirective, repository)
+            return HugoLinkWithinDocuMarkdown(name, originalPathString, linkDirective)
         }
     }
 
     fun generateMarkdown(): String {
-        val githubUrl = repository.urlToFile(target)
-        val markdownLink = "[$name]($githubUrl)"
+        val hugoRelativeLinkMarkdown = "{{< ref \"$relativeTargetPath\" >}}"
+        val markdownLink = "[$name]($hugoRelativeLinkMarkdown)"
         return "${linkDirective.directive.completeString}\n$markdownLink"
     }
 }

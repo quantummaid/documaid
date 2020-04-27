@@ -27,6 +27,7 @@ import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
+import de.quantummaid.documaid.generating.GenerationFlavorType
 import de.quantummaid.documaid.givenWhenThen.TestEnvironment.Companion.emptyTestEnvironment
 import de.quantummaid.documaid.shared.filesystem.Setup
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
@@ -82,6 +83,11 @@ class DokuMaidTestBuilder private constructor() {
 
     fun configuredWithFlavorType(flavorType: String): DokuMaidTestBuilder {
         docuMaidConfigurationBuilder.withGenerationFlavorType(flavorType)
+        return this
+    }
+
+    fun configuredWithFlavorType(flavorType: GenerationFlavorType): DokuMaidTestBuilder {
+        docuMaidConfigurationBuilder.withGenerationFlavorType(flavorType.name)
         return this
     }
 

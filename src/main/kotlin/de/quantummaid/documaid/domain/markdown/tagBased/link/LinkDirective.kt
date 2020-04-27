@@ -22,6 +22,7 @@ package de.quantummaid.documaid.domain.markdown.tagBased.link
 
 import de.quantummaid.documaid.collecting.fastLookup.FileObjectsFastLookUpTable
 import de.quantummaid.documaid.collecting.structure.Project
+import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
@@ -30,7 +31,11 @@ import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidExcep
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class LinkDirective private constructor(val directive: RawMarkdownDirective, val options: LinkDirectiveOptions) {
+class LinkDirective private constructor(
+    val directive: RawMarkdownDirective,
+    val options: LinkDirectiveOptions,
+    val targetFile: ProjectFile
+) {
 
     companion object {
         val LINK_TAG = DirectiveTag("Link")
@@ -39,10 +44,11 @@ class LinkDirective private constructor(val directive: RawMarkdownDirective, val
             val options = LinkDirectiveOptions.create(directive, file)
             val rootRelativeTargetPath = options.rootDirRelativePath
             val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
-            if (!lookUpTable.fileExists(rootRelativeTargetPath)) {
+            if (!lookUpTable.fileObjectExists(rootRelativeTargetPath)) {
                 throw aDocuMaidException("Found [$LINK_TAG] tag to not existing file '$rootRelativeTargetPath'", file)
             }
-            return LinkDirective(directive, options)
+            val targetFile = lookUpTable.getFileObject(rootRelativeTargetPath) as ProjectFile
+            return LinkDirective(directive, options, targetFile)
         }
     }
 }

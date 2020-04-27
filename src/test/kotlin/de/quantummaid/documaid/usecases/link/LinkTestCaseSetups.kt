@@ -23,16 +23,20 @@ package de.quantummaid.documaid.usecases.link
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
+import de.quantummaid.documaid.shared.samplesFiles.HUGO_LINK_TARGET
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkAtTheEndOfFileWithoutNewLine
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirective
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAnInlineLinkDirective
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinks
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoLinkDirectives
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkAtEndOfFileWithoutNewline
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInserted
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAndAMissingLink
+import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedInlineStyle
+import de.quantummaid.documaid.shared.samplesFiles.aRawMarkdownFile
 
 fun aFileWithASingleLink(basePath: String): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleLink")
@@ -88,6 +92,18 @@ fun aFileWithWrongLink(basePath: String): SetupUpdate {
             .with(
                 javaFile,
                 aMarkdownFileWithWrongLinkInserted("md1.md", javaFile.fileName, "linkName"))
+    }
+}
+
+fun aFileWithAnInlineLink(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithAnInlineLink")
+
+    val javaFile = aJavaFileWithOneSnippet("source.java", "testSnippet")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithAnInlineLinkDirective("md1.md", javaFile.fileName, "sampleLinkName"))
     }
 }
 
@@ -193,6 +209,45 @@ fun aFileWithWrongLinkAtTheEndOfFileWithoutNewline(basePath: String): SetupUpdat
             .with(
                 javaFile,
                 aMarkdownFileWithWrongLinkAtEndOfFileWithoutNewline("md1.md", javaFile.fileName, "sampleLinkName")
+            )
+    }
+}
+
+fun aFileWithALinkToADocumentationFile(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithALinkToADocumentationFile")
+
+    val targetMarkdownFile = aRawMarkdownFile("02_SomeChapter.md", "blabla")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aDirectory("documentation")
+                    .with(
+                        targetMarkdownFile,
+                        aRawMarkdownFile("_index.md", ""),
+                        aMarkdownFileWithALinkDirective("1_Introduction.md", "02_SomeChapter.md", "linkName",
+                            hugoLinkTarget = HUGO_LINK_TARGET.WITHIN_DOCU))
+            )
+    }
+}
+
+fun aFileWithAWrongLinkToADocumentationFile(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithAWrongLinkToADocumentationFile")
+
+    val targetMarkdownFile = aRawMarkdownFile("02_SomeChapter.md", "blabla")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aDirectory("documentation")
+                    .with(
+                        aDirectory("2_Something")
+                            .with(
+                                targetMarkdownFile,
+                                aRawMarkdownFile("_index.md", "")
+                            ),
+                        aRawMarkdownFile("_index.md", ""),
+                        aMarkdownFileWithWrongLinkInsertedInlineStyle("1_Introduction.md",
+                            "2_Something/02_SomeChapter.md", "linkName",
+                            hugoLinkTarget = HUGO_LINK_TARGET.WITHIN_DOCU))
             )
     }
 }

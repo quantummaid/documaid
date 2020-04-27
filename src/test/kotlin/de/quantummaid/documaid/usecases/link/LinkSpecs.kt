@@ -21,6 +21,7 @@
 package de.quantummaid.documaid.usecases.link
 
 import de.quantummaid.documaid.config.Goal
+import de.quantummaid.documaid.generating.GenerationFlavorType
 import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectADocuMaidExceptionCollectingTheFollowingErrors
 import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
@@ -68,6 +69,16 @@ interface LinkSpecs {
     fun canReplaceAWrongLink(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
             .configuredWith(aFileWithWrongLink(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canInsertLinkInline(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aFileWithAnInlineLink(BASE_PATH))
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
@@ -166,6 +177,28 @@ interface LinkSpecs {
         given(DokuMaidTestBuilder.aDokuMaid()
             .configuredWith(aFileWithWrongLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
             .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canInsertLinkReferencingFileWithinDocumentation(platformConfiguration: PlatformConfiguration) {
+        given(DokuMaidTestBuilder.aDokuMaid()
+            .configuredWith(aFileWithALinkToADocumentationFile(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canReplaceLinkReferencingFileWithinDocumentation(platformConfiguration: PlatformConfiguration) {
+        given(DokuMaidTestBuilder.aDokuMaid()
+            .configuredWith(aFileWithAWrongLinkToADocumentationFile(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
