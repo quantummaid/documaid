@@ -27,6 +27,9 @@ import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithACommentsIn
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithADifferentSnippet.Companion.aJavaFileWithADifferentSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithFullClassSnippet.Companion.aJavaFileWithOneFullSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
+import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWithMultipleSuppressWarning.Companion.sampleJavaFileWithSnippetWithTwoSuppressWarning
+import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWithNoSonarComments.Companion.sampleJavaFileWithSnippetWithNoSonarComments
+import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWithSuppressWarning.Companion.sampleJavaFileWithSnippetWithSuppressWarning
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithTwoSnippets.Companion.aJavaFileWithTwoSnippets
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippet
@@ -268,6 +271,48 @@ fun aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(basePath: Strin
                 aMarkdownFileWithTwoSnippets("md1.md",
                     "testSnippet", javaFile.snippet1,
                     "testSnippet1", javaFile.snippet2)
+            )
+    }
+}
+
+fun aJavaFileWithSnippetWithSuppressWarning(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aJavaFileWithSnippetWithSuppressWarning")
+
+    val javaFile = sampleJavaFileWithSnippetWithSuppressWarning("source1.java", "testSnippet")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithSnippet("md1.md",
+                    "testSnippet", javaFile.expectedStrippedSnippet)
+            )
+    }
+}
+
+fun aJavaFileWithSnippetWithAMultipleSuppressWarning(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aJavaFileWithSnippetWithAMultipleSuppressWarning")
+
+    val javaFile = sampleJavaFileWithSnippetWithTwoSuppressWarning("source1.java", "testSnippet")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithSnippet("md1.md",
+                    "testSnippet", javaFile.expectedStrippedSnippet)
+            )
+    }
+}
+
+fun aJavaFileWithSnippetWithNoSonarComments(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aJavaFileWithSnippetWithNoSonarComments")
+
+    val javaFile = sampleJavaFileWithSnippetWithNoSonarComments("source1.java", "testSnippet")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                javaFile,
+                aMarkdownFileWithSnippet("md1.md",
+                    "testSnippet", javaFile.expectedStrippedSnippet)
             )
     }
 }

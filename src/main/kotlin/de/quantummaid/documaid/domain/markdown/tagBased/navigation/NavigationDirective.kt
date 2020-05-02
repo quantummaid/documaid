@@ -28,10 +28,10 @@ import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupDa
 
 class NavigationDirective private constructor(
     val directive: RawMarkdownDirective,
-    val file: MarkdownFile,
-    val previousFile: MarkdownFile?,
-    val overviewFile: MarkdownFile,
-    val nextFile: MarkdownFile?
+    private val file: MarkdownFile,
+    private val previousFile: MarkdownFile?,
+    private val overviewFile: MarkdownFile,
+    private val nextFile: MarkdownFile?
 ) {
 
     companion object {
@@ -49,5 +49,9 @@ class NavigationDirective private constructor(
             val nextFile = tableOfContents.getFileSuccessor(file)
             return NavigationDirective(rawMarkdownDirective, file, previousFile, overviewFile, nextFile)
         }
+    }
+
+    fun generateMarkdown(): GithubNavigationMarkdown {
+        return GithubNavigationMarkdown.create(file, previousFile, overviewFile, nextFile)
     }
 }

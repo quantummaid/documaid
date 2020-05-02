@@ -22,12 +22,12 @@ package de.quantummaid.documaid.collecting.structure
 
 class Project private constructor(
     val rootDirectory: Directory,
-    private val collectedInformationMap: CollectedInformationMap
+    private val collectedInformationMap: HashMap<CollectedInformationKey<Any?>, Any>
 ) {
 
     companion object {
         fun create(rootDirectory: Directory): Project {
-            return Project(rootDirectory, CollectedInformationMap())
+            return Project(rootDirectory, HashMap())
         }
     }
 

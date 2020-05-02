@@ -20,7 +20,6 @@
  */
 package de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents
 
-import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
@@ -28,14 +27,20 @@ import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdow
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 import de.quantummaid.documaid.domain.tableOfContents.TableOfContents
 
-class GithubTableOfContentsMarkdown(
+class GithubTableOfContentsMarkdown private constructor(
     private val rawMarkdownDirective: RawMarkdownDirective,
-    private val tableOfContents: TableOfContents,
-    private val file: MarkdownFile
+    private val tableOfContents: TableOfContents
 ) {
 
     companion object {
         val TOC_REGEX = """^\n1\. \[ *.*(?=<!---EndOfToc-->)<!---EndOfToc-->""".toRegex(RegexOption.DOT_MATCHES_ALL)
+
+        fun create(
+            rawMarkdownDirective: RawMarkdownDirective,
+            tableOfContents: TableOfContents
+        ): GithubTableOfContentsMarkdown {
+            return GithubTableOfContentsMarkdown(rawMarkdownDirective, tableOfContents)
+        }
 
         fun startsWithTrailingTableOfContentsMarkdown(
             remainingMarkupFileContent: RemainingMarkupFileContent

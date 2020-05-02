@@ -18,6 +18,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.quantummaid.documaid.collecting.structure
+package de.quantummaid.documaid.domain.markdown.tagBased.archetype
 
-class CollectedInformationMap : HashMap<CollectedInformationKey<Any?>, Any>()
+import de.quantummaid.documaid.domain.maven.ArtifactId
+import de.quantummaid.documaid.domain.maven.GroupId
+import de.quantummaid.documaid.domain.maven.Packaging
+import de.quantummaid.documaid.domain.maven.Version
+
+data class Archetype constructor(
+    val archetypeGroupId: GroupId,
+    val archetypeArtifactId: ArtifactId,
+    val archetypeVersion: Version,
+    val groupId: GroupId,
+    val artifactId: ArtifactId,
+    val version: Version,
+    val packaging: Packaging
+)

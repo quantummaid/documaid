@@ -25,7 +25,11 @@ import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdow
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 
-class GithubLinkMarkdown(val name: String, val target: String, val linkDirective: LinkDirective) {
+class GithubLinkMarkdown private constructor(
+    private val name: String,
+    private val target: String,
+    private val linkDirective: LinkDirective
+) {
 
     companion object {
         val LINK_PATTERN = """\n? *\[ *[^]]+ *] *\([^)]*\)""".toRegex()

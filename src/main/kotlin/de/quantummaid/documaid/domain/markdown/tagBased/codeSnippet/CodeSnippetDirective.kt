@@ -39,9 +39,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class CodeSnippetDirective(
-    val rawMarkdownDirective: RawMarkdownDirective,
-    val options: CodeSnippetDirectiveOptions,
+class CodeSnippetDirective private constructor(
+    private val rawMarkdownDirective: RawMarkdownDirective,
     private val codeSnippetMarkdown: CodeSnippetMarkdown
 ) {
 
@@ -56,7 +55,7 @@ class CodeSnippetDirective(
 
             val options = CodeSnippetDirectiveOptions.create(rawMarkdownDirective, file)
             val codeSnippetMarkdown = loadCode(options, file, project, rawMarkdownDirective)
-            return CodeSnippetDirective(rawMarkdownDirective, options, codeSnippetMarkdown)
+            return CodeSnippetDirective(rawMarkdownDirective, codeSnippetMarkdown)
         }
 
         private fun loadCode(

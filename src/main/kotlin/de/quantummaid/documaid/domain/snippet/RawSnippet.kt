@@ -20,4 +20,4 @@
  */
 package de.quantummaid.documaid.domain.snippet
 
-open class RawSnippet(val content: String, val contentWithComments: String, val id: SnippetId)
+open class RawSnippet(val content: String, val id: SnippetId)

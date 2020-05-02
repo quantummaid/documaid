@@ -24,7 +24,7 @@ import de.quantummaid.documaid.collecting.structure.FileType
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.snippet.RawSnippet
-import de.quantummaid.documaid.domain.snippet.RawSnippetExtractor
+import de.quantummaid.documaid.domain.snippet.SnippetExtractor
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
@@ -40,7 +40,8 @@ class XmlFile private constructor(private val path: Path, val snippets: List<Raw
         }
 
         fun create(path: Path): XmlFile {
-            val snippets = RawSnippetExtractor.extractSnippets(path, XmlSnippetFormat.regex)
+            val snippets = SnippetExtractor.createExtractorFor(FileType.XML)
+                .extractSnippets(path, XmlSnippetFormat.regex)
             return XmlFile(path, snippets)
         }
     }

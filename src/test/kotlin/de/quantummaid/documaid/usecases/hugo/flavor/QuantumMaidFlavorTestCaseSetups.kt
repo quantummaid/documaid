@@ -120,7 +120,7 @@ fun aTypicalQuantumMaidProjectStructureWithIndex(basePath: String, hugoOutputPat
     val usecasesMarkdownFile1 = aMarkdownFileWithH1Heading("1_Usecases1.md", "1020301001")
     val furtherBelowFile1 = aMarkdownFileWithH1Heading("1_FurtherBelow.md", "1020312011")
     val encodingMarkdownFile = aMarkdownFileWithH1Heading("4_Encoding.md", "1020400001")
-    val endingMarkdownFile = aMarkdownFileWithH1Heading("5_Ending.md", "1020500001")
+    val endingMarkdownFile = aMarkdownFileWithH1Heading("22_Ending.md", "1022200001")
 
     val readme = aMarkdownFileWithH1Heading("README.md", "20")
     val java10Readme = EmptySutFile.aFile("README.Java10.md")
@@ -193,5 +193,21 @@ fun aTypicalQuantumMaidProjectStructureWithIndex(basePath: String, hugoOutputPat
                 )
                 .construct()
         )
+    }
+}
+
+fun aDocumentationStructureWithATooBigIndex(basePath: String): SetupUpdate {
+    val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aTypicalQuantumMaidProjectStructure")
+
+    val markdownFile = aMarkdownFileWithH1Heading("123_Introduction.md", "1020100001")
+
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+            .with(
+                aDirectory("documentation")
+                    .with(
+                        markdownFile
+                    )
+            )
     }
 }

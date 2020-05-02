@@ -86,10 +86,7 @@ class GithubNavigationMarkdownHandler : MarkdownTagHandler {
 
     private fun generateNewMarkdown(directive: RawMarkdownDirective, file: MarkdownFile, project: Project): String {
         val navDirective = NavigationDirective.create(directive, file, project)
-        val previousFile = navDirective.previousFile
-        val overviewFile = navDirective.overviewFile
-        val nextFile = navDirective.nextFile
-        val markdown = GithubNavigationMarkdown(file, previousFile, overviewFile, nextFile)
+        val markdown = navDirective.generateMarkdown()
         return markdown.generateMarkdown(navDirective)
     }
 }

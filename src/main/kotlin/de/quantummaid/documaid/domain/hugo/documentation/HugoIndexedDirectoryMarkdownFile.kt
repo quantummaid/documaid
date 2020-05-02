@@ -27,7 +27,7 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.heading.HugoHeadingMarkdown
 import java.nio.file.Path
 
-class HugoIndexedDirectoryMarkdownFile {
+class HugoIndexedDirectoryMarkdownFile private constructor() {
 
     companion object {
         fun create(path: Path, directoryName: String, hugoWeight: HugoWeight): Pair<MarkdownFile, String> {

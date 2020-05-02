@@ -27,6 +27,7 @@ import de.quantummaid.documaid.errors.VerificationError
 
 interface PreparingVisitor {
     fun startPreparation(project: Project) {
+        // left blank because of adapter pattern
     }
 
     fun beforeDirectoryPreparing(directory: Directory, project: Project): List<VerificationError> {

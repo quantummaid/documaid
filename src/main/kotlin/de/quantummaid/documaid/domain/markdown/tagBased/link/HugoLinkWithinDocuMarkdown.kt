@@ -20,10 +20,10 @@
  */
 package de.quantummaid.documaid.domain.markdown.tagBased.link
 
-class HugoLinkWithinDocuMarkdown(
-    val name: String,
-    val relativeTargetPath: String,
-    val linkDirective: LinkDirective
+class HugoLinkWithinDocuMarkdown private constructor(
+    private val name: String,
+    private val relativeTargetPath: String,
+    private val linkDirective: LinkDirective
 ) {
 
     companion object {

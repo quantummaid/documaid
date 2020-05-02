@@ -42,9 +42,9 @@ import java.nio.file.Paths
 
 class MarkdownFile private constructor(
     val path: Path,
-    val directives: List<RawMarkdownDirective>,
-    val tagHandlers: List<MarkdownTagHandler>,
-    val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>
+    private val directives: List<RawMarkdownDirective>,
+    private val tagHandlers: List<MarkdownTagHandler>,
+    private val syntaxBasedHandlers: List<SyntaxBasedMarkdownHandler>
 ) : ProjectFile() {
 
     companion object {
@@ -253,7 +253,7 @@ class MarkdownFile private constructor(
         return createCopyForPath(Paths.get(path))
     }
 
-    fun createCopyForPath(path: Path): MarkdownFile {
+    private fun createCopyForPath(path: Path): MarkdownFile {
         return MarkdownFile(path, directives, tagHandlers, syntaxBasedHandlers)
     }
 }

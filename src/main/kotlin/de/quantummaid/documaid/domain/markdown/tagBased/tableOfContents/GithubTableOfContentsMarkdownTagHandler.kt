@@ -59,7 +59,7 @@ class GithubTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
             throw aDocuMaidException("Found [${tag()}] without a Table of Contents being generated", file)
         }
         val tableOfContents = tableOfContentsLookupData.getTableOfContents()
-        val tocMarkdown = GithubTableOfContentsMarkdown(directive, tableOfContents, file)
+        val tocMarkdown = GithubTableOfContentsMarkdown.create(directive, tableOfContents)
         return tocMarkdown.markdownString()
     }
 
