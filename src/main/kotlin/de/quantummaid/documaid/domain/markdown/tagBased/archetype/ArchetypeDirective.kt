@@ -35,7 +35,10 @@ import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.domain.os.OsType
 import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 
-class ArchetypeDirective(val rawMarkdownDirective: RawMarkdownDirective, val options: ArchetypeDirectiveOptions) {
+class ArchetypeDirective private constructor(
+    private val rawMarkdownDirective: RawMarkdownDirective,
+    private val options: ArchetypeDirectiveOptions
+) {
 
     companion object {
         val ARCHETYPE_TAG = DirectiveTag("Archetype")
@@ -52,21 +55,13 @@ class ArchetypeDirective(val rawMarkdownDirective: RawMarkdownDirective, val opt
 
     fun generateCompleteMarkdown(): String {
         val multiLineCommandNewLine = MultiLineCommandNewLine.forOsType(options.osType)
-        val dependencyMarkdown = ArchetypeMarkdown.create(
-            options.archetypeGroupId, options.archetypeArtifactId, options.archetypeVersion,
-            options.groupId, options.artifactId, options.version, options.packaging, multiLineCommandNewLine)
+        val dependencyMarkdown = ArchetypeMarkdown.create(options.archetype, multiLineCommandNewLine)
         return "${rawMarkdownDirective.completeString}\n${dependencyMarkdown.markdownString()}"
     }
 }
 
 class ArchetypeDirectiveOptions(
-    val archetypeGroupId: GroupId,
-    val archetypeArtifactId: ArtifactId,
-    val archetypeVersion: Version,
-    val groupId: GroupId,
-    val artifactId: ArtifactId,
-    val version: Version,
-    val packaging: Packaging,
+    val archetype: Archetype,
     val osType: OsType
 ) {
 
@@ -92,20 +87,30 @@ class ArchetypeDirectiveOptions(
             val optionsString = rawMarkdownDirective.optionsString
             val matchEntire = ARCHETYPE_OPTIONS_REGEX.matchEntire(optionsString.value)
             if (matchEntire != null) {
-                val archetypeGroupId = extractArchetypeGroupId(matchEntire, mavenConfiguration, file)
-                val archetypeArtifactId = extractArchetypeArtifactId(matchEntire, mavenConfiguration, file)
-                val archetypeVersion = extractArchetypeVersion(matchEntire, mavenConfiguration, file)
-                val groupId = extractGroupId(matchEntire, file)
-                val artifactId = extractArtifactId(matchEntire, file)
-                val version = extractVersion(matchEntire, file)
-                val packaging = extractPackaging(matchEntire, file)
-                val osType = extractOsType(matchEntire)
-                return ArchetypeDirectiveOptions(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-                    groupId, artifactId, version, packaging, osType)
+                val (osType, archetype) = extractArchetype(matchEntire, mavenConfiguration, file)
+                return ArchetypeDirectiveOptions(archetype, osType)
             } else {
                 val message = "Cannot parse options for [${ARCHETYPE_TAG.value}]: ${optionsString.value}"
                 throw aDocuMaidException(message, file)
             }
+        }
+
+        private fun extractArchetype(
+            matchEntire: MatchResult,
+            mavenConfiguration: MavenConfiguration,
+            file: MarkdownFile
+        ): Pair<OsType, Archetype> {
+            val archetypeGroupId = extractArchetypeGroupId(matchEntire, mavenConfiguration, file)
+            val archetypeArtifactId = extractArchetypeArtifactId(matchEntire, mavenConfiguration, file)
+            val archetypeVersion = extractArchetypeVersion(matchEntire, mavenConfiguration, file)
+            val groupId = extractGroupId(matchEntire, file)
+            val artifactId = extractArtifactId(matchEntire, file)
+            val version = extractVersion(matchEntire, file)
+            val packaging = extractPackaging(matchEntire, file)
+            val osType = extractOsType(matchEntire)
+            val archetype = Archetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
+                groupId, artifactId, version, packaging)
+            return Pair(osType, archetype)
         }
 
         private fun extractArchetypeGroupId(

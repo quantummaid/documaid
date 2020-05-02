@@ -33,7 +33,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class TableOfContentsDirective private constructor(
-    val options: TableOfContentsDirectiveOptions,
     val file: MarkdownFile,
     val scanBaseDirectory: Directory
 ) {
@@ -52,7 +51,7 @@ class TableOfContentsDirective private constructor(
             val tocScanBaseDirectory = options.tocScanBaseDirectory
             val lookUpTable = project.getInformation(FileObjectsFastLookUpTable.FILES_LOOKUP_TABLE_KEY)
             val scanBaseDirectory = lookUpTable.getFileObject(tocScanBaseDirectory) as Directory
-            return TableOfContentsDirective(options, file, scanBaseDirectory)
+            return TableOfContentsDirective(file, scanBaseDirectory)
         }
     }
 }

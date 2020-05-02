@@ -236,6 +236,36 @@ interface CodeSnippetSpecs {
             .then(expectAllFilesToBeCorrect())
     }
 
+    @Test
+    fun canStripSuppressWarningAnnotationsFromSnippet(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aJavaFileWithSnippetWithSuppressWarning(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canStripAMultipleSuppressWarningAnnotationsFromSnippet(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aJavaFileWithSnippetWithAMultipleSuppressWarning(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canStripANoSonarComments(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+            .configuredWith(aJavaFileWithSnippetWithNoSonarComments(BASE_PATH))
+            .configuredwith(platformConfiguration)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
+    }
+
     companion object {
         private const val BASE_PATH = "target/tempTestDirs/codeSnippet/"
     }

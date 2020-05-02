@@ -27,7 +27,7 @@ import de.quantummaid.documaid.collecting.structure.FileObjectDataKey
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import java.nio.file.Path
 
-class HugoDocumentationGenerationInformation private constructor(
+data class HugoDocumentationGenerationInformation constructor(
     val originalPath: Path,
     var originalFileObject: FileObject,
     var targetPath: Path? = null,

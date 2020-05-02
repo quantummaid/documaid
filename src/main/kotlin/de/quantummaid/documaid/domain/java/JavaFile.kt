@@ -24,13 +24,16 @@ import de.quantummaid.documaid.collecting.structure.FileType
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.snippet.RawSnippet
-import de.quantummaid.documaid.domain.snippet.RawSnippetExtractor
+import de.quantummaid.documaid.domain.snippet.SnippetExtractor
 import de.quantummaid.documaid.errors.VerificationError
 import de.quantummaid.documaid.processing.ProcessingResult
 import de.quantummaid.documaid.processing.ProcessingResult.Companion.contentNotChangedProcessingResult
 import java.nio.file.Path
 
-class JavaFile private constructor(private val path: Path, val snippets: List<RawSnippet>) : ProjectFile() {
+class JavaFile private constructor(
+    private val path: Path,
+    private val snippets: List<RawSnippet>
+) : ProjectFile() {
 
     companion object {
         object JavaSnippetFormat {
@@ -40,7 +43,8 @@ class JavaFile private constructor(private val path: Path, val snippets: List<Ra
         }
 
         fun create(path: Path): JavaFile {
-            val snippets = RawSnippetExtractor.extractSnippets(path, JavaSnippetFormat.regex)
+            val snippets = SnippetExtractor.createExtractorFor(FileType.JAVA)
+                .extractSnippets(path, JavaSnippetFormat.regex)
             return JavaFile(path, snippets)
         }
     }

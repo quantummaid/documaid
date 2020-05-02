@@ -34,14 +34,18 @@ interface FileObjectVisitor {
 open class FileObjectVisitorAdapter : FileObjectVisitor {
 
     override fun startTreeWalk() {
+        // left blank because of adapter pattern
     }
 
     override fun fileVisited(file: ProjectFile) {
+        // left blank because of adapter pattern
     }
 
     override fun directoryVisited(directory: Directory) {
+        // left blank because of adapter pattern
     }
 
     override fun finishTreeWalk(project: Project) {
+        // left blank because of adapter pattern
     }
 }

@@ -20,7 +20,7 @@
  */
 package de.quantummaid.documaid.domain.hugo.documentationWeights
 
-class HugoWeight(val value: Int) {
+class HugoWeight private constructor(val value: Int) {
 
     companion object {
         fun createForMultiLevelWeight(value: String): HugoWeight {

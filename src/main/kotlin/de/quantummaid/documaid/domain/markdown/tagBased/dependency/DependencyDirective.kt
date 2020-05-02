@@ -33,7 +33,10 @@ import de.quantummaid.documaid.domain.maven.Scope
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 
-class DependencyDirective(val rawMarkdownDirective: RawMarkdownDirective, val options: DependencyDirectiveOptions) {
+class DependencyDirective private constructor(
+    private val rawMarkdownDirective: RawMarkdownDirective,
+    private val options: DependencyDirectiveOptions
+) {
 
     companion object {
         val DEPENDENCY_TAG = DirectiveTag("Dependency")

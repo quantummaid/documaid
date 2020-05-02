@@ -27,16 +27,25 @@ import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdow
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
 
-class GithubNavigationMarkdown(
-    val fileWithDirective: MarkdownFile,
-    val previousFile: MarkdownFile?,
-    val overviewFile: MarkdownFile,
-    val nextFile: MarkdownFile?
+class GithubNavigationMarkdown private constructor(
+    private val fileWithDirective: MarkdownFile,
+    private val previousFile: MarkdownFile?,
+    private val overviewFile: MarkdownFile,
+    private val nextFile: MarkdownFile?
 ) {
 
     companion object {
         val SPACES = "&nbsp;&nbsp;&nbsp;"
         val NAV_MARKDOWN_REGEX = """\n? *(\[&larr;]\([^)]+\)$SPACES)?\[Overview]\([^)]+\)($SPACES\[&rarr;]\([^)]+\))?"""
+
+        fun create(
+            fileWithDirective: MarkdownFile,
+            previousFile: MarkdownFile?,
+            overviewFile: MarkdownFile,
+            nextFile: MarkdownFile?
+        ): GithubNavigationMarkdown {
+            return GithubNavigationMarkdown(fileWithDirective, previousFile, overviewFile, nextFile)
+        }
 
         fun startsWithNavigationMarkdown(
             remainingMarkupFileContent: RemainingMarkupFileContent

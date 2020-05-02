@@ -26,35 +26,18 @@ import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection.Compa
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
-import de.quantummaid.documaid.domain.maven.ArtifactId
-import de.quantummaid.documaid.domain.maven.GroupId
-import de.quantummaid.documaid.domain.maven.Packaging
-import de.quantummaid.documaid.domain.maven.Version
 
 class ArchetypeMarkdown private constructor(
-    private val archetypeGroupId: GroupId,
-    private val archetypeArtifactId: ArtifactId,
-    private val archetypeVersion: Version,
-    private val groupId: GroupId,
-    private val artifactId: ArtifactId,
-    private val version: Version,
-    private val packaging: Packaging,
+    private val archetype: Archetype,
     private val commandNewLine: MultiLineCommandNewLine
 ) {
 
     companion object {
         fun create(
-            archetypeGroupId: GroupId,
-            archetypeArtifactId: ArtifactId,
-            archetypeVersion: Version,
-            groupId: GroupId,
-            artifactId: ArtifactId,
-            version: Version,
-            packaging: Packaging,
+            archetype: Archetype,
             commandNewLine: MultiLineCommandNewLine
         ): ArchetypeMarkdown {
-            return ArchetypeMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-                groupId, artifactId, version, packaging, commandNewLine)
+            return ArchetypeMarkdown(archetype, commandNewLine)
         }
 
         fun startsWithArchetypeMarkdown(
@@ -77,6 +60,8 @@ class ArchetypeMarkdown private constructor(
     }
 
     fun markdownString(): String {
+        val (archetypeGroupId, archetypeArtifactId, archetypeVersion,
+            groupId, artifactId, version, packaging) = archetype
         return "```xml\n" +
             "mvn archetype:generate ${commandNewLine.value}" +
             "    --batch-mode ${commandNewLine.value}" +

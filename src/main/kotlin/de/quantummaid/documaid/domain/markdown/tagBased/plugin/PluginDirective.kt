@@ -34,7 +34,10 @@ import de.quantummaid.documaid.domain.maven.MavenPhase
 import de.quantummaid.documaid.domain.maven.Version
 import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 
-class PluginDirective(val rawMarkdownDirective: RawMarkdownDirective, val options: DependencyDirectiveOptions) {
+class PluginDirective private constructor(
+    private val rawMarkdownDirective: RawMarkdownDirective,
+    private val options: DependencyDirectiveOptions
+) {
 
     companion object {
         val PLUGIN_TAG = DirectiveTag("Plugin")

@@ -24,6 +24,7 @@ import de.quantummaid.documaid.config.Goal
 import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.generating.GenerationFlavorType
 import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
 import de.quantummaid.documaid.givenWhenThen.given
@@ -39,7 +40,7 @@ class QuantumMaidFlavorSpecs {
             .configuredWith(aTypicalQuantumMaidProjectStructure(BASE_PATH, hugoOutputPath))
             .configuredWith(Platform.HUGO)
             .configuredWithHugoOutputPath(hugoOutputPath)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID.name)
+            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
@@ -52,10 +53,23 @@ class QuantumMaidFlavorSpecs {
             .configuredWith(aTypicalQuantumMaidProjectStructureWithIndex(BASE_PATH, hugoOutputPath))
             .configuredWith(Platform.HUGO)
             .configuredWithHugoOutputPath(hugoOutputPath)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID.name)
+            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun quantumMaidFlavorAllowsNoIndexAbove99() {
+        val hugoOutputPath = "2_TestMaid"
+        given(DokuMaidTestBuilder.aDokuMaid()
+            .configuredWith(aDocumentationStructureWithATooBigIndex(BASE_PATH))
+            .configuredWith(Platform.HUGO)
+            .configuredWithHugoOutputPath(hugoOutputPath)
+            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+            .configuredWithGoal(Goal.GENERATE))
+            .`when`(theDokuIsPimped())
+            .then(expectAnExceptionWithMessage("Only indices between 1 and 99 allowed"))
     }
 
     companion object {

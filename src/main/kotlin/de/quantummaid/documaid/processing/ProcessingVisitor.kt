@@ -53,9 +53,11 @@ interface ProcessingVisitor {
 open class ProcessingVisitorAdapter : ProcessingVisitor {
 
     override fun beforeProcessingStart(project: Project, goal: Goal) {
+        // left blank because of adapter pattern
     }
 
     override fun beforeDirectoryProcessing(directory: Directory, project: Project, goal: Goal) {
+        // left blank because of adapter pattern
     }
 
     override fun afterDirectoryProcessing(
@@ -64,9 +66,11 @@ open class ProcessingVisitorAdapter : ProcessingVisitor {
         goal: Goal,
         directoryProcessingResults: MutableList<ProcessingResult>
     ) {
+        // left blank because of adapter pattern
     }
 
     override fun beforeFileProcessing(file: ProjectFile, project: Project, goal: Goal) {
+        // left blank because of adapter pattern
     }
 
     override fun afterFileProcessing(
@@ -75,8 +79,10 @@ open class ProcessingVisitorAdapter : ProcessingVisitor {
         goal: Goal,
         fileProcessingResults: MutableList<ProcessingResult>
     ) {
+        // left blank because of adapter pattern
     }
 
     override fun afterProcessingFinish(project: Project, goal: Goal) {
+        // left blank because of adapter pattern
     }
 }

@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.24</version>
+    <version>0.9.25</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -512,6 +512,40 @@
                 <activeByDefault>false</activeByDefault>
                 <property>
                     <name>deployToMavenCentral</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>tidy-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>prepareForMavenCentral</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>prepareForMavenCentral</name>
                 </property>
             </activation>
 

@@ -153,3 +153,102 @@ class SampleJavaFileWithTwoSnippets private constructor(
         }
     }
 }
+
+class SampleJavaFileWithSnippetWithSuppressWarning private constructor(
+    val fileName: String,
+    val expectedStrippedSnippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
+
+    companion object {
+        fun sampleJavaFileWithSnippetWithSuppressWarning(
+            fileName: String,
+            snippetId: String,
+            suppressedWarning: String = "'all'"
+        ): SampleJavaFileWithSnippetWithSuppressWarning {
+            val content = "Something else" +
+                "//Showcase start $snippetId\n" +
+                "public class SampleCodeSnippets {\n\n" +
+                "    @SuppressWarnings($suppressedWarning)\n" +
+                "    public static void main(){\n" +
+                "    }\n" +
+                "}\n" +
+                "//Showcase end $snippetId"
+            val fileBuilder = PhysicalFileBuilder.aFile(fileName)
+                .withContent(content)
+            val expectedStrippedSnippet = "public class SampleCodeSnippets {\n\n" +
+                "    public static void main(){\n" +
+                "    }\n" +
+                "}"
+
+            return SampleJavaFileWithSnippetWithSuppressWarning(fileName, expectedStrippedSnippet, fileBuilder)
+        }
+    }
+}
+
+class SampleJavaFileWithSnippetWithMultipleSuppressWarning private constructor(
+    val fileName: String,
+    val expectedStrippedSnippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
+
+    companion object {
+        fun sampleJavaFileWithSnippetWithTwoSuppressWarning(
+            fileName: String,
+            snippetId1: String
+        ): SampleJavaFileWithSnippetWithMultipleSuppressWarning {
+            val content = "Something else" +
+                "//Showcase start $snippetId1\n" +
+                "public class SampleCodeSnippets {\n\n" +
+                "    @SuppressWarnings({\"unused\", 'unchecked', 'sf:UnusedPrivateField'})\n" +
+                "    public static void main(){\n" +
+                "    }\n" +
+                "}\n" +
+                "//Showcase end $snippetId1"
+            val fileBuilder = PhysicalFileBuilder.aFile(fileName)
+                .withContent(content)
+            val expectedStrippedSnippet = "public class SampleCodeSnippets {\n\n" +
+                "    public static void main(){\n" +
+                "    }\n" +
+                "}"
+
+            return SampleJavaFileWithSnippetWithMultipleSuppressWarning(fileName, expectedStrippedSnippet, fileBuilder)
+        }
+    }
+}
+
+class SampleJavaFileWithSnippetWithNoSonarComments private constructor(
+    val fileName: String,
+    val expectedStrippedSnippet: String,
+    javaFileBuilder: PhysicalFileBuilder
+) : NotProcessedSourceFile(javaFileBuilder) {
+
+    companion object {
+        fun sampleJavaFileWithSnippetWithNoSonarComments(
+            fileName: String,
+            snippetId1: String
+        ): SampleJavaFileWithSnippetWithNoSonarComments {
+            val content = "Something else" +
+                "//Showcase start $snippetId1\n" +
+                "public class SampleCodeSnippets {\n\n" +
+                "    //NOSONAR\n" +
+                "    public static void main(){\n" +
+                "    final int x = 1 + 2;//NOSONAR\n" +
+                "    final int y = 1 + 2;// NOSONAR\n" +
+                "    final int z = 1 + 2; //NOSONAR\n" +
+                "    }\n" +
+                "}\n" +
+                "//Showcase end $snippetId1"
+            val fileBuilder = PhysicalFileBuilder.aFile(fileName)
+                .withContent(content)
+            val expectedStrippedSnippet = "public class SampleCodeSnippets {\n\n" +
+                "    public static void main(){\n" +
+                "    final int x = 1 + 2;\n" +
+                "    final int y = 1 + 2;\n" +
+                "    final int z = 1 + 2; \n" +
+                "    }\n" +
+                "}"
+            return SampleJavaFileWithSnippetWithNoSonarComments(fileName, expectedStrippedSnippet, fileBuilder)
+        }
+    }
+}

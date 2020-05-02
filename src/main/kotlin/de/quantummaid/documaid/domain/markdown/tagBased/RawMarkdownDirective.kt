@@ -22,7 +22,7 @@ package de.quantummaid.documaid.domain.markdown.tagBased
 
 import de.quantummaid.documaid.domain.markdown.RemainingMarkupFileContent
 
-data class RawMarkdownDirective internal constructor(
+data class RawMarkdownDirective(
     val tag: DirectiveTag,
     val optionsString: OptionsString,
     val completeString: String,

@@ -20,7 +20,7 @@
  */
 package de.quantummaid.documaid.domain.hugo.documentationWeights
 
-class HugoDirectoryWeightPadder {
+class HugoDirectoryWeightPadder private constructor() {
     companion object {
         fun padIndex(index: Int): String {
             val indexString = index.toString()
