@@ -4,46 +4,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.26](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.26/jar) - 2020-06-22
+### Changed
+- Update dependencies.
+
 ## [0.9.25](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.25/jar) - 2020-05-02
-### ADDED
+### Added
 - remove sonar suppression annotations and warnings from code snippets.
 
 ## [0.9.24](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.24/jar) - 2020-04-27
-### ADDED
+### Added
 - allow relative hugo links within documentation.
 
 ## [0.9.23](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.23/jar) - 2020-04-21
-### CHANGED
+### Changed
 - Update dependencies.
 
 ## [0.9.22](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.22/jar) - 2020-04-21
-### ADDED
+### Added
 - Archetype directive.
-### CHANGED
+### Changed
 - generation of hugo documentation.
 
 ## [0.9.21](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.21/jar) - 2020-04-19
-### CHANGED
+### Changed
 - Update dependencies.
 
 ## [0.9.20](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.20/jar) - 2020-04-19
-### CHANGED
+### Changed
 - Fixed coverage report.
 
 ## [0.9.19](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.19/jar) - 2020-04-14
-### CHANGED
+### Changed
 - Ignore files other than .md, .xml, .java.
 
 ## [0.9.18](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.18/jar) - 2020-04-14
 ### Added
 - Enable max_line_length check for klint.
 - Introduce license-maven-plugin for copyright header check.
-### CHANGED
+### Changed
 - Fix max line length warnings.
 - Add copyright header to missing files.
 
 ## [0.9.17](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.17/jar) - 2020-04-13
-### CHANGED
+### Changed
 - Adapt QuantumMaid flavor to remove badges and logo before h1 heading.
 
 ## [0.9.16](https://search.maven.org/artifact/de.quantummaid/documaid/0.9.16/jar) - 2020-04-13
