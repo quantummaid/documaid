@@ -44,7 +44,7 @@ Full files can be imported with the `file=` option:
 
 In case of XML use the `<!-- Showcase start example -->` and `<!-- Showcase end example -->`
 
-#### Depdendency
+#### Dependency
 Dependency markdown code can be automatically generated.
 The following elements are available: `groupId`, `artifactId`, `version` and `scope`.
 
