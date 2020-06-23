@@ -14,7 +14,7 @@
 DocuMaid keeps your documentation in sync with your codebase.
 
 ## Usage
-To generate the the documentation:
+To generate the documentation:
 
 ```
 mvn de.quantummaid:documaid:0.9.26:generate
@@ -22,7 +22,7 @@ mvn de.quantummaid:documaid:0.9.26:generate -DskipPaths=docs/Usage.md
 
 ```
 
-To validate, if the current documentation is correct and does not require any changes:
+To validate whether the current documentation is correct and does not require any changes:
 
 ```
 mvn de.quantummaid:documaid:0.9.26:validate
