@@ -47,4 +47,4 @@ mvn de.quantummaid:documaid:0.9.26:validate
 </plugin>
 ```
 
-More information can be found [here](documentation/Usage.md).
+The full documentation can be found [here](documentation/Usage.md).
