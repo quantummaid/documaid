@@ -31,6 +31,7 @@ import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWith
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWithNoSonarComments.Companion.sampleJavaFileWithSnippetWithNoSonarComments
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWithSuppressWarning.Companion.sampleJavaFileWithSnippetWithSuppressWarning
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithTwoSnippets.Companion.aJavaFileWithTwoSnippets
+import de.quantummaid.documaid.shared.samplesFiles.SampleKotlinFileWithOneSnippet.Companion.aKotlinFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet
@@ -115,7 +116,7 @@ fun aFileWithTheSameCodeSnippetTwiceInDifferentFiles(basePath: String): SetupUpd
     }
 }
 
-fun aFileWithACodeSnippetFromANonJavaFile(basePath: String): SetupUpdate {
+fun aFileWithACodeSnippetFromAnXmlFile(basePath: String): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aFileWithACodeSnippetFromANonJavaFile")
 
     val xmlFileWithSnippet = aXmlFileWithOneSnippet("source.xml", "snippet")
@@ -125,6 +126,19 @@ fun aFileWithACodeSnippetFromANonJavaFile(basePath: String): SetupUpdate {
                 xmlFileWithSnippet,
                 aMarkdownFileWithSnippet("md1.md", "snippet", xmlFileWithSnippet.snippet, "xml")
             )
+    }
+}
+
+fun aFileWithACodeSnippetFromAKotlinFile(basePath: String): SetupUpdate {
+    val testDir = aTemporyTestDirectory(basePath, "aFileWithACodeSnippetFromAKotlinFile")
+
+    val kotlinFileWithSnippet = aKotlinFileWithOneSnippet("source.kt", "snippet")
+    return { (_, sutFileStructure) ->
+        sutFileStructure.inDirectory(testDir)
+                .with(
+                        kotlinFileWithSnippet,
+                        aMarkdownFileWithSnippet("md1.md", "snippet", kotlinFileWithSnippet.snippet, "kotlin")
+                )
     }
 }
 

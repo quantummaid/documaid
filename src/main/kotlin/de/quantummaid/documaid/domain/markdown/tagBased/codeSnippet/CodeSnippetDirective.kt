@@ -25,6 +25,7 @@ import de.quantummaid.documaid.collecting.snippets.CodeSnippetsLookupTable
 import de.quantummaid.documaid.collecting.structure.Project
 import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.domain.java.JavaFile
+import de.quantummaid.documaid.domain.kotlin.KotlinFile
 import de.quantummaid.documaid.domain.markdown.MarkdownCodeSection
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
@@ -96,6 +97,7 @@ class CodeSnippetDirective private constructor(
             val snippet = when (fileObject) {
                 is JavaFile -> fileObject.snippetForId(snippetId)
                 is XmlFile -> fileObject.snippetForId(snippetId)
+                is KotlinFile -> fileObject.snippetForId(snippetId)
                 is UnclassifiedFile -> fileObject.snippetForId(snippetId)
                 else -> {
                     val message = "[$CODE_SNIPPET_TAG]: Could not load snippet $snippetId " +

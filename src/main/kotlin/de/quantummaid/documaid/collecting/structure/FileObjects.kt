@@ -100,6 +100,7 @@ abstract class ProjectFile : FileObjectWithData() {
 
 enum class FileType {
     JAVA,
+    KOTLIN,
     XML,
     MARKDOWN,
     OTHER
