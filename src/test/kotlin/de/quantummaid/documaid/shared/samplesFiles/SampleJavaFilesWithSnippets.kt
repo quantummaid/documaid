@@ -50,18 +50,22 @@ class SampleJavaFileWithADifferentSnippet private constructor(
 
     companion object {
         fun aJavaFileWithADifferentSnippet(fileName: String, snippetId: String): SampleJavaFileWithADifferentSnippet {
-            val snippet = "final List<String> strings = new ArrayList<>();\n" +
-                "strings.add(\"A\");\n" +
-                "strings.add(\"B\");\n" +
-                "strings.remove(1);\n" +
-                "if (Math.random() % 2 == 0) {\n" +
-                "    System.out.println(\"Success\");\n" +
-                "} else {\n" +
-                "    System.out.println(\"Nope\");\n" +
-                "}"
-            val content = "//Showcase start $snippetId\n" +
-                snippet +
-                "\n//Showcase end $snippetId"
+            val snippet = """
+final List<String> strings = new ArrayList<>();
+strings.add("A");
+strings.add("B");
+strings.remove(1);
+if (Math.random() % 2 == 0) {
+    System.out.println("Success");
+} else {
+    System.out.println("Nope");
+}
+""".trim()
+            val content = """
+//Showcase start $snippetId
+$snippet
+//Showcase end $snippetId
+"""
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(content)
             return SampleJavaFileWithADifferentSnippet(fileName, snippet, fileBuilder)

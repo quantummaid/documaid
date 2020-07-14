@@ -22,6 +22,7 @@ package de.quantummaid.documaid.collecting.structure
 
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.domain.java.JavaFile
+import de.quantummaid.documaid.domain.kotlin.KotlinFile
 import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.unclassifiedFile.UnclassifiedFile
 import de.quantummaid.documaid.domain.xml.XmlFile
@@ -34,6 +35,7 @@ class FileCreator private constructor() {
             val stringPath = path.toString()
             return when {
                 stringPath.endsWith(".java") -> JavaFile.create(path)
+                stringPath.endsWith(".kt") -> KotlinFile.create(path)
                 stringPath.endsWith(".xml") -> XmlFile.create(path)
                 stringPath.endsWith(".md") -> MarkdownFile.create(path, docuMaidConfig)
                 else -> UnclassifiedFile.create(path)

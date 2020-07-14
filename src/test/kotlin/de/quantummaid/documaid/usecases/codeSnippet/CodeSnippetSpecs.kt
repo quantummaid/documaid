@@ -86,13 +86,23 @@ interface CodeSnippetSpecs {
     }
 
     @Test
-    fun canInsertACodeSnippetFromANonJavaFile(platformConfiguration: PlatformConfiguration) {
+    fun canInsertACodeSnippetFromAnXmlFile(platformConfiguration: PlatformConfiguration) {
         given(aDokuMaid()
-            .configuredWith(aFileWithACodeSnippetFromANonJavaFile(BASE_PATH))
+            .configuredWith(aFileWithACodeSnippetFromAnXmlFile(BASE_PATH))
             .configuredwith(platformConfiguration)
             .configuredWithGoal(Goal.GENERATE))
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
+    }
+
+    @Test
+    fun canInsertACodeSnippetFromAKotlinFile(platformConfiguration: PlatformConfiguration) {
+        given(aDokuMaid()
+                .configuredWith(aFileWithACodeSnippetFromAKotlinFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE))
+                .`when`(theDokuIsPimped())
+                .then(expectAllFilesToBeCorrect())
     }
 
     @Test

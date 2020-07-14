@@ -39,6 +39,7 @@ data class MarkdownCodeSection(val content: String) {
             val language = when {
                 fileName.endsWith(".java") -> "java"
                 fileName.endsWith(".xml") -> "xml"
+                fileName.endsWith(".kt") -> "kotlin"
                 else -> ""
             }
             return MarkdownCodeSection.create(code, language)
