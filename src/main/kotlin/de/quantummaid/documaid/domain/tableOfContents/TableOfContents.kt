@@ -44,8 +44,8 @@ class TableOfContents private constructor(
         val tocEntries = collectTocEntries(tocRootDirectory)
 
         val stringBuilder = StringBuilder()
-            .appendln()
-        tocEntries.forEach { stringBuilder.appendln(it.generate()) }
+                .append("\n")
+        tocEntries.forEach { stringBuilder.append(it.generate()).append("\n") }
         stringBuilder.append("<!---EndOfToc-->")
         return stringBuilder.toString()
     }
