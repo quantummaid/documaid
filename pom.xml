@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.32</version>
+    <version>0.9.33</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -381,7 +381,7 @@
                     <executions>
                         <execution>
                             <id>sign-artifacts</id>
-                            <phase>verify</phase>
+                            <phase>install</phase>
                             <goals>
                                 <goal>sign</goal>
                             </goals>
