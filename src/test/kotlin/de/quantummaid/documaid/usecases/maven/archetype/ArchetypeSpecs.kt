@@ -35,119 +35,145 @@ interface ArchetypeSpecs {
 
     @Test
     fun canGenerateFullyDefinedArchetypeInMarkdownFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithASingleFullyDefinedArchetype(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithASingleFullyDefinedArchetype(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateMinimalDefinedArchetypeInMarkdownFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithASingleMinimalDefinedArchetype(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithASingleMinimalDefinedArchetype(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateArchetypeAlsoForWindows(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAnArchetypeForWindows(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAnArchetypeForWindows(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateFullyDefinedArchetypeAtEndOfMarkdownFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAnArchetypeAtEndOfFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAnArchetypeAtEndOfFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateOverWrongArchetype(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAWrongArchetype(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAWrongArchetype(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateOverWrongArchetypeAtEndOfMarkdownFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAWrongArchetypeAtEndOfFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAWrongArchetypeAtEndOfFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canValidateCorrectArchetype(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAlreadyGeneratedArchetype(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAlreadyGeneratedArchetype(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canValidateCorrectArchetypeAtEndOfFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAlreadyGeneratedArchetypeAtEndOfFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAlreadyGeneratedArchetypeAtEndOfFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun failsForMissingArchetype(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAMissingArchetype(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAMissingArchetype(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [${ARCHETYPE_TAG.value}] tag with missing archetype code for " +
-                    "'<!---[Archetype](archetypeGroupId archetypeArtifactId archetypeVersion " +
-                    "groupId=local artifactId=test version=1.0.0 packaging=java )-->' " +
-                    "(in path ${absPath("aFileWithAMissingArchetype/archetype.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [${ARCHETYPE_TAG.value}] tag with missing archetype code for " +
+                        "'<!---[Archetype](archetypeGroupId archetypeArtifactId archetypeVersion " +
+                        "groupId=local artifactId=test version=1.0.0 packaging=java )-->' " +
+                        "(in path ${absPath("aFileWithAMissingArchetype/archetype.md")})"
+                )
+            )
     }
 
     @Test
     fun failsForIncorrectArchetype(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAWrongArchetype(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithMavenCoordinates()
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAWrongArchetype(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithMavenCoordinates()
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [${ARCHETYPE_TAG.value}] tag with incorrect archetype code for " +
-                    "'<!---[Archetype](archetypeGroupId archetypeArtifactId=test archetypeVersion " +
-                    "groupId=local artifactId=test version=1.0.0 packaging=java )-->' " +
-                    "(in path ${absPath("aFileWithAWrongArchetype/archetype.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [${ARCHETYPE_TAG.value}] tag with incorrect archetype code for " +
+                        "'<!---[Archetype](archetypeGroupId archetypeArtifactId=test archetypeVersion " +
+                        "groupId=local artifactId=test version=1.0.0 packaging=java )-->' " +
+                        "(in path ${absPath("aFileWithAWrongArchetype/archetype.md")})"
+                )
+            )
     }
 
     companion object {

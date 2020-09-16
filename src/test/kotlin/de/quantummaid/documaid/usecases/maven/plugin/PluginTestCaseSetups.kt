@@ -30,8 +30,14 @@ fun aFileWithASingleFullyDefinedPlugin(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithAPluginDirective("md1.md",
-                    "com.local", "test", "1.0.0", "testgoal", "verify")
+                aMarkdownFileWithAPluginDirective(
+                    "md1.md",
+                    "com.local",
+                    "test",
+                    "1.0.0",
+                    "testgoal",
+                    "verify"
+                )
             )
     }
 }

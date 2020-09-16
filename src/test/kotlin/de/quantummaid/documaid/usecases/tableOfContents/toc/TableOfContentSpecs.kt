@@ -36,185 +36,244 @@ interface TableOfContentSpecs {
 
     @Test
     fun canGenerateTocForDocsDirectory(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateTocForSameDirectory(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeFromSameDirectory(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeFromSameDirectory(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateTocForMultipleNestedDirectories(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithMultipleNestedDirectories(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithMultipleNestedDirectories(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun tocIgnoresNotIndexedFiles(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithNotIndexedMarkdownFiles(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithNotIndexedMarkdownFiles(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun tocIgnoresGeneratedOverviewFilesWithIndex0(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithGeneratedOverviewFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithGeneratedOverviewFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun tocGeneratesCorrectTocForIncorrectToc(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocInReadmeWithIncorrectToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocInReadmeWithIncorrectToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun tocGenerationFailsForRedundantIndex(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithTheSameIndexTwice(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithTheSameIndexTwice(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "[$TOC_TAG] Same TOC indices[2] used by multiple files [2_One.md, 2_Two.md] " +
-                "(in path ${absPath("tocWithSameIndexTwice")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "[$TOC_TAG] Same TOC indices[2] used by multiple files [2_One.md, 2_Two.md] " +
+                        "(in path ${absPath("tocWithSameIndexTwice")})"
+                )
+            )
     }
 
     @Test
     fun tocGenerationFailsForMissingIndex(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithMissingIndex(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithMissingIndex(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "[$TOC_TAG] Missing index 2 for TOC in directory 'tocWithMissingIndex' " +
-                "(in path ${absPath("tocWithMissingIndex")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "[$TOC_TAG] Missing index 2 for TOC in directory 'tocWithMissingIndex' " +
+                        "(in path ${absPath("tocWithMissingIndex")})"
+                )
+            )
     }
 
     @Test
     fun tocGenerationFailsForRedundantIndexInSubDirectory(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "[$TOC_TAG] Same TOC indices[2] used by multiple files " +
-                    "[02_docs/2_Double.md, 02_docs/2_SecondDocs.md] " +
-                "(in path ${absPath("tocWithSameIndexTwiceInSubDirectory/02_docs")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "[$TOC_TAG] Same TOC indices[2] used by multiple files " +
+                        "[02_docs/2_Double.md, 02_docs/2_SecondDocs.md] " +
+                        "(in path ${absPath("tocWithSameIndexTwiceInSubDirectory/02_docs")})"
+                )
+            )
     }
 
     @Test
     fun tocGenerationFailsForMissingIndexInSubDirectory(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithMissingIndexInSubDirectory(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithMissingIndexInSubDirectory(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("[$TOC_TAG] Missing index 2 for TOC in directory '02_docs' " +
-                "(in path ${absPath("tocWithMissingIndexInSubDirectory/02_docs")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "[$TOC_TAG] Missing index 2 for TOC in directory '02_docs' " +
+                        "(in path ${absPath("tocWithMissingIndexInSubDirectory/02_docs")})"
+                )
+            )
     }
 
     @Test
     fun tocGenerationFailsForNotExistingScanDirectory(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithNotExistingScanDirectory(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithNotExistingScanDirectory(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "[$TOC_TAG] Cannot create TOC for not existing directory 'notExisting/' " +
-                "(in path ${absPath("aTocTagInReadmeWithNotExistingScanDirectory/README.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "[$TOC_TAG] Cannot create TOC for not existing directory 'notExisting/' " +
+                        "(in path ${absPath("aTocTagInReadmeWithNotExistingScanDirectory/README.md")})"
+                )
+            )
     }
 
     @Test
     fun tocGenerationFailsForMalformedOptions(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithMalFormedOptions(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithMalFormedOptions(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "[$TOC_TAG] Could not match TOC options '(not a correct options String)' " +
-                "(in path ${absPath("aTocTagInReadmeWithMalFormedOptions/README.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "[$TOC_TAG] Could not match TOC options '(not a correct options String)' " +
+                        "(in path ${absPath("aTocTagInReadmeWithMalFormedOptions/README.md")})"
+                )
+            )
     }
 
     @Test
     fun tocVerificationForValidToc(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocInReadmeWithCorrectToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocInReadmeWithCorrectToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun tocVerificationWithMissingToc(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocInReadmeWithMissingToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocInReadmeWithMissingToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [$TOC_TAG] tag with missing TOC (in path ${absPath("aTocInReadmeWithMissingToc/README.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$TOC_TAG] tag with missing TOC (in path ${absPath("aTocInReadmeWithMissingToc/README.md")})"
+                )
+            )
     }
 
     @Test
     fun tocVerificationFailsForIncorrectToc(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocInReadmeWithIncorrectToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocInReadmeWithIncorrectToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [$TOC_TAG] tag with incorrect TOC " +
-                    "(in path ${absPath("aTocInReadmeWithIncorrectToc/README.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$TOC_TAG] tag with incorrect TOC " +
+                        "(in path ${absPath("aTocInReadmeWithIncorrectToc/README.md")})"
+                )
+            )
     }
 
     @Test
     fun canGenerateTocAtTheEndOfFileWithoutNewLine(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceTocAtTheEndOfFileWithoutNewLine(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aWrongTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aWrongTocTagAtTheEndOfFileWithoutNewline(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

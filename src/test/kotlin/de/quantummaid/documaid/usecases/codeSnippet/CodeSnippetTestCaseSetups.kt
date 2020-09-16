@@ -23,6 +23,7 @@ package de.quantummaid.documaid.usecases.codeSnippet
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
+import de.quantummaid.documaid.shared.samplesFiles.*
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithACommentsInSnippet.Companion.aJavaFileWithACommentsInSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithADifferentSnippet.Companion.aJavaFileWithADifferentSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithFullClassSnippet.Companion.aJavaFileWithOneFullSnippet
@@ -33,15 +34,6 @@ import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithSnippetWith
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithTwoSnippets.Companion.aJavaFileWithTwoSnippets
 import de.quantummaid.documaid.shared.samplesFiles.SampleKotlinFileWithOneSnippet.Companion.aKotlinFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippet
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithFullClassSnippetDirective
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithSnippet
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithSnippetDirectiveAtTheEnd
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoSnippets
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoWrongSnippets
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongGeneratedSnippetAtEndOfFile
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongSnippet
 
 fun aFileWithASingleCodeSnippet(basePath: String): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleCodeSnippet")
@@ -66,9 +58,13 @@ fun aFileWithATwoCodeSnippets(basePath: String): SetupUpdate {
             .with(
                 javaFileWithSnippet,
                 javaFileWithADifferentSnippet,
-                aMarkdownFileWithTwoSnippets("md1.md",
-                    "snippet1", javaFileWithSnippet.snippet,
-                    "snippet2", javaFileWithADifferentSnippet.snippet)
+                aMarkdownFileWithTwoSnippets(
+                    "md1.md",
+                    "snippet1",
+                    javaFileWithSnippet.snippet,
+                    "snippet2",
+                    javaFileWithADifferentSnippet.snippet
+                )
             )
     }
 }
@@ -81,9 +77,13 @@ fun aFileWithTheSameCodeSnippetTwice(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFileWithSnippet,
-                aMarkdownFileWithTwoSnippets("md1.md",
-                    "snippet", javaFileWithSnippet.snippet,
-                    "snippet", javaFileWithSnippet.snippet)
+                aMarkdownFileWithTwoSnippets(
+                    "md1.md",
+                    "snippet",
+                    javaFileWithSnippet.snippet,
+                    "snippet",
+                    javaFileWithSnippet.snippet
+                )
             )
     }
 }
@@ -135,10 +135,10 @@ fun aFileWithACodeSnippetFromAKotlinFile(basePath: String): SetupUpdate {
     val kotlinFileWithSnippet = aKotlinFileWithOneSnippet("source.kt", "snippet")
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
-                .with(
-                        kotlinFileWithSnippet,
-                        aMarkdownFileWithSnippet("md1.md", "snippet", kotlinFileWithSnippet.snippet, "kotlin")
-                )
+            .with(
+                kotlinFileWithSnippet,
+                aMarkdownFileWithSnippet("md1.md", "snippet", kotlinFileWithSnippet.snippet, "kotlin")
+            )
     }
 }
 
@@ -191,9 +191,13 @@ fun aFileWithTwoOutdatedCodeSnippets(basePath: String): SetupUpdate {
             .with(
                 javaFileWithSnippet,
                 javaFileWithADifferentSnippet,
-                aMarkdownFileWithTwoWrongSnippets("md1.md",
-                    "snippet1", javaFileWithSnippet.snippet,
-                    "snippet2", javaFileWithADifferentSnippet.snippet)
+                aMarkdownFileWithTwoWrongSnippets(
+                    "md1.md",
+                    "snippet1",
+                    javaFileWithSnippet.snippet,
+                    "snippet2",
+                    javaFileWithADifferentSnippet.snippet
+                )
             )
     }
 }
@@ -224,7 +228,8 @@ fun aCorrectlyGeneratedFileWithOneCodeSnippet(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFileWithSnippet,
-                aMarkdownFileWithAlreadyGeneratedSnippet("md1.md", "testSnippet", javaFileWithSnippet.snippet))
+                aMarkdownFileWithAlreadyGeneratedSnippet("md1.md", "testSnippet", javaFileWithSnippet.snippet)
+            )
     }
 }
 
@@ -242,9 +247,14 @@ fun aFileWithMultipleCodeSnippetErrors(basePath: String): SetupUpdate {
             .with(
                 javaFileWithSnippet,
                 javaFileWithADifferentSnippet,
-                aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet("md1.md",
-                    "snippet1", javaFileWithSnippet.snippet,
-                    "snippet2", javaFileWithADifferentSnippet.snippet))
+                aMarkdownFileWithAlreadyGeneratedSnippetAndASecondNotGeneratedSnippet(
+                    "md1.md",
+                    "snippet1",
+                    javaFileWithSnippet.snippet,
+                    "snippet2",
+                    javaFileWithADifferentSnippet.snippet
+                )
+            )
     }
 }
 
@@ -282,9 +292,13 @@ fun aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(basePath: Strin
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithTwoSnippets("md1.md",
-                    "testSnippet", javaFile.snippet1,
-                    "testSnippet1", javaFile.snippet2)
+                aMarkdownFileWithTwoSnippets(
+                    "md1.md",
+                    "testSnippet",
+                    javaFile.snippet1,
+                    "testSnippet1",
+                    javaFile.snippet2
+                )
             )
     }
 }
@@ -297,8 +311,11 @@ fun aJavaFileWithSnippetWithSuppressWarning(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithSnippet("md1.md",
-                    "testSnippet", javaFile.expectedStrippedSnippet)
+                aMarkdownFileWithSnippet(
+                    "md1.md",
+                    "testSnippet",
+                    javaFile.expectedStrippedSnippet
+                )
             )
     }
 }
@@ -311,8 +328,11 @@ fun aJavaFileWithSnippetWithAMultipleSuppressWarning(basePath: String): SetupUpd
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithSnippet("md1.md",
-                    "testSnippet", javaFile.expectedStrippedSnippet)
+                aMarkdownFileWithSnippet(
+                    "md1.md",
+                    "testSnippet",
+                    javaFile.expectedStrippedSnippet
+                )
             )
     }
 }
@@ -325,8 +345,11 @@ fun aJavaFileWithSnippetWithNoSonarComments(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithSnippet("md1.md",
-                    "testSnippet", javaFile.expectedStrippedSnippet)
+                aMarkdownFileWithSnippet(
+                    "md1.md",
+                    "testSnippet",
+                    javaFile.expectedStrippedSnippet
+                )
             )
     }
 }

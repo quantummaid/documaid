@@ -33,7 +33,8 @@ class GithubTableOfContentsMarkdown private constructor(
 ) {
 
     companion object {
-        val TOC_REGEX = """^\n1\. \[ *.*(?=<!---EndOfToc-->)<!---EndOfToc-->""".toRegex(RegexOption.DOT_MATCHES_ALL)
+        val TOC_REGEX =
+            """^\n1\. \[ *.*(?=<!---EndOfToc-->)<!---EndOfToc-->""".toRegex(RegexOption.DOT_MATCHES_ALL)
 
         fun create(
             rawMarkdownDirective: RawMarkdownDirective,

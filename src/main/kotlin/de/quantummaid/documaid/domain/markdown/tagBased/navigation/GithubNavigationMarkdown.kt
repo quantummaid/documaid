@@ -36,7 +36,8 @@ class GithubNavigationMarkdown private constructor(
 
     companion object {
         val SPACES = "&nbsp;&nbsp;&nbsp;"
-        val NAV_MARKDOWN_REGEX = """\n? *(\[&larr;]\([^)]+\)$SPACES)?\[Overview]\([^)]+\)($SPACES\[&rarr;]\([^)]+\))?"""
+        val NAV_MARKDOWN_REGEX =
+            """\n? *(\[&larr;]\([^)]+\)$SPACES)?\[Overview]\([^)]+\)($SPACES\[&rarr;]\([^)]+\))?"""
 
         fun create(
             fileWithDirective: MarkdownFile,

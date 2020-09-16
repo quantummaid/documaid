@@ -20,11 +20,7 @@
  */
 package de.quantummaid.documaid.givenWhenThen
 
-import de.quantummaid.documaid.shared.filesystem.PhysicalDirectory
-import de.quantummaid.documaid.shared.filesystem.PhysicalFile
-import de.quantummaid.documaid.shared.filesystem.PhysicalFileSystemStructure
-import de.quantummaid.documaid.shared.filesystem.assertDirectoryExists
-import de.quantummaid.documaid.shared.filesystem.assertFileWithContent
+import de.quantummaid.documaid.shared.filesystem.*
 import kotlin.test.fail
 
 class TestFileStructureCorrectnessChecker {

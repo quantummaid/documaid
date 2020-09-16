@@ -22,12 +22,7 @@ package de.quantummaid.documaid.usecases.maven.archetype
 
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileAlreadyGeneratedArchetype
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedArchetypeAtEndOfFile
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithOneArchetype
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithOneArchetypeAtEndOfFile
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongArchetype
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongArchetypeAtEndOfFile
+import de.quantummaid.documaid.shared.samplesFiles.*
 
 fun aFileWithASingleFullyDefinedArchetype(basePath: String): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedArchetype")
@@ -35,9 +30,11 @@ fun aFileWithASingleFullyDefinedArchetype(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneArchetype("archetype.md",
+                aMarkdownFileWithOneArchetype(
+                    "archetype.md",
                     archetypeGroupId = "com.quantummaid", archetypeArtifactId = "archetype", archetypeVersion = "1.0.0",
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java", os = "linux")
+                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java", os = "linux"
+                )
             )
     }
 }
@@ -48,9 +45,16 @@ fun aFileWithASingleMinimalDefinedArchetype(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneArchetype("archetype.md",
-                    null, null, null,
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java")
+                aMarkdownFileWithOneArchetype(
+                    "archetype.md",
+                    null,
+                    null,
+                    null,
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    packaging = "java"
+                )
             )
     }
 }
@@ -61,9 +65,16 @@ fun aFileWithAnArchetypeAtEndOfFile(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneArchetypeAtEndOfFile("archetype.md",
-                    null, "test", null,
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java")
+                aMarkdownFileWithOneArchetypeAtEndOfFile(
+                    "archetype.md",
+                    null,
+                    "test",
+                    null,
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    packaging = "java"
+                )
             )
     }
 }
@@ -74,10 +85,12 @@ fun aFileWithAnArchetypeForWindows(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneArchetypeAtEndOfFile("archetype.md",
+                aMarkdownFileWithOneArchetypeAtEndOfFile(
+                    "archetype.md",
                     null, "test", null,
                     groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java",
-                    os = "windows", lineBreakingChar = "^")
+                    os = "windows", lineBreakingChar = "^"
+                )
             )
     }
 }
@@ -88,9 +101,16 @@ fun aFileWithAWrongArchetype(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithWrongArchetype("archetype.md",
-                    null, "test", null,
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java")
+                aMarkdownFileWithWrongArchetype(
+                    "archetype.md",
+                    null,
+                    "test",
+                    null,
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    packaging = "java"
+                )
             )
     }
 }
@@ -101,9 +121,16 @@ fun aFileWithAWrongArchetypeAtEndOfFile(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithWrongArchetypeAtEndOfFile("archetype.md",
-                    null, "test", null,
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java")
+                aMarkdownFileWithWrongArchetypeAtEndOfFile(
+                    "archetype.md",
+                    null,
+                    "test",
+                    null,
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    packaging = "java"
+                )
             )
     }
 }
@@ -114,9 +141,11 @@ fun aFileWithAlreadyGeneratedArchetype(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileAlreadyGeneratedArchetype("archetype.md",
+                aMarkdownFileAlreadyGeneratedArchetype(
+                    "archetype.md",
                     archetypeGroupId = "com.quantummaid", archetypeArtifactId = null, archetypeVersion = "1.0.0",
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "pom", os = "linux")
+                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "pom", os = "linux"
+                )
             )
     }
 }
@@ -127,10 +156,12 @@ fun aFileWithAlreadyGeneratedArchetypeAtEndOfFile(basePath: String): SetupUpdate
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithAlreadyGeneratedArchetypeAtEndOfFile("archetype.md",
+                aMarkdownFileWithAlreadyGeneratedArchetypeAtEndOfFile(
+                    "archetype.md",
                     archetypeGroupId = "com.quantummaid", archetypeArtifactId = "test", archetypeVersion = null,
                     groupId = "local", artifactId = "test", version = "1.0.0", packaging = "pom",
-                    os = "windows", lineBreakingChar = "^")
+                    os = "windows", lineBreakingChar = "^"
+                )
             )
     }
 }
@@ -141,9 +172,16 @@ fun aFileWithAMissingArchetype(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneArchetype("archetype.md",
-                    archetypeGroupId = null, archetypeArtifactId = null, archetypeVersion = null,
-                    groupId = "local", artifactId = "test", version = "1.0.0", packaging = "java")
+                aMarkdownFileWithOneArchetype(
+                    "archetype.md",
+                    archetypeGroupId = null,
+                    archetypeArtifactId = null,
+                    archetypeVersion = null,
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    packaging = "java"
+                )
             )
     }
 }

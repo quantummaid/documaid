@@ -50,7 +50,8 @@ class SampleJavaFileWithADifferentSnippet private constructor(
 
     companion object {
         fun aJavaFileWithADifferentSnippet(fileName: String, snippetId: String): SampleJavaFileWithADifferentSnippet {
-            val snippet = """
+            val snippet =
+                """
 final List<String> strings = new ArrayList<>();
 strings.add("A");
 strings.add("B");
@@ -61,7 +62,8 @@ if (Math.random() % 2 == 0) {
     System.out.println("Nope");
 }
 """.trim()
-            val content = """
+            val content =
+                """
 //Showcase start $snippetId
 $snippet
 //Showcase end $snippetId
@@ -107,7 +109,8 @@ class SampleJavaFileWithFullClassSnippet private constructor(
 
     companion object {
         fun aJavaFileWithOneFullSnippet(fileName: String): SampleJavaFileWithFullClassSnippet {
-            val snippet = """
+            val snippet =
+                """
                 package de.quantummaid.documaid.usecases.codeSnippet;
 
                 public class FullClassCodeSnippet {
@@ -121,7 +124,7 @@ class SampleJavaFileWithFullClassSnippet private constructor(
 
                 }
              }
-            """.trimIndent()
+                """.trimIndent()
             val fileBuilder = PhysicalFileBuilder.aFile(fileName)
                 .withContent(snippet)
             return SampleJavaFileWithFullClassSnippet(fileName, snippet, fileBuilder)

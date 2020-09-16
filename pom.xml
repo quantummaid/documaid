@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.34</version>
+    <version>0.9.35</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -76,7 +76,7 @@
 
     <properties>
         <kotlin.version>1.4.0</kotlin.version>
-        <klint-plugin-version>1.5.2</klint-plugin-version>
+        <klint-plugin-version>1.6.1</klint-plugin-version>
         <kotlin.version>1.4.10</kotlin.version>
         <maven-clean-plugin-version>3.1.0</maven-clean-plugin-version>
         <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
@@ -100,7 +100,7 @@
         <maven-annotations-dependency-version>3.6.0</maven-annotations-dependency-version>
         <license-maven-plugin-version>4.0.rc2</license-maven-plugin-version>
         <sonar-maven-plugin-version>3.7.0.1746</sonar-maven-plugin-version>
-        <jacobo-maven-plugin-version>0.8.5</jacobo-maven-plugin-version>
+        <jacobo-maven-plugin-version>0.8.6</jacobo-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jvm-target-version>1.8</jvm-target-version>
@@ -309,7 +309,8 @@
                                 <allowSnapshots>false</allowSnapshots>
                                 <outputFile>target/dependency-updates.txt</outputFile>
                                 <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml</rulesUri>
+                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml
+                                </rulesUri>
                             </configuration>
                         </execution>
                         <execution>
@@ -322,7 +323,8 @@
                                 <allowSnapshots>false</allowSnapshots>
                                 <outputFile>target/plugin-updates.txt</outputFile>
                                 <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml</rulesUri>
+                                <rulesUri>file:///${project.basedir}/src/test/dependencies/ignoredVersionUpdates.xml
+                                </rulesUri>
                             </configuration>
                         </execution>
                     </executions>
@@ -428,7 +430,8 @@
                             <configuration>
                                 <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                                 <suppressionFiles>
-                                    <suppressionFile>src/test/dependencies/ignoredVulnerableVersion.xml</suppressionFile>
+                                    <suppressionFile>src/test/dependencies/ignoredVulnerableVersion.xml
+                                    </suppressionFile>
                                 </suppressionFiles>
                             </configuration>
                         </execution>

@@ -31,7 +31,8 @@ class SampleXmlFileWithOneSnippet private constructor(
 
     companion object {
         fun aXmlFileWithOneSnippet(fileName: String, snippetId: String): SampleXmlFileWithOneSnippet {
-            val snippet = """
+            val snippet =
+                """
 <configuration>
     <propA>A</propA>
     <propB>
@@ -39,7 +40,8 @@ class SampleXmlFileWithOneSnippet private constructor(
     </propB>
 </configuration>
 """.trim()
-            val content = """
+            val content =
+                """
 <!-- Showcase start $snippetId -->
 $snippet
 <!-- Showcase end $snippetId -->

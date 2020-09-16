@@ -38,10 +38,14 @@ fun aMarkdownFileWithAllDirectives(
     val goal = "generate"
     val phase = "verify"
     val scope = "test"
-    val contentInput = contentInput(groupId, artifactId, version, goal, phase, scope,
-        tocPath, linkPath, linkName, snippetName, snippet)
-    val expectedContentOutput = expectedContent(groupId, artifactId, version, goal, phase, scope,
-        tocPath, toc, linkPath, linkName, snippetName, snippet)
+    val contentInput = contentInput(
+        groupId, artifactId, version, goal, phase, scope,
+        tocPath, linkPath, linkName, snippetName, snippet
+    )
+    val expectedContentOutput = expectedContent(
+        groupId, artifactId, version, goal, phase, scope,
+        tocPath, toc, linkPath, linkName, snippetName, snippet
+    )
 
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, contentInput)
@@ -65,8 +69,10 @@ fun aMarkdownFileWithAllDirectivesAlreadyGenerated(
     val goal = "generate"
     val phase = "verify"
     val scope = "test"
-    val expectedContentOutput = expectedContent(groupId, artifactId, version, goal, phase, scope,
-        tocPath, toc, linkPath, linkName, snippetName, snippet)
+    val expectedContentOutput = expectedContent(
+        groupId, artifactId, version, goal, phase, scope,
+        tocPath, toc, linkPath, linkName, snippetName, snippet
+    )
 
     return ProcessedFileBuilder.anExpectedFile()
         .withOriginalNameAndContent(fileName, expectedContentOutput)

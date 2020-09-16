@@ -41,7 +41,7 @@ class KotlinFile private constructor(private val path: Path, private val snippet
 
         fun create(path: Path): KotlinFile {
             val snippets = SnippetExtractor.createExtractorFor(FileType.KOTLIN)
-                    .extractSnippets(path, KotlinSnippetFormat.regex)
+                .extractSnippets(path, KotlinSnippetFormat.regex)
             return KotlinFile(path, snippets)
         }
     }

@@ -1,3 +1,15 @@
-[*.{kt,kts}]
-disabled_rules=import-ordering,indent
-max_line_length = 120
+[*.{kt, kts}]
+#
+# We need this to ensure that Intellij Ultimate respects the 4 space continuation indent.
+#
+# https://github.com/pinterest/ktlint/issues/805#issuecomment-651074670
+#
+continuation_indent_size = 4
+#
+# by default, idea adds '*' import when 5 imports are for the same package
+#
+disabled_rules = no-wildcard-imports
+#
+# by default, use idea layout
+#
+kotlin_imports_layout = idea

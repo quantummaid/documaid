@@ -23,8 +23,8 @@ package de.quantummaid.documaid.domain.tableOfContents
 import de.quantummaid.documaid.collecting.structure.Directory
 import de.quantummaid.documaid.collecting.structure.FileObject
 import de.quantummaid.documaid.collecting.structure.ProjectFile
-import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
 import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.GithubTableOfContentsMarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.tableOfContents.TableOfContentsDirective.Companion.TOC_TAG
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError
 import java.nio.file.Path
@@ -129,7 +129,8 @@ private fun parseName(name: String, path: Path): Pair<Int, String> {
 
 private fun convertToNormalCase(name: String): String {
     val nameWithOutFirstCharacter = name.substring(1)
-    val regex = """\p{Lu}""".toRegex()
+    val regex =
+        """\p{Lu}""".toRegex()
     val normalCaseRest = nameWithOutFirstCharacter.replace(regex) { " " + it.value.toLowerCase() }
     return name[0].toUpperCase() + normalCaseRest
 }

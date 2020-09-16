@@ -20,13 +20,8 @@
  */
 package de.quantummaid.documaid.usecases.hugo.flavor
 
-import de.quantummaid.documaid.shared.filesystem.EmptySutFile
-import de.quantummaid.documaid.shared.filesystem.PhysicalDirectoryBuilder
-import de.quantummaid.documaid.shared.filesystem.PhysicalFileBuilder
-import de.quantummaid.documaid.shared.filesystem.PhysicalFileSystemStructureBuilder
-import de.quantummaid.documaid.shared.filesystem.SetupUpdate
+import de.quantummaid.documaid.shared.filesystem.*
 import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
-import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithH1Heading
 import de.quantummaid.documaid.shared.samplesFiles.aRawMarkdownFile
@@ -69,7 +64,10 @@ fun aTypicalQuantumMaidProjectStructure(basePath: String, hugoOutputPath: String
                             aDirectory("de").with(
                                 aDirectory("documentation").with(
                                     aJavaFileWithOneSnippet("source.java", "snippet")
-                                )))),
+                                )
+                            )
+                        )
+                    ),
                 aDirectory("something")
                     .with(
                         aMarkdownFileWithH1Heading("README.md", "10"),
@@ -124,7 +122,8 @@ fun aTypicalQuantumMaidProjectStructureWithIndex(basePath: String, hugoOutputPat
 
     val readme = aMarkdownFileWithH1Heading("README.md", "20")
     val java10Readme = EmptySutFile.aFile("README.Java10.md")
-    val rawMarkdownFile = aRawMarkdownFile("_index.md",
+    val rawMarkdownFile = aRawMarkdownFile(
+        "_index.md",
         "---\n" +
             "title: \"Teeest\"\n" +
             "weight: 12\n" +

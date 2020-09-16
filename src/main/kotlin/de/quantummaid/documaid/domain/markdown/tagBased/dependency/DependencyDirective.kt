@@ -69,11 +69,14 @@ class DependencyDirectiveOptions(
 ) {
 
     companion object {
-        private val DEPENDENY_OPTIONS_REGEX = ("\\(? *(?<groupId>groupId(=[^ ]*)?) *" +
-            "(?<artifactId>artifactId(=[^ ]*)?) *" +
-            "(?<version>version(=[^ ]*)?) *" +
-            "(?<scope>scope=[^ ]*)? *\\)?").toRegex()
-        private val PROPERTY_VALUE_REGEX = """[\w]+=(?<value>.+)""".toRegex()
+        private val DEPENDENY_OPTIONS_REGEX = (
+            "\\(? *(?<groupId>groupId(=[^ ]*)?) *" +
+                "(?<artifactId>artifactId(=[^ ]*)?) *" +
+                "(?<version>version(=[^ ]*)?) *" +
+                "(?<scope>scope=[^ ]*)? *\\)?"
+            ).toRegex()
+        private val PROPERTY_VALUE_REGEX =
+            """[\w]+=(?<value>.+)""".toRegex()
 
         fun create(
             rawMarkdownDirective: RawMarkdownDirective,

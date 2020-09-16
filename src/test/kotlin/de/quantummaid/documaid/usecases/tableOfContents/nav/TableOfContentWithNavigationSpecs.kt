@@ -37,119 +37,154 @@ interface TableOfContentWithNavigationSpecs {
 
     @Test
     fun canGenerateNavigationForIndexFiles(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canGenerateNavigationForDeeplyNestedStructure(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeWithADeeplyNestedStructure(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeWithADeeplyNestedStructure(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun navigationFailsForFileWithMissingNavigation(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocInReadmeWithAnIndexFileWithoutNavigation(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocInReadmeWithAnIndexFileWithoutNavigation(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found file indexed by table of contents but without [$NAV_TAG] tag " +
-                "(in path ${absPath("fileWithoutNav/1_error.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found file indexed by table of contents but without [$NAV_TAG] tag " +
+                        "(in path ${absPath("fileWithoutNav/1_error.md")})"
+                )
+            )
     }
 
     @Test
     fun navigationFailsForFileWithNavigationButNotIncludedInTableOfContents(
         platformConfiguration: PlatformConfiguration
     ) {
-        given(aDokuMaid()
-            .configuredWith(aTocInReadmeWithFileWithNavigationButNotIndexedByToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocInReadmeWithFileWithNavigationButNotIndexedByToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [$NAV_TAG] tag for file not indexed by table of contents " +
-                "(in path ${absPath("fileOutsideOfToc/1_error.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$NAV_TAG] tag for file not indexed by table of contents " +
+                        "(in path ${absPath("fileOutsideOfToc/1_error.md")})"
+                )
+            )
     }
 
     @Test
     fun navigationFailsForFileWithNavigationWithoutATableOfContents(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithNavigationButNoFileWithToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithNavigationButNoFileWithToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tags without a [$TOC_TAG]"))
     }
 
     @Test
     fun navigationCanGenerateCorrectNavOverWrongNavigation(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun navigationValidationWithCorrectNavigations(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aReadmeWithTocAndSeveralFilesWithCorrectNavigation(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aReadmeWithTocAndSeveralFilesWithCorrectNavigation(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun navigationValidationForMissingNavigation(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aReadmeWithTocAndAFileWithMissingNav(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aReadmeWithTocAndAFileWithMissingNav(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [$NAV_TAG] tag with missing navigation " +
-                "(in path ${absPath("missingNav/docs/02_SomeImportantStuff.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$NAV_TAG] tag with missing navigation " +
+                        "(in path ${absPath("missingNav/docs/02_SomeImportantStuff.md")})"
+                )
+            )
     }
 
     @Test
     fun navigationValidationForWrongNavigation(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aReadmeWithTocAndAFileWithWrongNav(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [$NAV_TAG] tag with wrong navigation " +
-                    "(in path ${absPath("wrongNav/docs/003_ADifferentChapter.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$NAV_TAG] tag with wrong navigation " +
+                        "(in path ${absPath("wrongNav/docs/003_ADifferentChapter.md")})"
+                )
+            )
     }
 
     @Test
     fun canGenerateNavigationAtTheEndOfFileWithoutNewLine(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceNavigationAtTheEndOfFileWithoutNewLine(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

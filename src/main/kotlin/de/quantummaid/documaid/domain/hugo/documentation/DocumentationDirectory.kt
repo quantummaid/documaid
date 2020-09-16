@@ -82,8 +82,10 @@ private abstract class AbstractDocumentationDirectory protected constructor(
 
     protected fun getFileIndex(generationInformation: HugoDocumentationGenerationInformation): Int {
         val targetPath = generationInformation.targetPath
-            ?: throw IllegalArgumentException("Can not obtain index for ${generationInformation.originalPath}, " +
-                "because 'targetpath' not set in generation information.")
+            ?: throw IllegalArgumentException(
+                "Can not obtain index for ${generationInformation.originalPath}, " +
+                    "because 'targetpath' not set in generation information."
+            )
         val indexedPath = IndexedPath.anIndexedPath(targetPath)
         return indexedPath.index
     }
@@ -151,8 +153,10 @@ private class DocumentationRootDirectory constructor(
 
     private fun getOptionalFileIndex(generationInformation: HugoDocumentationGenerationInformation): Int {
         val targetPath = generationInformation.targetPath
-            ?: throw IllegalArgumentException("Can not obtain index for ${generationInformation.originalPath}, " +
-                "because 'targetpath' not set in generation information.")
+            ?: throw IllegalArgumentException(
+                "Can not obtain index for ${generationInformation.originalPath}, " +
+                    "because 'targetpath' not set in generation information."
+            )
         return if (isIndexedPath(targetPath)) {
             val indexedPath = IndexedPath.anIndexedPath(targetPath)
             indexedPath.index
@@ -171,7 +175,8 @@ private class DocumentationRootDirectory constructor(
     override fun resolveInTargetPath(name: String): Path {
         val generationInformation = directory.getData(DOCUMENTATION_GEN_INFO_KEY)
         val targetPath = generationInformation.targetPath ?: throw IllegalStateException(
-            "Can not resolve target path, because own target path has not been set in ${directory.absolutePath()}")
+            "Can not resolve target path, because own target path has not been set in ${directory.absolutePath()}"
+        )
         return targetPath.resolve(name)
     }
 }
@@ -209,7 +214,8 @@ private class NormalDocumentationDirectory constructor(
     override fun resolveInTargetPath(name: String): Path {
         val generationInformation = directory.getData(DOCUMENTATION_GEN_INFO_KEY)
         val targetPath = generationInformation.targetPath ?: throw IllegalStateException(
-            "Can not resolve target path, because own target path has not been set in ${directory.absolutePath()}")
+            "Can not resolve target path, because own target path has not been set in ${directory.absolutePath()}"
+        )
         return targetPath.resolve(name)
     }
 }

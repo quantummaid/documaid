@@ -98,8 +98,10 @@ class DocuMaidConfigurationBuilder private constructor() {
         } else {
             0
         }
-        return DocuMaidConfiguration(absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths,
-            platform, hugoOutputPath, repository, generationFlavorType, documentationDepth)
+        return DocuMaidConfiguration(
+            absolutePath, goal!!, logger!!, mavenConfiguration, skippedPaths,
+            platform, hugoOutputPath, repository, generationFlavorType, documentationDepth
+        )
     }
 
     companion object {

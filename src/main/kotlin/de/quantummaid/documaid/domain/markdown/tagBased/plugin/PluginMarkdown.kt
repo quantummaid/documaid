@@ -25,11 +25,7 @@ import de.quantummaid.documaid.domain.markdown.TrailingMarkdownCodeSection.Compa
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.createMatchForTrailingMarkdown
 import de.quantummaid.documaid.domain.markdown.tagBased.matching.TrailingMarkdownMatchResult.Companion.noMatchForTrailingCodeSection
-import de.quantummaid.documaid.domain.maven.ArtifactId
-import de.quantummaid.documaid.domain.maven.GroupId
-import de.quantummaid.documaid.domain.maven.MavenGoal
-import de.quantummaid.documaid.domain.maven.MavenPhase
-import de.quantummaid.documaid.domain.maven.Version
+import de.quantummaid.documaid.domain.maven.*
 
 class PluginMarkdown private constructor(
     private val groupId: GroupId,

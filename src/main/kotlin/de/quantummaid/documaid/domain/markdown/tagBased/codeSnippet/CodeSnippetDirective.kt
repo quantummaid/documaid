@@ -137,8 +137,10 @@ class CodeSnippetDirective private constructor(
 class CodeSnippetDirectiveOptions(val snippetId: SnippetId?, val filePath: Path?) {
 
     companion object {
-        val OPTIONS_WITH_SNIPPET_ID_REGEX = """ *\(? *(?<id>[\w]*) *\)? *""".toRegex()
-        val OPTIONS_WITH_FILE = """ *\(? *file=(?<filePath>[^ )]+) *\)? *""".toRegex()
+        val OPTIONS_WITH_SNIPPET_ID_REGEX =
+            """ *\(? *(?<id>[\w]*) *\)? *""".toRegex()
+        val OPTIONS_WITH_FILE =
+            """ *\(? *file=(?<filePath>[^ )]+) *\)? *""".toRegex()
 
         fun create(directive: RawMarkdownDirective, file: MarkdownFile): CodeSnippetDirectiveOptions {
             val options = directive.optionsString.value

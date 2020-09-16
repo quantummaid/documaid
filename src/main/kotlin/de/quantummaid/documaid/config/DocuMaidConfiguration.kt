@@ -22,7 +22,6 @@ package de.quantummaid.documaid.config
 
 import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
 import de.quantummaid.documaid.logging.Logger
-
 import java.nio.file.Path
 
 class DocuMaidConfiguration(

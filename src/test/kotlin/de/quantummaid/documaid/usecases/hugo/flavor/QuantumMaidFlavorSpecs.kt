@@ -36,12 +36,14 @@ class QuantumMaidFlavorSpecs {
     @Test
     fun quantumMaidFlavorWorksForTypicalQuantumMaidDirectoryStructure() {
         val hugoOutputPath = "2_TestMaid"
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aTypicalQuantumMaidProjectStructure(BASE_PATH, hugoOutputPath))
-            .configuredWith(Platform.HUGO)
-            .configuredWithHugoOutputPath(hugoOutputPath)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aTypicalQuantumMaidProjectStructure(BASE_PATH, hugoOutputPath))
+                .configuredWith(Platform.HUGO)
+                .configuredWithHugoOutputPath(hugoOutputPath)
+                .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -49,12 +51,14 @@ class QuantumMaidFlavorSpecs {
     @Test
     fun quantumMaidFlavorWorksForTypicalQuantumMaidDirectoryStructureWithAlreadyGeneratedIndexFile() {
         val hugoOutputPath = "2_TestMaid"
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aTypicalQuantumMaidProjectStructureWithIndex(BASE_PATH, hugoOutputPath))
-            .configuredWith(Platform.HUGO)
-            .configuredWithHugoOutputPath(hugoOutputPath)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aTypicalQuantumMaidProjectStructureWithIndex(BASE_PATH, hugoOutputPath))
+                .configuredWith(Platform.HUGO)
+                .configuredWithHugoOutputPath(hugoOutputPath)
+                .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -62,12 +66,14 @@ class QuantumMaidFlavorSpecs {
     @Test
     fun quantumMaidFlavorAllowsNoIndexAbove99() {
         val hugoOutputPath = "2_TestMaid"
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aDocumentationStructureWithATooBigIndex(BASE_PATH))
-            .configuredWith(Platform.HUGO)
-            .configuredWithHugoOutputPath(hugoOutputPath)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aDocumentationStructureWithATooBigIndex(BASE_PATH))
+                .configuredWith(Platform.HUGO)
+                .configuredWithHugoOutputPath(hugoOutputPath)
+                .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAnExceptionWithMessage("Only indices between 1 and 99 allowed"))
     }

@@ -37,50 +37,60 @@ interface LinkSpecs {
 
     @Test
     fun canInsertSimpleCodeLinks(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aFileWithASingleLink(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aFileWithASingleLink(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTwoLinks(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithTwoLinks(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithTwoLinks(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTheSameLinkTwice(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithTheSameLinksTwice(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithTheSameLinksTwice(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceAWrongLink(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithWrongLink(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithWrongLink(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertLinkInline(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAnInlineLink(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAnInlineLink(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -88,25 +98,31 @@ interface LinkSpecs {
     @Test
     fun failsForSeveralNotExistingLinkTarget(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithLinksToNotExistingFiles")
-        given(aDokuMaid()
-            .configuredWith(aFileWithLinksToNotExistingFiles(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithLinksToNotExistingFiles(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
-                "Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' " +
-                    "(in path $testBasePath/missingLinksFile.md)",
-                "Found [Link] tag to not existing file '$testBasePath/differentNotExistingFile.java' " +
-                    "(in path $testBasePath/missingLinksFile.md)"
-            ))
+            .then(
+                expectADocuMaidExceptionCollectingTheFollowingErrors(
+                    "Found [Link] tag to not existing file '$testBasePath/someWhere/notExistingFile.java' " +
+                        "(in path $testBasePath/missingLinksFile.md)",
+                    "Found [Link] tag to not existing file '$testBasePath/differentNotExistingFile.java' " +
+                        "(in path $testBasePath/missingLinksFile.md)"
+                )
+            )
     }
 
     @Test
     fun canValidateCorrectLinks(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aCorrectlyGeneratedFileWithTwoLinks(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aCorrectlyGeneratedFileWithTwoLinks(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -114,92 +130,123 @@ interface LinkSpecs {
     @Test
     fun failsForMissingLink(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithAMissingLink")
-        given(aDokuMaid()
-            .configuredWith(aFileWithAMissingLink(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAMissingLink(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [Link] tag without link being set for " +
-                "'<!---[Link] ( source.java linkName)-->' (in path $testBasePath/oneMissingLinkFileSampleFiles.md)"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [Link] tag without link being set for " +
+                        "'<!---[Link] ( source.java linkName)-->' (in path $testBasePath/oneMissingLinkFileSampleFiles.md)"
+                )
+            )
     }
 
     @Test
     fun failsForWrongLink(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithWrongLink")
-        given(aDokuMaid()
-            .configuredWith(aFileWithWrongLink(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithWrongLink(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [Link] tag with wrong link being set: " +
-                "'<!---[Link] ( source.java linkName)-->' (in path $testBasePath/md1.md)"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [Link] tag with wrong link being set: " +
+                        "'<!---[Link] ( source.java linkName)-->' (in path $testBasePath/md1.md)"
+                )
+            )
     }
 
     @Test
     fun failsIfLinkDoesNotPointToAExistingFileAnymore(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithLinkANotExistingFile")
-        given(aDokuMaid()
-            .configuredWith(aFileWithLinkANotExistingFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithLinkANotExistingFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage("Found [Link] tag to not existing file " +
-                "'$testBasePath/notExistingFile.java' (in path $testBasePath/aLinkToANotExistingFile.md)"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [Link] tag to not existing file " +
+                        "'$testBasePath/notExistingFile.java' (in path $testBasePath/aLinkToANotExistingFile.md)"
+                )
+            )
     }
 
     @Test
     fun capturesMultipleErrors(platformConfiguration: PlatformConfiguration) {
         val testBasePath = absPath("aFileWithMultipleLinkErrors")
-        given(aDokuMaid()
-            .configuredWith(aFileWithMultipleLinkErrors(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithMultipleLinkErrors(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
-                "Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName1)-->' " +
-                    "(in path $testBasePath/multipleLinkErrors.md)",
-                "Found [Link] tag without link being set for '<!---[Link] ( source.java linkName2)-->' " +
-                    "(in path $testBasePath/multipleLinkErrors.md)"))
+            .then(
+                expectADocuMaidExceptionCollectingTheFollowingErrors(
+                    "Found [Link] tag with wrong link being set: '<!---[Link] ( source.java linkName1)-->' " +
+                        "(in path $testBasePath/multipleLinkErrors.md)",
+                    "Found [Link] tag without link being set for '<!---[Link] ( source.java linkName2)-->' " +
+                        "(in path $testBasePath/multipleLinkErrors.md)"
+                )
+            )
     }
 
     @Test
     fun canInsertCodeLinkAtTheEndOfFileWithoutNewline(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aFileWithASingleLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aFileWithASingleLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceCodeLinkAtTheEndOfFileWithoutNewline(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aFileWithWrongLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aFileWithWrongLinkAtTheEndOfFileWithoutNewline(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertLinkReferencingFileWithinDocumentation(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aFileWithALinkToADocumentationFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aFileWithALinkToADocumentationFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceLinkReferencingFileWithinDocumentation(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aFileWithAWrongLinkToADocumentationFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aFileWithAWrongLinkToADocumentationFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithFlavorType(GenerationFlavorType.QUANTUMMAID)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

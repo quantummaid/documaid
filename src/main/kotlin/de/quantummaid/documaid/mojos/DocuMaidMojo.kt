@@ -21,11 +21,7 @@
 package de.quantummaid.documaid.mojos
 
 import de.quantummaid.documaid.DocuMaid.Companion.docuMaid
-import de.quantummaid.documaid.config.DocuMaidConfiguration
-import de.quantummaid.documaid.config.DocuMaidConfigurationBuilder
-import de.quantummaid.documaid.config.Goal
-import de.quantummaid.documaid.config.MavenConfiguration
-import de.quantummaid.documaid.config.Platform
+import de.quantummaid.documaid.config.*
 import de.quantummaid.documaid.domain.maven.ArtifactId
 import de.quantummaid.documaid.domain.maven.GroupId
 import de.quantummaid.documaid.domain.maven.Version
@@ -41,18 +37,25 @@ import java.nio.file.Paths
 abstract class DocuMaidMojo : AbstractMojo() {
     @Parameter(property = "project", required = true, readonly = true)
     private val project: MavenProject? = null
+
     @Parameter(property = "skipTests", defaultValue = "false")
     private val skip: Boolean = false
+
     @Parameter(property = "skipPaths")
     private val skipPaths: List<String>? = null
+
     @Parameter(property = "platform")
     private val platform: String? = null
+
     @Parameter(property = "hugoOutputPath")
     private val hugoOutputPath: String = "hugo"
+
     @Parameter(property = "repositoryUrl")
     private val repositoryUrl: String? = null
+
     @Parameter(property = "generationFlavor")
     private val generationFlavor: String? = null
+
     @Parameter(property = "overriddenDocumentationDepth")
     private val overriddenDocumentationDepth: String? = null
 
