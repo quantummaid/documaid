@@ -23,20 +23,9 @@ package de.quantummaid.documaid.usecases.link
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
-import de.quantummaid.documaid.shared.samplesFiles.HUGO_LINK_TARGET
+import de.quantummaid.documaid.shared.samplesFiles.*
 import de.quantummaid.documaid.shared.samplesFiles.SampleJavaFileWithOneSnippet.Companion.aJavaFileWithOneSnippet
 import de.quantummaid.documaid.shared.samplesFiles.SampleXmlFileWithOneSnippet.Companion.aXmlFileWithOneSnippet
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkAtTheEndOfFileWithoutNewLine
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithALinkDirective
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAnInlineLinkDirective
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinks
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTwoLinkDirectives
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkAtEndOfFileWithoutNewline
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInserted
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedAndAMissingLink
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithWrongLinkInsertedInlineStyle
-import de.quantummaid.documaid.shared.samplesFiles.aRawMarkdownFile
 
 fun aFileWithASingleLink(basePath: String): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aFileWithASingleLink")
@@ -46,7 +35,8 @@ fun aFileWithASingleLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithALinkDirective("md1.md", javaFile.fileName, "sampleLinkName"))
+                aMarkdownFileWithALinkDirective("md1.md", javaFile.fileName, "sampleLinkName")
+            )
     }
 }
 
@@ -61,12 +51,19 @@ fun aFileWithTwoLinks(basePath: String): SetupUpdate {
                 javaFile,
                 aDirectory("subDir")
                     .with(
-                        aMarkdownFileWithTwoLinkDirectives("md1.md",
-                            "../${javaFile.fileName}", "sampleLinkName",
-                            "subSubDir/${xmlFile.fileName}", "complex !/@_ filename"),
+                        aMarkdownFileWithTwoLinkDirectives(
+                            "md1.md",
+                            "../${javaFile.fileName}",
+                            "sampleLinkName",
+                            "subSubDir/${xmlFile.fileName}",
+                            "complex !/@_ filename"
+                        ),
                         aDirectory("subSubDir")
                             .with(
-                                xmlFile)))
+                                xmlFile
+                            )
+                    )
+            )
     }
 }
 
@@ -77,9 +74,14 @@ fun aFileWithTheSameLinksTwice(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 aJavaFileWithOneSnippet("source.java", "testSnippet"),
-                aMarkdownFileWithTwoLinkDirectives("md1.md",
-                    "source.java", "name1",
-                    "source.java", "name2"))
+                aMarkdownFileWithTwoLinkDirectives(
+                    "md1.md",
+                    "source.java",
+                    "name1",
+                    "source.java",
+                    "name2"
+                )
+            )
     }
 }
 
@@ -91,7 +93,8 @@ fun aFileWithWrongLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithWrongLinkInserted("md1.md", javaFile.fileName, "linkName"))
+                aMarkdownFileWithWrongLinkInserted("md1.md", javaFile.fileName, "linkName")
+            )
     }
 }
 
@@ -103,7 +106,8 @@ fun aFileWithAnInlineLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithAnInlineLinkDirective("md1.md", javaFile.fileName, "sampleLinkName"))
+                aMarkdownFileWithAnInlineLinkDirective("md1.md", javaFile.fileName, "sampleLinkName")
+            )
     }
 }
 
@@ -113,9 +117,14 @@ fun aFileWithLinksToNotExistingFiles(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithTwoLinkDirectives("missingLinksFile.md",
-                    "someWhere/notExistingFile.java", "linkName1",
-                    "differentNotExistingFile.java", "linkName2"))
+                aMarkdownFileWithTwoLinkDirectives(
+                    "missingLinksFile.md",
+                    "someWhere/notExistingFile.java",
+                    "linkName1",
+                    "differentNotExistingFile.java",
+                    "linkName2"
+                )
+            )
     }
 }
 
@@ -129,9 +138,14 @@ fun aCorrectlyGeneratedFileWithTwoLinks(basePath: String): SetupUpdate {
             .with(
                 javaFile,
                 xmlFile,
-                aMarkdownFileWithTwoAlreadyGeneratedLinks("md1.md",
-                    javaFile.fileName, "sampleLinkName",
-                    xmlFile.fileName, "complex filename"))
+                aMarkdownFileWithTwoAlreadyGeneratedLinks(
+                    "md1.md",
+                    javaFile.fileName,
+                    "sampleLinkName",
+                    xmlFile.fileName,
+                    "complex filename"
+                )
+            )
     }
 }
 
@@ -145,9 +159,14 @@ fun aCorrectlyGeneratedFileWithTwoLinksForHugo(basePath: String): SetupUpdate {
             .with(
                 javaFile,
                 xmlFile,
-                aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo("md1.md",
-                    javaFile.fileName, "sampleLinkName",
-                    xmlFile.fileName, "complex filename"))
+                aMarkdownFileWithTwoAlreadyGeneratedLinksForHugo(
+                    "md1.md",
+                    javaFile.fileName,
+                    "sampleLinkName",
+                    xmlFile.fileName,
+                    "complex filename"
+                )
+            )
     }
 }
 
@@ -159,7 +178,8 @@ fun aFileWithAMissingLink(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithALinkDirective("oneMissingLinkFileSampleFiles.md", javaFile.fileName, "linkName"))
+                aMarkdownFileWithALinkDirective("oneMissingLinkFileSampleFiles.md", javaFile.fileName, "linkName")
+            )
     }
 }
 
@@ -169,7 +189,8 @@ fun aFileWithLinkANotExistingFile(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "notExistingFile.java", "linkName"))
+                aMarkdownFileWithALinkDirective("aLinkToANotExistingFile.md", "notExistingFile.java", "linkName")
+            )
     }
 }
 
@@ -181,9 +202,14 @@ fun aFileWithMultipleLinkErrors(basePath: String): SetupUpdate {
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithWrongLinkInsertedAndAMissingLink("multipleLinkErrors.md",
-                    javaFile.fileName, "linkName1",
-                    javaFile.fileName, "linkName2"))
+                aMarkdownFileWithWrongLinkInsertedAndAMissingLink(
+                    "multipleLinkErrors.md",
+                    javaFile.fileName,
+                    "linkName1",
+                    javaFile.fileName,
+                    "linkName2"
+                )
+            )
     }
 }
 
@@ -224,8 +250,13 @@ fun aFileWithALinkToADocumentationFile(basePath: String): SetupUpdate {
                     .with(
                         targetMarkdownFile,
                         aRawMarkdownFile("_index.md", ""),
-                        aMarkdownFileWithALinkDirective("1_Introduction.md", "02_SomeChapter.md", "linkName",
-                            hugoLinkTarget = HUGO_LINK_TARGET.WITHIN_DOCU))
+                        aMarkdownFileWithALinkDirective(
+                            "1_Introduction.md",
+                            "02_SomeChapter.md",
+                            "linkName",
+                            hugoLinkTarget = HUGO_LINK_TARGET.WITHIN_DOCU
+                        )
+                    )
             )
     }
 }
@@ -245,9 +276,13 @@ fun aFileWithAWrongLinkToADocumentationFile(basePath: String): SetupUpdate {
                                 aRawMarkdownFile("_index.md", "")
                             ),
                         aRawMarkdownFile("_index.md", ""),
-                        aMarkdownFileWithWrongLinkInsertedInlineStyle("1_Introduction.md",
-                            "2_Something/02_SomeChapter.md", "linkName",
-                            hugoLinkTarget = HUGO_LINK_TARGET.WITHIN_DOCU))
+                        aMarkdownFileWithWrongLinkInsertedInlineStyle(
+                            "1_Introduction.md",
+                            "2_Something/02_SomeChapter.md",
+                            "linkName",
+                            hugoLinkTarget = HUGO_LINK_TARGET.WITHIN_DOCU
+                        )
+                    )
             )
     }
 }

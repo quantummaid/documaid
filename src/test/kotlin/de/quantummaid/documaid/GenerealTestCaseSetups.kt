@@ -36,28 +36,43 @@ fun severalFilesWithLinksAndSnippets(basePath: String): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
         val javaFile = aJavaFileWithOneSnippet("source.java", "snippet")
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithAllDirectives("README.md", "./docs", expectedToc,
-                    javaFile.fileName, "linkedFile",
-                    "snippet", javaFile.snippet),
+                aMarkdownFileWithAllDirectives(
+                    "README.md",
+                    "./docs",
+                    expectedToc,
+                    javaFile.fileName,
+                    "linkedFile",
+                    "snippet",
+                    javaFile.snippet
+                ),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithNav("02_SomeImportantStuff.md",
+                        aMarkdownFileWithNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithNav(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithNav("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithNav(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -67,27 +82,42 @@ fun aCorrectlyGeneratedFileWithLinksAndSnippets(basePath: String): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
         val javaFile = aJavaFileWithOneSnippet("source.java", "snippet")
         sutFileStructure.inDirectory(testDir)
             .with(
                 javaFile,
-                aMarkdownFileWithAllDirectivesAlreadyGenerated("README.md", "./docs", expectedToc,
-                    javaFile.fileName, "linkedFile",
-                    "snippet", javaFile.snippet),
+                aMarkdownFileWithAllDirectivesAlreadyGenerated(
+                    "README.md",
+                    "./docs",
+                    expectedToc,
+                    javaFile.fileName,
+                    "linkedFile",
+                    "snippet",
+                    javaFile.snippet
+                ),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithAlreadyGeneratedNav("02_SomeImportantStuff.md",
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithAlreadyGeneratedNav("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }

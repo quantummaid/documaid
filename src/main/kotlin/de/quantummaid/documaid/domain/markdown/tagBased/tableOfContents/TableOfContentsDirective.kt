@@ -64,7 +64,8 @@ class TableOfContentsDirectiveOptions(val tocScanBaseDirectory: Path) {
             directoryBasePath: Path,
             file: MarkdownFile
         ): TableOfContentsDirectiveOptions {
-            val optionsRegex = """ *\(? *(?<baseDir>[^ )]+) *\)? *""".toRegex()
+            val optionsRegex =
+                """ *\(? *(?<baseDir>[^ )]+) *\)? *""".toRegex()
             val matchResult = optionsRegex.matchEntire(optionsString.value)
             if (matchResult != null) {
                 val baseDirectoryPathString = matchResult.groups["baseDir"]!!.value

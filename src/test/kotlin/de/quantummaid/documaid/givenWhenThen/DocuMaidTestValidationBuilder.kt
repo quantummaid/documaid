@@ -24,9 +24,7 @@ import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.config.Platform
 import de.quantummaid.documaid.errors.ErrorsEncounteredInDokuMaidException
 import de.quantummaid.documaid.shared.filesystem.SutFileStructure
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.Assertions.*
 
 class DocuMaidTestValidationBuilder private constructor(
     private val testValidation: (testEnvironment: TestEnvironment) -> Unit

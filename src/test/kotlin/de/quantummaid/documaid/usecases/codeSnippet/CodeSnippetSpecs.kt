@@ -37,199 +37,245 @@ interface CodeSnippetSpecs {
 
     @Test
     fun canInsertSimpleCodeSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithASingleCodeSnippet(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithASingleCodeSnippet(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTwoSnippets(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithATwoCodeSnippets(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithATwoCodeSnippets(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTheSameSnippetsTwice(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithTheSameCodeSnippetTwice(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithTheSameCodeSnippetTwice(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTheSameSnippetsInMultipleFiles(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(filesWithTheSameCodeSnippet(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(filesWithTheSameCodeSnippet(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertTheSameSnippetsTwiceInDifferentFiles(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithTheSameCodeSnippetTwiceInDifferentFiles(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithTheSameCodeSnippetTwiceInDifferentFiles(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetFromAnXmlFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithACodeSnippetFromAnXmlFile(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithACodeSnippetFromAnXmlFile(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetFromAKotlinFile(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
+        given(
+            aDokuMaid()
                 .configuredWith(aFileWithACodeSnippetFromAKotlinFile(BASE_PATH))
                 .configuredwith(platformConfiguration)
-                .configuredWithGoal(Goal.GENERATE))
-                .`when`(theDokuIsPimped())
-                .then(expectAllFilesToBeCorrect())
+                .configuredWithGoal(Goal.GENERATE)
+        )
+            .`when`(theDokuIsPimped())
+            .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetWithComments(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithCommentsInCodeSnippet(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithCommentsInCodeSnippet(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canInsertACodeSnippetForAFullClass(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAFullClassSnippet(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAFullClassSnippet(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceAWrongCodeSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceTwoSnippets(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithTwoOutdatedCodeSnippets(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithTwoOutdatedCodeSnippets(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun failsForDuplicateSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(filesWithDuplicateCodeSnippets(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(filesWithDuplicateCodeSnippets(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
-                "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +
-                    "${absPath("duplicateSnippetsDirectory/snippetDuplicate1.java")}, " +
-                    absPath("duplicateSnippetsDirectory/snippetDuplicate2.xml"),
-                "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'tripleDuplicate': " +
-                    "${absPath("duplicateSnippetsDirectory/snippetTriplicate1.java")}, " +
-                    "${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate2.java")}, " +
-                    absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml")
-            ))
+            .then(
+                expectADocuMaidExceptionCollectingTheFollowingErrors(
+                    "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'doubleDuplicate': " +
+                        "${absPath("duplicateSnippetsDirectory/snippetDuplicate1.java")}, " +
+                        absPath("duplicateSnippetsDirectory/snippetDuplicate2.xml"),
+                    "Found [$CODE_SNIPPET_TAG] tags with duplicate snippet 'tripleDuplicate': " +
+                        "${absPath("duplicateSnippetsDirectory/snippetTriplicate1.java")}, " +
+                        "${absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate2.java")}, " +
+                        absPath("duplicateSnippetsDirectory/subDir/snippetTriplicate3.xml")
+                )
+            )
     }
 
     @Test
     fun canValidateCorrectSnippets(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aCorrectlyGeneratedFileWithOneCodeSnippet(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aCorrectlyGeneratedFileWithOneCodeSnippet(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectNoException())
     }
 
     @Test
     fun failsForWrongSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithWrongCodeSnippetPresent(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [$CODE_SNIPPET_TAG] tag with incorrect code for " +
-                    "'<!---[$CODE_SNIPPET_TAG] (snippet)-->' " +
-                    "(in path ${absPath("aFileWithWrongCodeSnippetPresent/wrongCodeSnippet.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$CODE_SNIPPET_TAG] tag with incorrect code for " +
+                        "'<!---[$CODE_SNIPPET_TAG] (snippet)-->' " +
+                        "(in path ${absPath("aFileWithWrongCodeSnippetPresent/wrongCodeSnippet.md")})"
+                )
+            )
     }
 
     @Test
     fun failsForMissingSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAMissingCodeSnippet(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAMissingCodeSnippet(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [$CODE_SNIPPET_TAG] tag with missing snippet for " +
-                    "'<!---[$CODE_SNIPPET_TAG] (testSnippet)-->' " +
-                "(in path ${absPath("aFileWithASingleCodeSnippet/md1.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [$CODE_SNIPPET_TAG] tag with missing snippet for " +
+                        "'<!---[$CODE_SNIPPET_TAG] (testSnippet)-->' " +
+                        "(in path ${absPath("aFileWithASingleCodeSnippet/md1.md")})"
+                )
+            )
     }
 
     @Test
     fun canCaptureMultipleErrors(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithMultipleCodeSnippetErrors(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithMultipleCodeSnippetErrors(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectADocuMaidExceptionCollectingTheFollowingErrors(
-                "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (snippet1)-->'" +
-                    " (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})",
-                "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (snippet2)-->' " +
-                    "(in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})"
-            ))
+            .then(
+                expectADocuMaidExceptionCollectingTheFollowingErrors(
+                    "Found [CodeSnippet] tag with incorrect code for '<!---[CodeSnippet] (snippet1)-->'" +
+                        " (in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})",
+                    "Found [CodeSnippet] tag with missing snippet for '<!---[CodeSnippet] (snippet2)-->' " +
+                        "(in path ${absPath("aFileWithMultipleCodeSnippetErrors/md1.md")})"
+                )
+            )
     }
 
     @Test
     fun canReplaceSimpleCodeSnippetAtTheEndOfFileWithoutNewline(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithASingleCodeSnippetAtTheEndOfFileWithoutNewLine(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithASingleCodeSnippetAtTheEndOfFileWithoutNewLine(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canReplaceCodeSnippetAtTheEndOfFileWithoutNewline(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithAlreadyExistingCodeSnippetAtTheEndOfFileWithoutNewLine(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithAlreadyExistingCodeSnippetAtTheEndOfFileWithoutNewLine(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
@@ -238,40 +284,48 @@ interface CodeSnippetSpecs {
     fun testThatASnippetDoesNotSwallowSubsequentSnippetsWithAnIdTheFirstIdIsAPrefix(
         platformConfiguration: PlatformConfiguration
     ) {
-        given(aDokuMaid()
-            .configuredWith(aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aFileWithTwoSnippetsWhereTheFirstOnesIdIsAPrefixForTheSecond(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canStripSuppressWarningAnnotationsFromSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aJavaFileWithSnippetWithSuppressWarning(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aJavaFileWithSnippetWithSuppressWarning(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canStripAMultipleSuppressWarningAnnotationsFromSnippet(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aJavaFileWithSnippetWithAMultipleSuppressWarning(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aJavaFileWithSnippetWithAMultipleSuppressWarning(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canStripANoSonarComments(platformConfiguration: PlatformConfiguration) {
-        given(aDokuMaid()
-            .configuredWith(aJavaFileWithSnippetWithNoSonarComments(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.GENERATE))
+        given(
+            aDokuMaid()
+                .configuredWith(aJavaFileWithSnippetWithNoSonarComments(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.GENERATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

@@ -38,10 +38,26 @@ fun aMarkdownFileWithOneArchetype(
     os: String? = null,
     lineBreakingChar: String = "\\"
 ): ProcessedFile {
-    val dependencyDirective = archetypeDirectiveMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
-    val dependencyMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+    val dependencyDirective = archetypeDirectiveMarkdown(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
+    val dependencyMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
 
     val contentInput = "Something\n" +
         dependencyDirective +
@@ -69,10 +85,26 @@ fun aMarkdownFileWithOneArchetypeAtEndOfFile(
     os: String? = null,
     lineBreakingChar: String = "\\"
 ): ProcessedFile {
-    val dependencyDirective = archetypeDirectiveMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
-    val dependencyMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+    val dependencyDirective = archetypeDirectiveMarkdown(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
+    val dependencyMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
 
     val contentInput = "Something\n" +
         dependencyDirective
@@ -98,19 +130,42 @@ fun aMarkdownFileWithWrongArchetype(
     os: String? = null,
     lineBreakingChar: String = "\\"
 ): ProcessedFile {
-    val dependencyDirective = archetypeDirectiveMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
+    val dependencyDirective = archetypeDirectiveMarkdown(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
     val wrongMarkdown = createMarkdownArchetype(
-        "different", "test", archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+        "different",
+        "test",
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
 
     val contentInput = "Something\n" +
         dependencyDirective +
         wrongMarkdown +
         "\nsome Text"
 
-    val correctMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+    val correctMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
     val expectedContent = "Something\n" +
         dependencyDirective +
         correctMarkdown +
@@ -134,17 +189,41 @@ fun aMarkdownFileWithWrongArchetypeAtEndOfFile(
     os: String? = null,
     lineBreakingChar: String = "\\"
 ): ProcessedFile {
-    val dependencyDirective = archetypeDirectiveMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
-    val wrongMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, "56.12.2", packaging, lineBreakingChar)
+    val dependencyDirective = archetypeDirectiveMarkdown(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
+    val wrongMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        "56.12.2",
+        packaging,
+        lineBreakingChar
+    )
 
     val contentInput = "Something\n" +
         dependencyDirective +
         wrongMarkdown
 
-    val correctMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+    val correctMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
     val expectedContent = "Something\n" +
         dependencyDirective +
         correctMarkdown
@@ -167,10 +246,26 @@ fun aMarkdownFileAlreadyGeneratedArchetype(
     os: String? = null,
     lineBreakingChar: String = "\\"
 ): ProcessedFile {
-    val dependencyDirective = archetypeDirectiveMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
-    val dependencyMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+    val dependencyDirective = archetypeDirectiveMarkdown(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
+    val dependencyMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
 
     val expectedContent = "Something\n" +
         dependencyDirective +
@@ -195,10 +290,26 @@ fun aMarkdownFileWithAlreadyGeneratedArchetypeAtEndOfFile(
     os: String? = null,
     lineBreakingChar: String = "\\"
 ): ProcessedFile {
-    val dependencyDirective = archetypeDirectiveMarkdown(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
-    val dependencyMarkdown = createMarkdownArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, lineBreakingChar)
+    val dependencyDirective = archetypeDirectiveMarkdown(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
+    val dependencyMarkdown = createMarkdownArchetype(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        lineBreakingChar
+    )
 
     val expectedContent = "Something\n" +
         dependencyDirective +
@@ -220,8 +331,16 @@ private fun archetypeDirectiveMarkdown(
     packaging: String,
     os: String? = null
 ): String {
-    val optionsString = createOptionsString(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-        groupId, artifactId, version, packaging, os)
+    val optionsString = createOptionsString(
+        archetypeGroupId,
+        archetypeArtifactId,
+        archetypeVersion,
+        groupId,
+        artifactId,
+        version,
+        packaging,
+        os
+    )
     return "<!---[Archetype]$optionsString-->\n"
 }
 

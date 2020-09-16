@@ -51,8 +51,11 @@ data class HugoDocumentationGenerationInformation constructor(
             levelWithinDocu: Int
         ): HugoDocumentationGenerationInformation {
             val absolutePath = directory.absolutePath()
-            return HugoDocumentationGenerationInformation(absolutePath,
-                directory, levelWithinDocumentation = levelWithinDocu)
+            return HugoDocumentationGenerationInformation(
+                absolutePath,
+                directory,
+                levelWithinDocumentation = levelWithinDocu
+            )
         }
     }
 }

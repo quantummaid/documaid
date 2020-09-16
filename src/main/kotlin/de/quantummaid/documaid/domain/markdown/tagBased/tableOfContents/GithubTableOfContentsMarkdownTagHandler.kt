@@ -35,7 +35,8 @@ import de.quantummaid.documaid.preparing.tableOfContents.TableOfContentsLookupDa
 class GithubTableOfContentsMarkdownTagHandler : MarkdownTagHandler {
 
     companion object {
-        val INDEX_MARKDOWN_FILE_NAME_PATTERN = """(?<index>([1-9]|[\d]{2,}))_+(?<name>[\w]+)(\.md)?""".toRegex()
+        val INDEX_MARKDOWN_FILE_NAME_PATTERN =
+            """(?<index>([1-9]|[\d]{2,}))_+(?<name>[\w]+)(\.md)?""".toRegex()
     }
 
     override fun tag(): String = TOC_TAG.toString()

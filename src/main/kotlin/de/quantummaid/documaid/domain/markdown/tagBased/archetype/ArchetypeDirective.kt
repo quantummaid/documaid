@@ -66,17 +66,20 @@ class ArchetypeDirectiveOptions(
 ) {
 
     companion object {
-        private val ARCHETYPE_OPTIONS_REGEX = ("\\(? *" +
-            "(?<archetypeGroupId>archetypeGroupId(=[^ ]*)?) *" +
-            "(?<archetypeArtifactId>archetypeArtifactId(=[^ ]*)?) *" +
-            "(?<archetypeVersion>archetypeVersion(=[^ ]*)?) *" +
-            "(?<groupId>groupId=[^ ]*) *" +
-            "(?<artifactId>artifactId=[^ ]*) *" +
-            "(?<version>version=[^ ]*) *" +
-            "(?<packaging>packaging=[^ ]*) *" +
-            "(?<os>os=[^ ]*)? *" +
-            "\\)?").toRegex()
-        private val PROPERTY_VALUE_REGEX = """[\w]+=(?<value>.+)""".toRegex()
+        private val ARCHETYPE_OPTIONS_REGEX = (
+            "\\(? *" +
+                "(?<archetypeGroupId>archetypeGroupId(=[^ ]*)?) *" +
+                "(?<archetypeArtifactId>archetypeArtifactId(=[^ ]*)?) *" +
+                "(?<archetypeVersion>archetypeVersion(=[^ ]*)?) *" +
+                "(?<groupId>groupId=[^ ]*) *" +
+                "(?<artifactId>artifactId=[^ ]*) *" +
+                "(?<version>version=[^ ]*) *" +
+                "(?<packaging>packaging=[^ ]*) *" +
+                "(?<os>os=[^ ]*)? *" +
+                "\\)?"
+            ).toRegex()
+        private val PROPERTY_VALUE_REGEX =
+            """[\w]+=(?<value>.+)""".toRegex()
 
         fun create(
             rawMarkdownDirective: RawMarkdownDirective,
@@ -108,8 +111,15 @@ class ArchetypeDirectiveOptions(
             val version = extractVersion(matchEntire, file)
             val packaging = extractPackaging(matchEntire, file)
             val osType = extractOsType(matchEntire)
-            val archetype = Archetype(archetypeGroupId, archetypeArtifactId, archetypeVersion,
-                groupId, artifactId, version, packaging)
+            val archetype = Archetype(
+                archetypeGroupId,
+                archetypeArtifactId,
+                archetypeVersion,
+                groupId,
+                artifactId,
+                version,
+                packaging
+            )
             return Pair(osType, archetype)
         }
 

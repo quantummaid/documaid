@@ -21,9 +21,9 @@
 package de.quantummaid.documaid
 
 import de.quantummaid.documaid.config.Goal
+import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
 import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder.Companion.aDokuMaid
-import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAllFilesToBeCorrect
 import de.quantummaid.documaid.givenWhenThen.given
 import org.junit.jupiter.api.Test
 
@@ -31,20 +31,24 @@ class GeneralDocuMaidCodeSpecs {
 
     @Test
     fun canProcessMultipleFilesWithGenerationGoal() {
-        given(aDokuMaid()
-            .configuredWith(severalFilesWithLinksAndSnippets(BASE_PATH))
-            .configuredWithGoal(Goal.GENERATE)
-            .configuredWithBasePath(BASE_PATH))
+        given(
+            aDokuMaid()
+                .configuredWith(severalFilesWithLinksAndSnippets(BASE_PATH))
+                .configuredWithGoal(Goal.GENERATE)
+                .configuredWithBasePath(BASE_PATH)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }
 
     @Test
     fun canExecuteAllProcessForValidationFile() {
-        given(aDokuMaid()
-            .configuredWith(aCorrectlyGeneratedFileWithLinksAndSnippets(BASE_PATH))
-            .configuredWithGoal(Goal.VALIDATE)
-            .configuredWithBasePath(BASE_PATH))
+        given(
+            aDokuMaid()
+                .configuredWith(aCorrectlyGeneratedFileWithLinksAndSnippets(BASE_PATH))
+                .configuredWithGoal(Goal.VALIDATE)
+                .configuredWithBasePath(BASE_PATH)
+        )
             .`when`(theDokuIsPimped())
             .then(expectAllFilesToBeCorrect())
     }

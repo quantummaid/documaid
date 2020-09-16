@@ -27,11 +27,7 @@ import de.quantummaid.documaid.domain.markdown.MarkdownFile
 import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
 import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.markdown.tagBased.plugin.PluginDirective.Companion.PLUGIN_TAG
-import de.quantummaid.documaid.domain.maven.ArtifactId
-import de.quantummaid.documaid.domain.maven.GroupId
-import de.quantummaid.documaid.domain.maven.MavenGoal
-import de.quantummaid.documaid.domain.maven.MavenPhase
-import de.quantummaid.documaid.domain.maven.Version
+import de.quantummaid.documaid.domain.maven.*
 import de.quantummaid.documaid.errors.DocuMaidException.Companion.aDocuMaidException
 
 class PluginDirective private constructor(
@@ -73,7 +69,8 @@ class DependencyDirectiveOptions(
             "(?<version>version(=[^ ]*)?) *" +
             "(?<goal>goal=[^ ]*) *" +
             "(?<phase>phase=[^ ]*) *\\)?"
-        private val PROPERTY_VALUE_REGEX = """[\w]+=(?<value>.+)""".toRegex()
+        private val PROPERTY_VALUE_REGEX =
+            """[\w]+=(?<value>.+)""".toRegex()
 
         fun create(
             rawMarkdownDirective: RawMarkdownDirective,

@@ -22,11 +22,7 @@ package de.quantummaid.documaid.usecases.hugo.heading
 
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithADifferentH1Heading
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithExistingH1Heading
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithH1Heading
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithH2Heading
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTextBeforeHeading
+import de.quantummaid.documaid.shared.samplesFiles.*
 
 fun aFileWithH1Heading(basePath: String): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aFileWithH1Heading")

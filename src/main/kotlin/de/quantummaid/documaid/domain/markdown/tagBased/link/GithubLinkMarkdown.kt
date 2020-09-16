@@ -32,7 +32,8 @@ class GithubLinkMarkdown private constructor(
 ) {
 
     companion object {
-        val LINK_PATTERN = """\n? *\[ *[^]]+ *] *\([^)]*\)""".toRegex()
+        val LINK_PATTERN =
+            """\n? *\[ *[^]]+ *] *\([^)]*\)""".toRegex()
 
         fun create(linkDirective: LinkDirective): GithubLinkMarkdown {
             val name = linkDirective.options.name

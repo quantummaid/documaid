@@ -24,13 +24,7 @@ import de.quantummaid.documaid.shared.filesystem.EmptySutFile
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongNav
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongNavAtEndOfFile
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAlreadyGeneratedNav
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithNav
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithNavAtEndOfLineWithoutNewLine
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithToc
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTocAlreadyGenerated
+import de.quantummaid.documaid.shared.samplesFiles.*
 import java.nio.file.Path
 
 const val S = "&nbsp;&nbsp;&nbsp;"
@@ -40,25 +34,34 @@ fun aTocTagInReadmeAndMultipleMarkdownFilesWithNavigationDirectives(basePath: Pa
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", "./docs", expectedToc),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithNav("02_SomeImportantStuff.md",
+                        aMarkdownFileWithNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithNav(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithNav("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithNav(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -67,7 +70,8 @@ fun aTocTagInReadmeWithADeeplyNestedStructure(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. Docs
                          1. [A](1_docs/1_A.md)
                          2. [B](1_docs/2_B.md)
@@ -88,42 +92,74 @@ fun aTocTagInReadmeWithADeeplyNestedStructure(basePath: Path): SetupUpdate {
                              1. [J](6_nested/1_nested/1_J.md)
                          2. Nested
                              1. [K](6_nested/2_nested/1_K.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", expectedToc),
                 SutDirectory.aDirectory("1_docs").with(
-                    aMarkdownFileWithNav("1_A.md",
-                        "[Overview](../README.md)$S[&rarr;](2_B.md)"),
-                    aMarkdownFileWithNav("2_B.md",
-                        "[&larr;](1_A.md)$S[Overview](../README.md)$S[&rarr;](3_docsLittle/1_C.md)"),
+                    aMarkdownFileWithNav(
+                        "1_A.md",
+                        "[Overview](../README.md)$S[&rarr;](2_B.md)"
+                    ),
+                    aMarkdownFileWithNav(
+                        "2_B.md",
+                        "[&larr;](1_A.md)$S[Overview](../README.md)$S[&rarr;](3_docsLittle/1_C.md)"
+                    ),
                     SutDirectory.aDirectory("3_docsLittle").with(
-                        aMarkdownFileWithNav("1_C.md",
-                            "[&larr;](../2_B.md)$S[Overview](../../README.md)$S[&rarr;](../../2_D.md)"))),
-                aMarkdownFileWithNav("2_D.md",
-                    "[&larr;](1_docs/3_docsLittle/1_C.md)$S[Overview](README.md)$S[&rarr;](3_E.md)"),
-                aMarkdownFileWithNav("3_E.md",
-                    "[&larr;](2_D.md)$S[Overview](README.md)$S[&rarr;](4_legacy/1_deep/1_deep_2/1_F.md)"),
+                        aMarkdownFileWithNav(
+                            "1_C.md",
+                            "[&larr;](../2_B.md)$S[Overview](../../README.md)$S[&rarr;](../../2_D.md)"
+                        )
+                    )
+                ),
+                aMarkdownFileWithNav(
+                    "2_D.md",
+                    "[&larr;](1_docs/3_docsLittle/1_C.md)$S[Overview](README.md)$S[&rarr;](3_E.md)"
+                ),
+                aMarkdownFileWithNav(
+                    "3_E.md",
+                    "[&larr;](2_D.md)$S[Overview](README.md)$S[&rarr;](4_legacy/1_deep/1_deep_2/1_F.md)"
+                ),
                 SutDirectory.aDirectory("4_legacy").with(
                     SutDirectory.aDirectory("1_deep").with(
                         SutDirectory.aDirectory("1_deep_2").with(
-                            aMarkdownFileWithNav("1_F.md",
-                                "[&larr;](../../../3_E.md)$S[Overview](../../../README.md)$S[&rarr;](../../2_G.md)"))),
-                    aMarkdownFileWithNav("2_G.md",
-                        "[&larr;](1_deep/1_deep_2/1_F.md)$S[Overview](../README.md)$S[&rarr;](3_deep/1_H.md)"),
+                            aMarkdownFileWithNav(
+                                "1_F.md",
+                                "[&larr;](../../../3_E.md)$S[Overview](../../../README.md)$S[&rarr;](../../2_G.md)"
+                            )
+                        )
+                    ),
+                    aMarkdownFileWithNav(
+                        "2_G.md",
+                        "[&larr;](1_deep/1_deep_2/1_F.md)$S[Overview](../README.md)$S[&rarr;](3_deep/1_H.md)"
+                    ),
                     SutDirectory.aDirectory("3_deep").with(
-                        aMarkdownFileWithNav("1_H.md",
-                            "[&larr;](../2_G.md)$S[Overview](../../README.md)$S[&rarr;](../../5_I.md)"))),
-                aMarkdownFileWithNav("5_I.md",
-                    "[&larr;](4_legacy/3_deep/1_H.md)$S[Overview](README.md)$S[&rarr;](6_nested/1_nested/1_J.md)"),
+                        aMarkdownFileWithNav(
+                            "1_H.md",
+                            "[&larr;](../2_G.md)$S[Overview](../../README.md)$S[&rarr;](../../5_I.md)"
+                        )
+                    )
+                ),
+                aMarkdownFileWithNav(
+                    "5_I.md",
+                    "[&larr;](4_legacy/3_deep/1_H.md)$S[Overview](README.md)$S[&rarr;](6_nested/1_nested/1_J.md)"
+                ),
                 SutDirectory.aDirectory("6_nested").with(
                     SutDirectory.aDirectory("1_nested").with(
-                        aMarkdownFileWithNav("1_J.md",
-                            "[&larr;](../../5_I.md)$S[Overview](../../README.md)$S[&rarr;](../2_nested/1_K.md)")),
+                        aMarkdownFileWithNav(
+                            "1_J.md",
+                            "[&larr;](../../5_I.md)$S[Overview](../../README.md)$S[&rarr;](../2_nested/1_K.md)"
+                        )
+                    ),
                     SutDirectory.aDirectory("2_nested").with(
-                        aMarkdownFileWithNav("1_K.md",
-                            "[&larr;](../1_nested/1_J.md)$S[Overview](../../README.md)"))))
+                        aMarkdownFileWithNav(
+                            "1_K.md",
+                            "[&larr;](../1_nested/1_J.md)$S[Overview](../../README.md)"
+                        )
+                    )
+                )
+            )
     }
 }
 
@@ -132,17 +168,19 @@ fun aTocInReadmeWithAnIndexFileWithoutNavigation(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", expectedToc),
                 EmptySutFile.aFile("1_error.md"),
-                aMarkdownFileWithNav("02_SomeImportantStuff.md", ""))
+                aMarkdownFileWithNav("02_SomeImportantStuff.md", "")
+            )
     }
 }
 
@@ -151,11 +189,12 @@ fun aTocInReadmeWithFileWithNavigationButNotIndexedByToc(basePath: Path): SetupU
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -163,7 +202,9 @@ fun aTocInReadmeWithFileWithNavigationButNotIndexedByToc(basePath: Path): SetupU
                 aMarkdownFileWithNav("1_error.md", ""),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithNav("1_Introduction.md", "")))
+                        aMarkdownFileWithNav("1_Introduction.md", "")
+                    )
+            )
     }
 }
 
@@ -173,7 +214,8 @@ fun aFileWithNavigationButNoFileWithToc(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithNav("1_error.md", ""))
+                aMarkdownFileWithNav("1_error.md", "")
+            )
     }
 }
 
@@ -182,25 +224,34 @@ fun aReadmeWithTocAndSeveralFilesWithCorrectNavigation(basePath: Path): SetupUpd
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithTocAlreadyGenerated("README.md", "./docs", expectedToc),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithAlreadyGeneratedNav("02_SomeImportantStuff.md",
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithAlreadyGeneratedNav("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -209,25 +260,34 @@ fun aReadmeWithTocAndAFileWithMissingNav(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithTocAlreadyGenerated("README.md", "./docs", expectedToc),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithNav("02_SomeImportantStuff.md",
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithNav(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithAlreadyGeneratedNav("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -236,25 +296,34 @@ fun aReadmeWithTocAndAFileWithWrongNav(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithTocAlreadyGenerated("README.md", "./docs", expectedToc),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithAlreadyGeneratedNav("02_SomeImportantStuff.md",
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithAWrongNav("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithAWrongNav(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -264,25 +333,34 @@ fun aTocTagInReadmeAndNavigationTagAtEndOfFileWithoutNewLine(basePath: Path): Se
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", "./docs", expectedToc),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine("02_SomeImportantStuff.md",
+                        aMarkdownFileWithNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -292,25 +370,34 @@ fun aTocTagInReadmeAndWrongNavigationTagAtEndOfFileWithoutNewLine(basePath: Path
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", "./docs", expectedToc),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"),
-                        aMarkdownFileWithAWrongNavAtEndOfFile("02_SomeImportantStuff.md",
+                        aMarkdownFileWithNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        ),
+                        aMarkdownFileWithAWrongNavAtEndOfFile(
+                            "02_SomeImportantStuff.md",
                             "[&larr;](1_Introduction.md)" +
                                 "$S[Overview](../README.md)$S" +
-                                "[&rarr;](003_ADifferentChapter.md)"),
-                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine("003_ADifferentChapter.md",
-                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)")))
+                                "[&rarr;](003_ADifferentChapter.md)"
+                        ),
+                        aMarkdownFileWithNavAtEndOfLineWithoutNewLine(
+                            "003_ADifferentChapter.md",
+                            "[&larr;](02_SomeImportantStuff.md)$S[Overview](../README.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -323,8 +410,12 @@ fun aReadmeWithAMissingTocAndASingleWithCorrectNavigationForHugo(basePath: Path)
                 aMarkdownFileWithToc("README.md", "./docs", ""),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithAlreadyGeneratedNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)")))
+                        aMarkdownFileWithAlreadyGeneratedNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -338,8 +429,12 @@ fun aReadmeWithTocAndAFileWithASingleWrongNavForHugo(basePath: Path): SetupUpdat
                 aMarkdownFileWithToc("README.md", "./docs", ""),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithAWrongNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)")))
+                        aMarkdownFileWithAWrongNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        )
+                    )
+            )
     }
 }
 
@@ -352,7 +447,11 @@ fun aReadmeWithTocAndAFileWithASingleMissingNavForHugo(basePath: Path): SetupUpd
                 aMarkdownFileWithTocAlreadyGenerated("README.md", "./docs", ""),
                 SutDirectory.aDirectory("docs")
                     .with(
-                        aMarkdownFileWithNav("1_Introduction.md",
-                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)")))
+                        aMarkdownFileWithNav(
+                            "1_Introduction.md",
+                            "[Overview](../README.md)$S[&rarr;](02_SomeImportantStuff.md)"
+                        )
+                    )
+            )
     }
 }

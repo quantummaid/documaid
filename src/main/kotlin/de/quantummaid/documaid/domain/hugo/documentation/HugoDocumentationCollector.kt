@@ -22,11 +22,7 @@ package de.quantummaid.documaid.domain.hugo.documentation
 
 import de.quantummaid.documaid.assumptions.HugoDocumentationAssumptions.Companion.DOCUMENTATION_DIRECTORY
 import de.quantummaid.documaid.assumptions.HugoDocumentationAssumptions.Companion.INDEX_MD_FILE_NAME
-import de.quantummaid.documaid.collecting.structure.CollectedInformationKey
-import de.quantummaid.documaid.collecting.structure.Directory
-import de.quantummaid.documaid.collecting.structure.FileObjectVisitorAdapter
-import de.quantummaid.documaid.collecting.structure.Project
-import de.quantummaid.documaid.collecting.structure.ProjectFile
+import de.quantummaid.documaid.collecting.structure.*
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.DOCUMENTATION_GEN_INFO_KEY
 import de.quantummaid.documaid.domain.hugo.documentation.HugoDocumentationGenerationInformation.Companion.DOCUMENTATION_MAX_LEVEL

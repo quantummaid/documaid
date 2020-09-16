@@ -26,12 +26,8 @@ import de.quantummaid.documaid.collecting.structure.ProjectFile
 import de.quantummaid.documaid.config.DocuMaidConfiguration
 import de.quantummaid.documaid.domain.markdown.syntaxBased.SyntaxBasedMarkdownHandler
 import de.quantummaid.documaid.domain.markdown.syntaxBased.hugo.SyntaxBasedMarkdownHandlerFactory
-import de.quantummaid.documaid.domain.markdown.tagBased.DirectiveTag
-import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownReplacement
-import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandler
+import de.quantummaid.documaid.domain.markdown.tagBased.*
 import de.quantummaid.documaid.domain.markdown.tagBased.MarkdownTagHandlerFactory.Companion.obtainMarkdownHandlersFor
-import de.quantummaid.documaid.domain.markdown.tagBased.OptionsString
-import de.quantummaid.documaid.domain.markdown.tagBased.RawMarkdownDirective
 import de.quantummaid.documaid.domain.snippet.RawSnippet
 import de.quantummaid.documaid.errors.DocuMaidException
 import de.quantummaid.documaid.errors.VerificationError

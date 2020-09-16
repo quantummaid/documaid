@@ -60,8 +60,10 @@ class ArchetypeMarkdown private constructor(
     }
 
     fun markdownString(): String {
-        val (archetypeGroupId, archetypeArtifactId, archetypeVersion,
-            groupId, artifactId, version, packaging) = archetype
+        val (
+            archetypeGroupId, archetypeArtifactId, archetypeVersion,
+            groupId, artifactId, version, packaging
+        ) = archetype
         return "```xml\n" +
             "mvn archetype:generate ${commandNewLine.value}" +
             "    --batch-mode ${commandNewLine.value}" +

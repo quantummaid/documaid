@@ -24,11 +24,7 @@ import de.quantummaid.documaid.shared.filesystem.EmptySutFile.Companion.aFile
 import de.quantummaid.documaid.shared.filesystem.SetupUpdate
 import de.quantummaid.documaid.shared.filesystem.SutDirectory.Companion.aDirectory
 import de.quantummaid.documaid.shared.filesystem.TemporaryTestDirectory.Companion.aTemporyTestDirectory
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongToc
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithAWrongTocAtEndOfFile
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithToc
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTocAlreadyGenerated
-import de.quantummaid.documaid.shared.samplesFiles.aMarkdownFileWithTocAtTheEndOfFileWithoutNewLine
+import de.quantummaid.documaid.shared.samplesFiles.*
 import java.nio.file.Path
 
 fun aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(basePath: Path): SetupUpdate {
@@ -36,12 +32,13 @@ fun aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(basePath: Path): Setu
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
                      4. [Final chapter](docs/04_FinalChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -51,7 +48,9 @@ fun aTocTagInReadmeAndMultipleMarkdownFilesInDocsDirectory(basePath: Path): Setu
                         aFile("1_Introduction.md"),
                         aFile("003_ADifferentChapter.md"),
                         aFile("02_SomeImportantStuff.md"),
-                        aFile("04_FinalChapter.md")))
+                        aFile("04_FinalChapter.md")
+                    )
+            )
     }
 }
 
@@ -60,16 +59,18 @@ fun aTocTagInReadmeFromSameDirectory(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](1_Introduction.md)
                      2. [A a a](2_AAA.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
                 aMarkdownFileWithToc("README.md", ".", expectedToc),
                 aFile("2_AAA.md"),
-                aFile("1_Introduction.md"))
+                aFile("1_Introduction.md")
+            )
     }
 }
 
@@ -77,7 +78,8 @@ fun aTocTagInReadmeWithMultipleNestedDirectories(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithMultipleNestedDirectories")
 
     return { (_, sutFileStructure) ->
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
                          1. [First docs](02_docs/1_FirstDocs.md)
@@ -91,7 +93,7 @@ fun aTocTagInReadmeWithMultipleNestedDirectories(basePath: Path): SetupUpdate {
                              2. [Second nested](4_legacy/002_nested/2_SecondNested.md)
                              3. [Third nested](4_legacy/002_nested/3_ThirdNested.md)
                          3. [Third legacy](4_legacy/3_ThirdLegacy.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -112,7 +114,10 @@ fun aTocTagInReadmeWithMultipleNestedDirectories(basePath: Path): SetupUpdate {
                             .with(
                                 aFile("1_FirstNested.md"),
                                 aFile("3_ThirdNested.md"),
-                                aFile("2_SecondNested.md"))))
+                                aFile("2_SecondNested.md")
+                            )
+                    )
+            )
     }
 }
 
@@ -120,14 +125,15 @@ fun aTocTagInReadmeWithNotIndexedMarkdownFiles(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithNotIndexedMarkdownFiles")
 
     return { (_, sutFileStructure) ->
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
                          1. [First docs](02_docs/1_FirstDocs.md)
                          2. [Second docs](02_docs/2_SecondDocs.md)
                      3. Legacy
                          1. [First legacy](3_legacy/1_FirstLegacy.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -144,7 +150,9 @@ fun aTocTagInReadmeWithNotIndexedMarkdownFiles(basePath: Path): SetupUpdate {
                 aDirectory("3_legacy")
                     .with(
                         aFile("1_FirstLegacy.md"),
-                        aFile("notIndexed.md")))
+                        aFile("notIndexed.md")
+                    )
+            )
     }
 }
 
@@ -152,12 +160,13 @@ fun aTocTagInReadmeWithGeneratedOverviewFile(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocTagInReadmeWithGeneratedOverviewFile")
 
     return { (_, sutFileStructure) ->
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
                          1. [First docs](02_docs/1_FirstDocs.md)
                          2. [Second docs](02_docs/2_SecondDocs.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -183,7 +192,8 @@ fun aTocTagInReadmeWithTheSameIndexTwice(basePath: Path): SetupUpdate {
                 aMarkdownFileWithToc("README.md", ".", ""),
                 aFile("1_Introduction.md"),
                 aFile("2_One.md"),
-                aFile("2_Two.md"))
+                aFile("2_Two.md")
+            )
     }
 }
 
@@ -195,7 +205,8 @@ fun aTocTagInReadmeWithMissingIndex(basePath: Path): SetupUpdate {
             .with(
                 aMarkdownFileWithToc("README.md", ".", "null"),
                 aFile("1_Introduction.md"),
-                aFile("3_Three.md"))
+                aFile("3_Three.md")
+            )
     }
 }
 
@@ -211,7 +222,9 @@ fun aTocTagInReadmeWithTheSameIndexTwiceInSubDirectory(basePath: Path): SetupUpd
                     .with(
                         aFile("1_FirstDocs.md"),
                         aFile("2_SecondDocs.md"),
-                        aFile("2_Double.md")))
+                        aFile("2_Double.md")
+                    )
+            )
     }
 }
 
@@ -228,7 +241,9 @@ fun aTocTagInReadmeWithMissingIndexInSubDirectory(basePath: Path): SetupUpdate {
                         aFile("1_FirstDocs.md"),
                         aFile("3_Three.md"),
                         aFile("4_Four.md"),
-                        aFile("5_Five.md")))
+                        aFile("5_Five.md")
+                    )
+            )
     }
 }
 
@@ -238,7 +253,8 @@ fun aTocTagInReadmeWithNotExistingScanDirectory(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", "notExisting/", ""))
+                aMarkdownFileWithToc("README.md", "notExisting/", "")
+            )
     }
 }
 
@@ -249,19 +265,21 @@ fun aTocTagInReadmeWithMalFormedOptions(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", notACorrectOptionsString, "null"))
+                aMarkdownFileWithToc("README.md", notACorrectOptionsString, "null")
+            )
     }
 }
 
 fun aTocInReadmeWithCorrectToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocInReadmeWithCorrectToc")
 
-    val expectedToc = """
+    val expectedToc =
+        """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
                          1. [First docs](02_docs/1_FirstDocs.md)
                          2. [Second docs](02_docs/2_SecondDocs.md)
-                """.trimIndent()
+        """.trimIndent()
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -272,7 +290,9 @@ fun aTocInReadmeWithCorrectToc(basePath: Path): SetupUpdate {
                     .with(
                         aFile("0_Overview.md"),
                         aFile("1_FirstDocs.md"),
-                        aFile("2_SecondDocs.md")))
+                        aFile("2_SecondDocs.md")
+                    )
+            )
     }
 }
 
@@ -282,18 +302,20 @@ fun aTocInReadmeWithMissingToc(basePath: Path): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithToc("README.md", ".", ""))
+                aMarkdownFileWithToc("README.md", ".", "")
+            )
     }
 }
 
 fun aTocInReadmeWithIncorrectToc(basePath: Path): SetupUpdate {
     val testDir = aTemporyTestDirectory(basePath, "aTocInReadmeWithIncorrectToc")
-    val expectedToc = """
+    val expectedToc =
+        """
                      1. [Introduction](1_Introduction.md)
                      2. Docs
                          1. [First docs](02_docs/1_FirstDocs.md)
                          2. [Second docs](02_docs/2_SecondDocs.md)
-                """.trimIndent()
+        """.trimIndent()
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -304,7 +326,9 @@ fun aTocInReadmeWithIncorrectToc(basePath: Path): SetupUpdate {
                     .with(
                         aFile("0_Overview.md"),
                         aFile("1_FirstDocs.md"),
-                        aFile("2_SecondDocs.md")))
+                        aFile("2_SecondDocs.md")
+                    )
+            )
     }
 }
 
@@ -313,12 +337,13 @@ fun aTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
                      4. [Final chapter](docs/04_FinalChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -328,7 +353,9 @@ fun aTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
                         aFile("1_Introduction.md"),
                         aFile("003_ADifferentChapter.md"),
                         aFile("02_SomeImportantStuff.md"),
-                        aFile("04_FinalChapter.md")))
+                        aFile("04_FinalChapter.md")
+                    )
+            )
     }
 }
 
@@ -337,12 +364,13 @@ fun aWrongTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
 
     return { (_, sutFileStructure) ->
 
-        val expectedToc = """
+        val expectedToc =
+            """
                      1. [Introduction](docs/1_Introduction.md)
                      2. [Some important stuff](docs/02_SomeImportantStuff.md)
                      3. [A different chapter](docs/003_ADifferentChapter.md)
                      4. [Final chapter](docs/04_FinalChapter.md)
-                """.trimIndent()
+            """.trimIndent()
 
         sutFileStructure.inDirectory(testDir)
             .with(
@@ -352,6 +380,8 @@ fun aWrongTocTagAtTheEndOfFileWithoutNewline(basePath: Path): SetupUpdate {
                         aFile("1_Introduction.md"),
                         aFile("003_ADifferentChapter.md"),
                         aFile("02_SomeImportantStuff.md"),
-                        aFile("04_FinalChapter.md")))
+                        aFile("04_FinalChapter.md")
+                    )
+            )
     }
 }

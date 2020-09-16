@@ -30,7 +30,7 @@ class SnippetsCollector : FileObjectVisitorAdapter() {
 
     override fun fileVisited(file: ProjectFile) {
         file.snippets()
-                .forEach { snippetsLookupTable.registerSnippet(it.id, file.absolutePath()) }
+            .forEach { snippetsLookupTable.registerSnippet(it.id, file.absolutePath()) }
     }
 
     override fun finishTreeWalk(project: Project) {

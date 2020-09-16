@@ -31,12 +31,14 @@ class SampleKotlinFileWithOneSnippet private constructor(
 
     companion object {
         fun aKotlinFileWithOneSnippet(fileName: String, snippetId: String): SampleKotlinFileWithOneSnippet {
-            val snippet = """
+            val snippet =
+                """
 fun foo(): String {
     return "bar"
 }
 """.trim()
-            val content = """
+            val content =
+                """
 //Showcase start $snippetId
 $snippet
 //Showcase end $snippetId

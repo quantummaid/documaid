@@ -33,8 +33,13 @@ fun aFileWithASingleFullyDefinedDependency(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneDependency("dependency.md",
-                    groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile")
+                aMarkdownFileWithOneDependency(
+                    "dependency.md",
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    scope = "compile"
+                )
             )
     }
 }
@@ -79,8 +84,13 @@ fun aFileWithACorrectlyGeneratedDependency(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithAnAlreadyGeneratedDependency("dependency.md",
-                    groupId = "com.local", artifactId = "test-project", version = "2.4-SNAPSHOT", scope = "provided")
+                aMarkdownFileWithAnAlreadyGeneratedDependency(
+                    "dependency.md",
+                    groupId = "com.local",
+                    artifactId = "test-project",
+                    version = "2.4-SNAPSHOT",
+                    scope = "provided"
+                )
             )
     }
 }
@@ -91,7 +101,8 @@ fun aFileWithDependencyWithMissingCode(basePath: String): SetupUpdate {
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneDependency("dependency.md", artifactId = "test", version = "1", scope = "compile"))
+                aMarkdownFileWithOneDependency("dependency.md", artifactId = "test", version = "1", scope = "compile")
+            )
     }
 }
 
@@ -101,17 +112,30 @@ fun aFileWithASingleDependencyAtTheEndOfFileWithoutNewLine(basePath: String): Se
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline("dependency.md",
-                    groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile"))
+                aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline(
+                    "dependency.md",
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    scope = "compile"
+                )
+            )
     }
 }
+
 fun aFileWithAWrongDependencyAtTheEndOfFileWithoutNewLine(basePath: String): SetupUpdate {
     val testDir = TemporaryTestDirectory.aTemporyTestDirectory(basePath, "aFileWithASingleFullyDefinedDependency")
 
     return { (_, sutFileStructure) ->
         sutFileStructure.inDirectory(testDir)
             .with(
-                aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline("dependency.md",
-                    groupId = "local", artifactId = "test", version = "1.0.0", scope = "compile"))
+                aMarkdownFileWithOneDependencyAtTheEndOfFileWithoutNewline(
+                    "dependency.md",
+                    groupId = "local",
+                    artifactId = "test",
+                    version = "1.0.0",
+                    scope = "compile"
+                )
+            )
     }
 }

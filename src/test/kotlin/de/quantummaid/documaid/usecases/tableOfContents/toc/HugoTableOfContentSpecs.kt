@@ -21,10 +21,10 @@
 package de.quantummaid.documaid.usecases.tableOfContents.toc
 
 import de.quantummaid.documaid.config.Goal
-import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
-import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
 import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectAnExceptionWithMessage
 import de.quantummaid.documaid.givenWhenThen.DocuMaidTestValidationBuilder.Companion.expectNoException
+import de.quantummaid.documaid.givenWhenThen.DokuMaidActionTestBuilder.Companion.theDokuIsPimped
+import de.quantummaid.documaid.givenWhenThen.DokuMaidTestBuilder
 import de.quantummaid.documaid.givenWhenThen.given
 import de.quantummaid.documaid.shared.testparams.HugoPlatformProvider
 import de.quantummaid.documaid.shared.testparams.PlatformConfiguration
@@ -37,23 +37,30 @@ class HugoTableOfContentSpecs : TableOfContentSpecs {
 
     @Test
     override fun tocVerificationWithMissingToc(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aTocInReadmeWithMissingToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aTocInReadmeWithMissingToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
             .then(expectNoException())
     }
 
     @Test
     override fun tocVerificationForValidToc(platformConfiguration: PlatformConfiguration) {
-        given(DokuMaidTestBuilder.aDokuMaid()
-            .configuredWith(aTocInReadmeWithCorrectToc(BASE_PATH))
-            .configuredwith(platformConfiguration)
-            .configuredWithGoal(Goal.VALIDATE))
+        given(
+            DokuMaidTestBuilder.aDokuMaid()
+                .configuredWith(aTocInReadmeWithCorrectToc(BASE_PATH))
+                .configuredwith(platformConfiguration)
+                .configuredWithGoal(Goal.VALIDATE)
+        )
             .`when`(theDokuIsPimped())
-            .then(expectAnExceptionWithMessage(
-                "Found [TOC] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithCorrectToc/README.md")})"))
+            .then(
+                expectAnExceptionWithMessage(
+                    "Found [TOC] tag with incorrect TOC (in path ${absPath("aTocInReadmeWithCorrectToc/README.md")})"
+                )
+            )
     }
 
     companion object {
