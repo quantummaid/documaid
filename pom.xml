@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.36</version>
+    <version>0.9.37</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -76,7 +76,7 @@
 
     <properties>
         <kotlin.version>1.4.0</kotlin.version>
-        <klint-plugin-version>1.6.1</klint-plugin-version>
+        <klint-plugin-version>1.7.0</klint-plugin-version>
         <kotlin.version>1.4.10</kotlin.version>
         <maven-clean-plugin-version>3.1.0</maven-clean-plugin-version>
         <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
