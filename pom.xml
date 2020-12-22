@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.40</version>
+    <version>0.9.41</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -77,7 +77,7 @@
     <properties>
         <kotlin.version>1.4.0</kotlin.version>
         <klint-plugin-version>1.7.0</klint-plugin-version>
-        <kotlin.version>1.4.20</kotlin.version>
+        <kotlin.version>1.4.30-M1</kotlin.version>
         <maven-clean-plugin-version>3.1.0</maven-clean-plugin-version>
         <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
@@ -108,6 +108,15 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>30.1-jre</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -345,7 +354,7 @@
                                     <requireFileChecksum>
                                         <message>Outdated dependencies detected</message>
                                         <file>target/dependency-updates.txt</file>
-                                        <checksum>011fae2eedc84420d0a4f30f16486022</checksum>
+                                        <checksum>3c917f29727fcfb2b50ed3ccaad4a495</checksum>
                                         <type>md5</type>
                                     </requireFileChecksum>
                                     <requireFileChecksum>
