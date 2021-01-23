@@ -24,7 +24,7 @@
 
     <groupId>de.quantummaid</groupId>
     <artifactId>documaid</artifactId>
-    <version>0.9.42</version>
+    <version>0.9.43</version>
     <packaging>maven-plugin</packaging>
 
     <name>DocuMaid</name>
@@ -77,7 +77,7 @@
     <properties>
         <kotlin.version>1.4.0</kotlin.version>
         <klint-plugin-version>1.7.0</klint-plugin-version>
-        <kotlin.version>1.4.30-M1</kotlin.version>
+        <kotlin.version>1.4.30-RC</kotlin.version>
         <maven-clean-plugin-version>3.1.0</maven-clean-plugin-version>
         <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
@@ -91,7 +91,7 @@
         <maven-enforcer-plugin-version>3.0.0-M3</maven-enforcer-plugin-version>
         <maven-gpg-plugin-version>1.6</maven-gpg-plugin-version>
         <versions-maven-plugin-version>2.8.1</versions-maven-plugin-version>
-        <owasp-dependency-check-plugin-version>6.0.4</owasp-dependency-check-plugin-version>
+        <owasp-dependency-check-plugin-version>6.0.5</owasp-dependency-check-plugin-version>
         <tidy-maven-plugin-version>1.1.0</tidy-maven-plugin-version>
         <nexus-staging-maven-plugin-version>1.6.8</nexus-staging-maven-plugin-version>
         <junit-version>5.7.0</junit-version>
